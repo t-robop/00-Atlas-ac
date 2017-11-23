@@ -3,6 +3,9 @@
 
 ラジコン側のプログラム : https://github.com/Dai1678/ScriptArduinoRC   
 
+# 目的
+GUIでプログラムのフローチャートを作って、ラジコンを動かす　⇛　思い通りの動作を実行させるための論理的思考力を養おう   
+
 # 開発環境
 AndroidStudio 3.0.1 (gradle3.0.1)
 java
