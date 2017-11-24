@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="true"
+        jar="/home/daipc/.android/build-cache/93d290dbd5256a50430ad7c08f17abb229e4955d/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="dff4d8f88fe2c0e57306e6981fd9b90caeead7e3">
+        <dex dex="/home/daipc/StudioProjects/ScriptRobotController/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_b9c0b57f502e1294e41e003473e549d59117e5d1/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/daipc/.android/build-cache/f7dbc2f4037f651c4cd4461ace7533db6056225d/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="d095503f29a8dedc55b9326ed97a5902a1527ab9">
+        <dex dex="/home/daipc/StudioProjects/ScriptRobotController/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_7c464efca7bc94bf86ce773cf0f532fd751a2735/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/daipc/.gradle/caches/modules-2/files-2.1/com.android.support/support-annotations/26.0.1/e1bb32b12b25e2f78e6786059ca7ea878f8345e0/support-annotations-26.0.1.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="e1bb32b12b25e2f78e6786059ca7ea878f8345e0">
+        <dex dex="/home/daipc/StudioProjects/ScriptRobotController/app/build/intermediates/transforms/dex/debug/folders/1000/10/support-annotations-26.0.1_1d1a0d38ecf317d72ebddf4a6130d863a8da84c0/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/daipc/.android/build-cache/3839cdadad27942938863ea0181a5dcc683f0645/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="e7424f816f538c2acfba6169b25e297ea22afbd8">
+        <dex dex="/home/daipc/StudioProjects/ScriptRobotController/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_35f715a9bce2ac90b3715a3f46bb45391a582e97/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/daipc/.android/build-cache/f1f84e8029feb7bbfa9d0aa90603480af3f62ccb/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="22c673e65215e0764add61e3102946de895439e4">
+        <dex dex="/home/daipc/StudioProjects/ScriptRobotController/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_b54354098ca9326aa142bd6995fdebb72c98fcfe/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/daipc/Android/Sdk/extras/m2repository/com/android/support/constraint/constraint-layout-solver/1.0.2/constraint-layout-solver-1.0.2.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="b9cd8fc6bd15cb915735d34535db30ece0c44603">
+        <dex dex="/home/daipc/StudioProjects/ScriptRobotController/app/build/intermediates/transforms/dex/debug/folders/1000/10/constraint-layout-solver-1.0.2_1464b238540752afd08dee187d587a5b59fdf9c1/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/daipc/StudioProjects/ScriptRobotController/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="3be78ebc2706b2e1fe2f12d5726887a92d6c183b">
+        <dex dex="/home/daipc/StudioProjects/ScriptRobotController/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_ac037b0d96a1b50e85a42f05ce75b922c5ef4ca8/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/daipc/StudioProjects/ScriptRobotController/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="8418dba34f9253aa38b2ce78b9cfa89cae11844b">
+        <dex dex="/home/daipc/StudioProjects/ScriptRobotController/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_6a6405d89e3c1b2818cd8d4719d2e6c270637bcb/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/daipc/.android/build-cache/e0f2f510eb8606a1752d25c25d0351dcb3fcd2ca/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="681eeeaec5300e5257ad9bf889c3859ba3833d5a">
+        <dex dex="/home/daipc/StudioProjects/ScriptRobotController/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_2497700f1b8a434ba451d3946b7e9baa5ac10a56/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/daipc/.android/build-cache/073c06ddae30fcb1c83206948e070eee1d277e2e/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="71af915b7f4f7ec0b5f768b365145bb6a5cb9a66">
+        <dex dex="/home/daipc/StudioProjects/ScriptRobotController/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_86b23a29cf01d6888d81c7a584f7c0a15adba750/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/daipc/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.7/751f548c85fa49f330cecbb1875893f971b33c4e/gson-2.7.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="751f548c85fa49f330cecbb1875893f971b33c4e">
+        <dex dex="/home/daipc/StudioProjects/ScriptRobotController/app/build/intermediates/transforms/dex/debug/folders/1000/10/gson-2.7_83b504c6a8681b3e4a9b438e9938335573228536/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/daipc/.android/build-cache/08dc9c2b4cc23b0751f3e3ede3fce74f4c33045f/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="d7c42c80f6509b9ea4db28ca7859ffae08ec5741">
+        <dex dex="/home/daipc/StudioProjects/ScriptRobotController/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_6759176ed580532ecb6b1a87ccbf0d071ad374bf/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/daipc/.android/build-cache/e24e6f6af7a10b860a2cf1d3960c137453891146/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="a4590fa7eadce322ca893129fdc999074e1aa5bf">
+        <dex dex="/home/daipc/StudioProjects/ScriptRobotController/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_620757849d1e2e2e27a6720bde04b8ba82db57de/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/daipc/.android/build-cache/8f00f9b28831820c15de5d90576caeb035fd7a95/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="44ee06abb66da30f5855e6bf54574e64cdcd982a">
+        <dex dex="/home/daipc/StudioProjects/ScriptRobotController/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_17573ad903e037c8f51d8fbc46c68ea0aefb26fd/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/daipc/.android/build-cache/0274e5a63a74cc165aa45481b669c596f9d20f16/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="a77138ac5211331e9579024c12bedabe3c835260">
+        <dex dex="/home/daipc/StudioProjects/ScriptRobotController/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_9c5d6fad1937f0b7472de0eab7ff64ecc70ecc7e/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/home/daipc/.android/build-cache/707f45d24c7c2c27a64bdf15660242d4102858d9/output/jars/classes.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="083e7bc5a9d9404b49b8f34e5091532361fa28e6">
+        <dex dex="/home/daipc/StudioProjects/ScriptRobotController/app/build/intermediates/transforms/dex/debug/folders/1000/10/classes_d780eb642e7ce1fa122f51e5b242ee0dd9ee498e/classes.dex" />
+    </item>
+
+</items>
