@@ -13,9 +13,6 @@ package com.robop.scriptrobotcontroller;
 
 public class MainActivity extends AppCompatActivity {
 
-    ListView listView;
-    ArrayAdapter<String> adapter;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
