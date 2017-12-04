@@ -20,11 +20,11 @@ jobs:
       - run:
           name: build Debug Apk
           command: ./gradlew assembleDebug
-      - run:
-          name: copy apk
-          command: |
-              sudo mkdir -p /apks;
-              sudo cp app/build/outputs/apk/app-debug.apk /apks
+      #- run:
+          #name: copy apk
+          #command: |
+              #sudo mkdir -p /apks;
+              #sudo cp app/build/outputs/apk/app-debug.apk /apks
       - store_artifacts:
           path: /apks
       - run:
