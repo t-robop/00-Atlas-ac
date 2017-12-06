@@ -191,6 +191,7 @@ public class MainActivity extends AppCompatActivity implements OnDataReceivedLis
     public void onStart(){
         super.onStart();
 
+        //Bluetooth有効確認
         if (!bt.isBluetoothEnabled()){
             Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(intent,BluetoothState.REQUEST_ENABLE_BT);
@@ -245,7 +246,7 @@ public class MainActivity extends AppCompatActivity implements OnDataReceivedLis
         switch (item.getItemId()){
             case R.id.connectBT:
                 if(bt.getServiceState() == BluetoothState.STATE_CONNECTED){
-                    bt.disconnect();
+                    bt.disconnect();    //接続中なら切断する
                 }else{
                     Intent intent = new Intent(getApplicationContext(), DeviceList.class);
                     startActivityForResult(intent,BluetoothState.REQUEST_CONNECT_DEVICE);
