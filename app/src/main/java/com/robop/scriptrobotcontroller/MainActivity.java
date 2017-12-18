@@ -25,6 +25,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 import app.akexorcist.bluetotohspp.library.BluetoothSPP;
@@ -33,7 +34,7 @@ import app.akexorcist.bluetotohspp.library.DeviceList;
 
 import static app.akexorcist.bluetotohspp.library.BluetoothSPP.*;
 
-public class MainActivity extends AppCompatActivity implements OnDataReceivedListener, BluetoothConnectionListener {
+public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener, OnDataReceivedListener, BluetoothConnectionListener {
 
     BluetoothSPP bt;
 
@@ -59,7 +60,6 @@ public class MainActivity extends AppCompatActivity implements OnDataReceivedLis
     String rotationLeftStr;
     String rotationRightStr;
 
-
     private RecyclerView recyclerView;
     private RecyclerView.Adapter recyclerAdapter;
     private RecyclerView.LayoutManager layoutManager;
@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements OnDataReceivedLis
     private ListView listView;
     private ListAdapter listAdapter;
 
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -106,6 +107,11 @@ public class MainActivity extends AppCompatActivity implements OnDataReceivedLis
         Button startButton = findViewById(R.id.startButton);
         Button finishButton = findViewById(R.id.finishButton);
 
+
+        listView.setOnItemClickListener(this);
+        listView.setOnItemLongClickListener(this);
+
+        /*
         //listの処理
         listView.setOnItemClickListener(
                 new AdapterView.OnItemClickListener() {
@@ -138,6 +144,7 @@ public class MainActivity extends AppCompatActivity implements OnDataReceivedLis
                 }
         );
 
+<<<<<<< c14a5b99570a15eb5ce5648b3b5e7853bffa5bc6
 ////        button1.setOnClickListener(new View.OnClickListener() {
 ////            @Override
 ////            public void onClick(View view) {
@@ -174,11 +181,43 @@ public class MainActivity extends AppCompatActivity implements OnDataReceivedLis
 //                listView.setAdapter(listAdapter);
 //            }
 //        });
+=======
+        button1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //imageList.add("1");
+
+                adapter.add("1");
+                listView.setAdapter(adapter);
+
+            }
+        });
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                imageList.add("2");
+            }
+        });
+        button3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                imageList.add("3");
+            }
+        });
+        button4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                imageList.add("4");
+            }
+        });
+>>>>>>> listから送信する文字列の取得処理を追加
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String sendData = adapter.getItem(0);
-                Log.i("BTData",sendData);
+                if(adapter.getCount() > 0){
+                    String sendData = adapter.getItem(0);
+                    Log.i("BTData",sendData);
+                }
             }
         });
         finishButton.setOnClickListener(new View.OnClickListener() {
@@ -187,7 +226,7 @@ public class MainActivity extends AppCompatActivity implements OnDataReceivedLis
 
             }
         });
-
+        */
     }
 
     @Override
@@ -215,6 +254,17 @@ public class MainActivity extends AppCompatActivity implements OnDataReceivedLis
     public void onDestroy(){
         super.onDestroy();
         bt.stopService();
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        Toast.makeText(getApplicationContext(), "position = " + i, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+        Toast.makeText(getApplicationContext(), "text = " + i, Toast.LENGTH_SHORT).show();
+        return false;
     }
 
     @Override
@@ -258,11 +308,10 @@ public class MainActivity extends AppCompatActivity implements OnDataReceivedLis
         return true;
     }
 
-    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         if(requestCode == BluetoothState.REQUEST_CONNECT_DEVICE){
             if(resultCode == Activity.RESULT_OK){
-                bt.connect(data);
+                bt.connect(data);   //TODO ヌルポ出て接続できない
             }
         }else if(requestCode == BluetoothState.REQUEST_ENABLE_BT){
             if(resultCode == Activity.RESULT_OK){
