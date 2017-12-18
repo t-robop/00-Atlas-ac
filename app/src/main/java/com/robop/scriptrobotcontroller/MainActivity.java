@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 import app.akexorcist.bluetotohspp.library.BluetoothSPP;
@@ -24,7 +25,7 @@ import app.akexorcist.bluetotohspp.library.DeviceList;
 
 import static app.akexorcist.bluetotohspp.library.BluetoothSPP.*;
 
-public class MainActivity extends AppCompatActivity implements OnDataReceivedListener, BluetoothConnectionListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener, OnDataReceivedListener, BluetoothConnectionListener {
 
     BluetoothSPP bt;
 
@@ -50,6 +51,9 @@ public class MainActivity extends AppCompatActivity implements OnDataReceivedLis
     String rotationLeftStr;
     String rotationRightStr;
 
+    ArrayAdapter<String> adapter;
+    List<String> imageList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,17 +69,30 @@ public class MainActivity extends AppCompatActivity implements OnDataReceivedLis
 
         bt.setOnDataReceivedListener(this);
 
-        final ListView listView = findViewById(R.id.listView);
-        final ArrayAdapter<String> adapter = new ArrayAdapter<String>
-                (this, android.R.layout.simple_list_item_1);
+        ListView listView = findViewById(R.id.listView);
+        imageList = new ArrayList<>(); //動作コードのリスト
+        adapter = new ArrayAdapter<String>
+                (this, android.R.layout.simple_list_item_1,imageList);
+        listView.setAdapter(adapter);
 
         Button button1 = findViewById(R.id.button1);
+        button1.setOnClickListener(this);
         Button button2 = findViewById(R.id.button2);
+        button2.setOnClickListener(this);
         Button button3 = findViewById(R.id.button3);
+        button3.setOnClickListener(this);
         Button button4 = findViewById(R.id.button4);
+        button4.setOnClickListener(this);
         Button startButton = findViewById(R.id.startButton);
+        startButton.setOnClickListener(this);
         Button finishButton = findViewById(R.id.finishButton);
+        finishButton.setOnClickListener(this);
 
+
+        listView.setOnItemClickListener(this);
+        listView.setOnItemLongClickListener(this);
+
+        /*
         //listの処理
         listView.setOnItemClickListener(
                 new AdapterView.OnItemClickListener() {
@@ -99,36 +116,38 @@ public class MainActivity extends AppCompatActivity implements OnDataReceivedLis
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //imageList.add("1");
+
                 adapter.add("1");
                 listView.setAdapter(adapter);
+
             }
         });
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                adapter.add("2");
-                listView.setAdapter(adapter);
+                imageList.add("2");
             }
         });
         button3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                adapter.add("3");
-                listView.setAdapter(adapter);
+                imageList.add("3");
             }
         });
         button4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                adapter.add("4");
-                listView.setAdapter(adapter);
+                imageList.add("4");
             }
         });
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String sendData = adapter.getItem(0);
-                Log.i("BTData",sendData);
+                if(adapter.getCount() > 0){
+                    String sendData = adapter.getItem(0);
+                    Log.i("BTData",sendData);
+                }
             }
         });
         finishButton.setOnClickListener(new View.OnClickListener() {
@@ -137,7 +156,7 @@ public class MainActivity extends AppCompatActivity implements OnDataReceivedLis
 
             }
         });
-
+        */
     }
 
     @Override
@@ -165,6 +184,56 @@ public class MainActivity extends AppCompatActivity implements OnDataReceivedLis
     public void onDestroy(){
         super.onDestroy();
         bt.stopService();
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.button1:
+                imageList.add("0001");
+                break;
+
+            case R.id.button2:
+                imageList.add("0002");
+                break;
+
+            case R.id.button3:
+                imageList.add("0003");
+                break;
+
+            case R.id.button4:
+                imageList.add("0004");
+                break;
+
+            case R.id.startButton:
+                //Arduinoに送るデータ
+                StringBuilder btData = new StringBuilder();
+
+                if(!imageList.isEmpty()){
+                    //スクリプトリストの値をとってくる
+                    for(int i=0; i<imageList.size(); i++){
+                        btData.append(imageList.get(i));
+                    }
+                    Log.i("btData",btData.toString());
+                    bt.send(btData.toString(),false);
+                }
+                break;
+
+            case R.id.finishButton:
+                break;
+        }
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        Toast.makeText(getApplicationContext(), "position = " + i, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+        Toast.makeText(getApplicationContext(), "text = " + i, Toast.LENGTH_SHORT).show();
+        return false;
     }
 
     @Override
@@ -208,11 +277,10 @@ public class MainActivity extends AppCompatActivity implements OnDataReceivedLis
         return true;
     }
 
-    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         if(requestCode == BluetoothState.REQUEST_CONNECT_DEVICE){
             if(resultCode == Activity.RESULT_OK){
-                bt.connect(data);
+                bt.connect(data);   //TODO ヌルポ出て接続できない
             }
         }else if(requestCode == BluetoothState.REQUEST_ENABLE_BT){
             if(resultCode == Activity.RESULT_OK){
