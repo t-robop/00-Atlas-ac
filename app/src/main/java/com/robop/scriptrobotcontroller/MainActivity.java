@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        bt = new BluetoothSPP(this);
+        bt = new BluetoothSPP(this.getApplicationContext());
 
         //端末のBluetooth有効確認
         if(!bt.isBluetoothAvailable()){
