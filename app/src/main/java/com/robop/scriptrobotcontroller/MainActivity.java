@@ -22,6 +22,9 @@ public class MainActivity extends AppCompatActivity {
         final ArrayAdapter<String> adapter = new ArrayAdapter<String>
                 (this, android.R.layout.simple_list_item_1);
 
+        final ItemDataList item = new ItemDataList();
+        final ListAdapter listAdapter = new ListAdapter(getApplicationContext(),item);
+
         Button button1 = findViewById(R.id.button1);
         Button button2 = findViewById(R.id.button2);
         Button button3 = findViewById(R.id.button3);
@@ -42,8 +45,7 @@ public class MainActivity extends AppCompatActivity {
                 new AdapterView.OnItemLongClickListener() {
                     @Override
                     public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        int num = i;
-                        Toast.makeText(getApplicationContext(), "text = " + num, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "text = " + item.getImageId(i), Toast.LENGTH_SHORT).show();
                         return true;
                     }
                 }
@@ -52,29 +54,37 @@ public class MainActivity extends AppCompatActivity {
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                adapter.add("1");
-                listView.setAdapter(adapter);
+                item.addSpeed(10);
+                item.addTime(100);
+                item.addImageId("1個目");
+                listView.setAdapter(listAdapter);
             }
         });
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                adapter.add("2");
-                listView.setAdapter(adapter);
+                item.addSpeed(20);
+                item.addTime(200);
+                item.addImageId("2個目");
+                listView.setAdapter(listAdapter);
             }
         });
         button3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                adapter.add("3");
-                listView.setAdapter(adapter);
+                item.addSpeed(30);
+                item.addTime(300);
+                item.addImageId("3個目");
+                listView.setAdapter(listAdapter);
             }
         });
         button4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                adapter.add("4");
-                listView.setAdapter(adapter);
+                item.addSpeed(40);
+                item.addTime(400);
+                item.addImageId("4個目");
+                listView.setAdapter(listAdapter);
             }
         });
         startButton.setOnClickListener(new View.OnClickListener() {
