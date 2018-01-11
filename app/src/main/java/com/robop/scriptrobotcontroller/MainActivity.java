@@ -2,6 +2,7 @@ package com.robop.scriptrobotcontroller;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -15,19 +16,17 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
-import app.akexorcist.bluetotohspp.library.BluetoothSPP;
-import app.akexorcist.bluetotohspp.library.BluetoothState;
-import app.akexorcist.bluetotohspp.library.DeviceList;
+import me.aflak.bluetooth.Bluetooth;
+import me.aflak.bluetooth.CommunicationCallback;
 
-import static app.akexorcist.bluetotohspp.library.BluetoothSPP.*;
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener,CommunicationCallback {
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener, OnDataReceivedListener, BluetoothConnectionListener {
-
-    BluetoothSPP bt;
+    Bluetooth bluetooth;
+    private final int REQUEST_CONNECT_DEVICE = 9;
+    private final int REQUEST_ENABLE_BLUETOOTH = 10;
 
     // 速度の値が入る変数
     // 前進の時
@@ -59,20 +58,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        bt = new BluetoothSPP(this.getApplicationContext());
-
-        //端末のBluetooth有効確認
-        if(!bt.isBluetoothAvailable()){
-            Toast.makeText(this.getApplicationContext(),"BluetoothがOFFになっています",Toast.LENGTH_LONG).show();
-            finish();
+        bluetooth = new Bluetooth(this);
+        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if(!bluetoothAdapter.isEnabled()){
+            Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(intent, REQUEST_ENABLE_BLUETOOTH);
         }
-
-        bt.setOnDataReceivedListener(this);
 
         ListView listView = findViewById(R.id.listView);
         imageList = new ArrayList<>(); //動作コードのリスト
-        adapter = new ArrayAdapter<String>
-                (this, android.R.layout.simple_list_item_1,imageList);
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1,imageList);
         listView.setAdapter(adapter);
 
         Button button1 = findViewById(R.id.button1);
@@ -92,87 +87,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         listView.setOnItemClickListener(this);
         listView.setOnItemLongClickListener(this);
 
-        /*
-        //listの処理
-        listView.setOnItemClickListener(
-                new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        Toast.makeText(getApplicationContext(), "position = " + i, Toast.LENGTH_SHORT).show();
-                    }
-                }
-        );
-        listView.setOnItemLongClickListener(
-                new AdapterView.OnItemLongClickListener() {
-                    @Override
-                    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        int num = i;
-                        Toast.makeText(getApplicationContext(), "text = " + num, Toast.LENGTH_SHORT).show();
-                        return true;
-                    }
-                }
-        );
-
-        button1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //imageList.add("1");
-
-                adapter.add("1");
-                listView.setAdapter(adapter);
-
-            }
-        });
-        button2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                imageList.add("2");
-            }
-        });
-        button3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                imageList.add("3");
-            }
-        });
-        button4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                imageList.add("4");
-            }
-        });
-        startButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(adapter.getCount() > 0){
-                    String sendData = adapter.getItem(0);
-                    Log.i("BTData",sendData);
-                }
-            }
-        });
-        finishButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-        */
     }
 
     @Override
     public void onStart(){
         super.onStart();
-
-        //Bluetooth有効確認
-        if (!bt.isBluetoothEnabled()){
-            Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(intent,BluetoothState.REQUEST_ENABLE_BT);
-        }else{
-            if(!bt.isBluetoothAvailable()){
-                bt.setupService();
-                bt.startService(BluetoothState.DEVICE_OTHER);
-            }
-        }
+        bluetooth.onStart();
     }
 
     @Override
@@ -183,7 +103,50 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onDestroy(){
         super.onDestroy();
-        bt.stopService();
+        bluetooth.onStop();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        if(requestCode == REQUEST_CONNECT_DEVICE){
+            if(resultCode == Activity.RESULT_OK){
+                //TODO DeviceListActivityから接続先デバイスの名前を取得
+                //bluetooth.connectToName(deviceName);
+            }
+        }
+        else if(requestCode == REQUEST_ENABLE_BLUETOOTH){
+            if (resultCode == Activity.RESULT_OK){
+                bluetooth.enable();
+            }
+        }else{
+            Toast.makeText(this, "BluetoothがONになっていません!", Toast.LENGTH_SHORT).show();
+            finish();
+        }
+    }
+
+    @Override
+    public void onConnect(BluetoothDevice device) {
+        Toast.makeText(this, "接続 to " + device.getName() + "\n" + device.getAddress(), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onDisconnect(BluetoothDevice device, String message) {
+        Toast.makeText(this, "接続が切れました", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onMessage(String message) {
+
+    }
+
+    @Override
+    public void onError(String message) {
+
+    }
+
+    @Override
+    public void onConnectError(BluetoothDevice device, String message) {
+        Toast.makeText(this, "接続できません", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -215,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         btData.append(imageList.get(i));
                     }
                     Log.i("btData",btData.toString());
-                    bt.send(btData.toString(),false);
+
                 }
                 break;
 
@@ -237,27 +200,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void onDataReceived(byte[] data, String message) {
-        Toast.makeText(this.getApplicationContext(),message,Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onDeviceConnected(String name, String address) {
-        Toast.makeText(this.getApplicationContext(),"接続 to " + name + "\n" + address,Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onDeviceDisconnected() {
-        bt.stopService();
-        Toast.makeText(this.getApplicationContext(),"接続が切れました",Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onDeviceConnectionFailed() {
-        Toast.makeText(this.getApplicationContext(),"接続できません",Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.option,menu);
         return true;
@@ -267,29 +209,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
             case R.id.connectBT:
-                if(bt.getServiceState() == BluetoothState.STATE_CONNECTED){
-                    bt.disconnect();    //接続中なら切断する
+                if(bluetooth.isConnected()){
+                    bluetooth.disconnect();
                 }else{
-                    Intent intent = new Intent(getApplicationContext(), DeviceList.class);
-                    startActivityForResult(intent,BluetoothState.REQUEST_CONNECT_DEVICE);
+                    Intent intent = new Intent(this,DeviceListActivity.class);
+                    startActivityForResult(intent, REQUEST_CONNECT_DEVICE);
                 }
+                break;
         }
         return true;
     }
 
-    public void onActivityResult(int requestCode, int resultCode, Intent data){
-        if(requestCode == BluetoothState.REQUEST_CONNECT_DEVICE){
-            if(resultCode == Activity.RESULT_OK){
-                bt.connect(data);   //TODO ヌルポ出て接続できない
-            }
-        }else if(requestCode == BluetoothState.REQUEST_ENABLE_BT){
-            if(resultCode == Activity.RESULT_OK){
-                bt.setupService();
-                bt.startService(BluetoothState.DEVICE_OTHER);
-            }else{
-                Toast.makeText(getApplicationContext(),"BluetoothがOFFになっています",Toast.LENGTH_LONG).show();
-                finish();
-            }
-        }
-    }
 }
