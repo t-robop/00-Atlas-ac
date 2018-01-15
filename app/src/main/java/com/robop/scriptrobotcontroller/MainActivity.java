@@ -35,6 +35,19 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                         Toast.makeText(getApplicationContext(), "position = " + i, Toast.LENGTH_SHORT).show();
+                        // ダイアログの表示
+                        final CustomizedDialog dialog = CustomizedDialog.newInstance();
+                        dialog.setOnSetButtonClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                //ダイアログから値を取得して、output用のTextViewに表示
+                                //tvOutput.setText(String.format("%1$,3d", dialog.getInputValue()));
+                                //ダイアログを消す
+                                dialog.dismiss();
+                            }
+                        });
+                        dialog.show(getFragmentManager(), "dialog_fragment");
+                        dialog.setCancelable(false);
                     }
                 }
         );
