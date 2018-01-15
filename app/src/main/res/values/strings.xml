@@ -1,5 +1,10 @@
 <resources>
     <string name="app_name">ScriptRobotController</string>
+    <string name="time">時間</string>
+    <string name="speed">速さ</string>
+    <string name="err_msg">値が設定されていません</string>
+    <string name="ok">決定</string>
+    <string name="cancel">キャンセル</string>
     <string name="frontId">0001</string>
     <string name="backId">0002</string>
     <string name="rightId">0003</string>
