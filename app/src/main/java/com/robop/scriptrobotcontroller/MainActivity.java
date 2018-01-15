@@ -191,6 +191,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         Toast.makeText(getApplicationContext(), "position = " + i, Toast.LENGTH_SHORT).show();
+        //TODO ダイアログ表示処理追加
+        CustomizedDialog dialog = new CustomizedDialog();
+        dialog.show(getFragmentManager(), "dialog_fragment");
+        dialog.setCancelable(false);
     }
 
     @Override
