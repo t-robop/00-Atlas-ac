@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 /**
  * Created by shiromu on 2017/12/11.
@@ -22,14 +23,16 @@ import android.widget.TextView;
 
 public class CustomizedDialog extends DialogFragment{
 
-    private View.OnClickListener okButtonClickLintener = null;
-    //Dialogのレイアウト読み込み
+    private View.OnClickListener okButtonClickLintener = null;    //Dialogのレイアウト読み込み
     //Dialogレイアウト取得用view
     View inputView;
 
     Dialog dialog;
     //ダイアログ
     TextView textView;
+    TextView timetext,speedtext;
+
+    NumberPicker timepic,speedpic;
     //決定・キャンセル ボタン
     Button btset;
     Button btcancel;
@@ -46,8 +49,18 @@ public class CustomizedDialog extends DialogFragment{
         LayoutInflater inflater = getActivity().getLayoutInflater();
         inputView = inflater.inflate(R.layout.layout_dialog,null);
         textView = (TextView) inputView.findViewById(R.id.tex);
+        timetext = (TextView) inputView.findViewById(R.id.timetext);
+        speedtext = (TextView) inputView.findViewById(R.id.speedtext);
+        timepic = (NumberPicker) inputView.findViewById(R.id.timepic);
+        speedpic = (NumberPicker) inputView.findViewById(R.id.speedpic);
         btset = (Button)inputView.findViewById(R.id.bt_ok);
         btcancel = (Button)inputView.findViewById(R.id.bt_close);
+        timepic.setMaxValue(20);
+        timepic.setMinValue(1);
+        speedpic.setMaxValue(20);
+        speedpic.setMinValue(1);
+
+
 
         //ダイアログ作成
         dialog = new Dialog(getActivity());
@@ -85,7 +98,7 @@ public class CustomizedDialog extends DialogFragment{
             WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
             DisplayMetrics metrics = getResources().getDisplayMetrics();
             lp.width = (int) (metrics.widthPixels * 0.8);//横幅を80%
-            //lp.height = (int) (metrics.heightPixels * 0.8);//高さを80%
+            lp.height = (int) (metrics.heightPixels * 0.8);//高さを80%
             //lp.x = 100; //表示位置を指定した分、右へ移動
             //lp.y = 200; //表示位置を指定した分、下へ移動
             dialog.getWindow().setAttributes(lp);

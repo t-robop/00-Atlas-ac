@@ -11,12 +11,57 @@
         android:id="@+id/tex"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"/>
+        android:layout_weight="1"
+        android:text="@string/app_name"/>
+
+    <TextView
+        android:id="@+id/timetext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/time"
+        android:textSize="30sp"/>
+
+    <NumberPicker
+        android:id="@+id/timepic"
+        android:layout_width="wrap_content"
+        android:layout_height="92dp"
+        android:layout_gravity="end"></NumberPicker>
+<!-- 参考 : http://android.keicode.com/basics/ui-numberpicker.php -->
+
+
+    <TextView
+        android:id="@+id/speedtext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/speed"
+        android:textSize="30sp"/>
+
+    <NumberPicker
+        android:id="@+id/speedpic"
+        android:layout_width="wrap_content"
+        android:layout_height="88dp"
+        android:layout_gravity="end"></NumberPicker>
+
+
+
+
+
+
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+
+
+        <Button
+            android:id="@+id/bt_close"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/cancel"
+            android:textColor="@android:color/white" />
 
         <Button
             android:id="@+id/bt_ok"
@@ -27,13 +72,6 @@
             android:text="@string/ok"
             android:textColor="@android:color/black" />
 
-        <Button
-            android:id="@+id/bt_close"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/cancel"
-            android:textColor="@android:color/white" />
     </LinearLayout>
 
 </LinearLayout>
