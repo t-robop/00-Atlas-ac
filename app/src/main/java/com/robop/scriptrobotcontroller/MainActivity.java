@@ -38,28 +38,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private final int REQUEST_CONNECT_DEVICE = 9;
     private final int REQUEST_ENABLE_BLUETOOTH = 10;
 
-    // 速度の値が入る変数
-    // 前進の時
-    String frontLeftSpeedStr;
-    String frontSpeedRightSpeedStr;
-    // 後退の時
-    String backSpeedLeftSpeedStr;
-    String backRightSpeedStr;
-    // 回転の時
-    String rotationLeftSpeedStr;
-    String rotationRightSpeedStr;
-
-    // 実行時間の値が入る変数
-    // 前進のとき
-    String frontTimeStr;
-
-    //後退の時
-    String backTimeStr;
-
-    //回転の時
-    String rotationLeftStr;
-    String rotationRightStr;
-
     private RecyclerView recyclerView;
     private RecyclerView.Adapter recyclerAdapter;
     private RecyclerView.LayoutManager layoutManager;
