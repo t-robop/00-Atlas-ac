@@ -6,7 +6,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -14,20 +13,8 @@ import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.Toast;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.List;
 
 import me.aflak.bluetooth.Bluetooth;
 import me.aflak.bluetooth.CommunicationCallback;
@@ -51,11 +38,17 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        bluetooth = new Bluetooth(this);
+        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if(!bluetoothAdapter.isEnabled()){
+            Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(intent, REQUEST_ENABLE_BLUETOOTH);
+        }
+
         //final ListView listView = findViewById(R.id.listView);
         listView = findViewById(R.id.listView);
         //RecyclerView recyclerView = findViewById(R.id.listView);
-        final ArrayAdapter<String> adapter = new ArrayAdapter<String>
-                (this, android.R.layout.simple_list_item_1);
+        //final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
 
         item = new ItemDataList();
         listAdapter = new ListAdapter(getApplicationContext(),item);
@@ -65,57 +58,30 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         layoutManager = new LinearLayoutManager(this);
         recyclerAdapter = new RecyclerAdapter(item);
 
-        //Button button1 = findViewById(R.id.button1);
-        setButtonLisetener(10, 100, "1個目", R.id.button1);
-        setButtonLisetener(20, 200, "2個目", R.id.button2);
-        setButtonLisetener(30, 300, "3個目", R.id.button3);
-        setButtonLisetener(40, 400, "4個目", R.id.button4);
-
-        bluetooth = new Bluetooth(this);
-        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        if(!bluetoothAdapter.isEnabled()){
-            Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(intent, REQUEST_ENABLE_BLUETOOTH);
-        }
+        setButtonListener(10, 100, "1個目", R.id.button1);
+        setButtonListener(20, 200, "2個目", R.id.button2);
+        setButtonListener(30, 300, "3個目", R.id.button3);
+        setButtonListener(40, 400, "4個目", R.id.button4);
 
         Button startButton = findViewById(R.id.startButton);
         Button finishButton = findViewById(R.id.finishButton);
 
-
         listView.setOnItemClickListener(this);
         listView.setOnItemLongClickListener(this);
 
-        //listの処理
-        listView.setOnItemClickListener(
-                new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        Toast.makeText(getApplicationContext(), "position = " + i, Toast.LENGTH_SHORT).show();
-                        // ダイアログの表示
-                        final CustomizedDialog dialog = CustomizedDialog.newInstance();
-                        dialog.setOnSetButtonClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                //ダイアログから値を取得して、output用のTextViewに表示
-                                //tvOutput.setText(String.format("%1$,3d", dialog.getInputValue()));
-                                //ダイアログを消す
-                                dialog.dismiss();
-                            }
-                        });
-                        dialog.show(getFragmentManager(), "dialog_fragment");
-                        dialog.setCancelable(false);
-                    }
-                }
-        );
-        listView.setOnItemLongClickListener(
-                new AdapterView.OnItemLongClickListener() {
-                    @Override
-                    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        Toast.makeText(getApplicationContext(), "text = " + item.getImageId(i), Toast.LENGTH_SHORT).show();
-                        return true;
-                    }
-                }
-        );
+        startButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+
+            }
+        });
+
+        finishButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+
+            }
+        });
 
     }
 
@@ -182,11 +148,24 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         Toast.makeText(getApplicationContext(), "position = " + i, Toast.LENGTH_SHORT).show();
+        // ダイアログの表示
+        final CustomizedDialog dialog = CustomizedDialog.newInstance();
+        dialog.setOnSetButtonClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //ダイアログから値を取得して、output用のTextViewに表示
+                //tvOutput.setText(String.format("%1$,3d", dialog.getInputValue()));
+                //ダイアログを消す
+                dialog.dismiss();
+            }
+        });
+        dialog.show(getFragmentManager(), "dialog_fragment");
+        dialog.setCancelable(false);
     }
 
     @Override
     public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-        Toast.makeText(getApplicationContext(), "text = " + i, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), "text = " + item.getImageId(i), Toast.LENGTH_SHORT).show();
         return false;
     }
 
@@ -211,7 +190,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         return true;
     }
 
-    Button setButtonLisetener(final int speed, final int time, final String imageId, int id) {
+    void setButtonListener(final int speed, final int time, final String imageId, int id) {
 
         Button button = findViewById(id);
 
@@ -224,6 +203,5 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 listView.setAdapter(listAdapter);
             }
         });
-        return button;
     }
 }
