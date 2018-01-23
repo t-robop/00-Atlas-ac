@@ -26,7 +26,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             this.image  = (ImageView)view.findViewById(R.id.directionImage);
         }
     }
-
+    
     public RecyclerAdapter(ItemDataList itemDataList) {
         item = itemDataList;
     }
