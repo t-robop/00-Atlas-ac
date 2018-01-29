@@ -91,14 +91,12 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 }else{
                     Toast.makeText(MainActivity.this, "ロボットが接続されていません", Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
 
         finishButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-
             }
         });
 
@@ -186,8 +184,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     }
 
     @Override
-    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-        Toast.makeText(getApplicationContext(), "text = " + item.getImageId(i), Toast.LENGTH_SHORT).show();
+    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long l) {
+        //とりあえずアイテム消す為。後で消す
+        item.remove(position);
+        listView.setAdapter(listAdapter);
         return false;
     }
 
