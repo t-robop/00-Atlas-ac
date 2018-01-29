@@ -64,6 +64,31 @@ public class ItemDataList extends Activity{
         timeData.remove(position);
         imageId.remove(position);
     }
+    public void change(int myPos, int changePos){
+
+        int tempI;
+        String tempS;
+
+        tempI = speedData.get(myPos);
+        speedData.set(myPos, speedData.get(changePos));
+        speedData.set(changePos, tempI);
+
+        tempI = timeData.get(myPos);
+        timeData.set(myPos, timeData.get(changePos));
+        timeData.set(changePos, tempI);
+
+        tempS = imageId.get(myPos);
+        imageId.set(myPos, imageId.get(changePos));
+        imageId.set(changePos, tempS);
+    }
+
+    //interruptPosの上に割り込み
+    public void interrupt(int myPos, int interruptPos){
+        for(int i = myPos; i > interruptPos; i--)
+            change(i, i - 1);
+        for(int i = myPos; i < interruptPos - 1; i++)
+            change(i, i + 1);
+    }
 
 
 
