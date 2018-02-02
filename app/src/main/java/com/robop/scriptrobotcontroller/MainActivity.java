@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -22,6 +23,7 @@ import me.aflak.bluetooth.CommunicationCallback;
 public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener, CommunicationCallback {
 
     Bluetooth bluetooth;
+    BluetoothAdapter bluetoothAdapter;
     private final int REQUEST_CONNECT_DEVICE = 9;
     private final int REQUEST_ENABLE_BLUETOOTH = 10;
 
@@ -39,11 +41,17 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         setContentView(R.layout.activity_main);
 
         bluetooth = new Bluetooth(this);
-        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        if(!bluetoothAdapter.isEnabled()){
-            Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(intent, REQUEST_ENABLE_BLUETOOTH);
+        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (bluetoothAdapter != null){
+            if(!bluetoothAdapter.isEnabled()){
+                Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                startActivityForResult(intent, REQUEST_ENABLE_BLUETOOTH);
+            }
+        }else{
+            Toast.makeText(this, "BlueTooth機能が見つかりませんでした\n機能が制限されます", Toast.LENGTH_SHORT).show();
         }
+
+        bluetooth.setCommunicationCallback(this);
 
         //final ListView listView = findViewById(R.id.listView);
         listView = findViewById(R.id.listView);
@@ -58,10 +66,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         layoutManager = new LinearLayoutManager(this);
         recyclerAdapter = new RecyclerAdapter(item);
 
-        setButtonListener(10, 100, "1個目", R.id.button1);
-        setButtonListener(20, 200, "2個目", R.id.button2);
-        setButtonListener(30, 300, "3個目", R.id.button3);
-        setButtonListener(40, 400, "4個目", R.id.button4);
+        setButtonListener(100, 02, "1", R.id.button1);
+        setButtonListener(100, 02, "2", R.id.button2);
+        setButtonListener(100, 02, "3", R.id.button3);
+        setButtonListener(100, 02, "4", R.id.button4);
 
         Button startButton = findViewById(R.id.startButton);
         Button finishButton = findViewById(R.id.finishButton);
@@ -72,6 +80,18 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         startButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
+                //BlueToothで送る文字列の生成メソッド
+                if(!sendBTText().equals("")){
+                    Log.i("bt",sendBTText());   //imageIdがString型で連結されて取得できる
+                }else{
+                    Toast.makeText(MainActivity.this, "送るデータがありません", Toast.LENGTH_SHORT).show();  //スクリプトリストに何もないときは空白でsendBTTextから返される
+                }
+
+                if(bluetooth.isConnected()){
+                    bluetooth.send(sendBTText());
+                }else{
+                    Toast.makeText(MainActivity.this, "ロボットが接続されていません", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -102,19 +122,22 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        //ロボットとのBlueTooth接続処理
         if(requestCode == REQUEST_CONNECT_DEVICE){
             if(resultCode == Activity.RESULT_OK){
-                //TODO DeviceListActivityから接続先デバイスの名前を取得
-                //bluetooth.connectToName(deviceName);
+                String deviceAddress = data.getStringExtra("deviceAddress");
+                Log.i("deviceAddress", deviceAddress);
+                bluetooth.connectToAddress(deviceAddress);
             }
         }
+        //Bluetoothの有効化処理
         else if(requestCode == REQUEST_ENABLE_BLUETOOTH){
             if (resultCode == Activity.RESULT_OK){
                 bluetooth.enable();
             }
         }else{
             Toast.makeText(this, "BluetoothがONになっていません!", Toast.LENGTH_SHORT).show();
-            finish();
+            //finish();
         }
     }
 
@@ -182,8 +205,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 if(bluetooth.isConnected()){
                     bluetooth.disconnect();
                 }else{
-                    Intent intent = new Intent(this,DeviceListActivity.class);
-                    startActivityForResult(intent, REQUEST_CONNECT_DEVICE);
+                    if (bluetoothAdapter != null){
+                        Intent intent = new Intent(this,DeviceListActivity.class);
+                        startActivityForResult(intent, REQUEST_CONNECT_DEVICE);
+                    }
                 }
                 break;
         }
@@ -203,5 +228,18 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 listView.setAdapter(listAdapter);
             }
         });
+    }
+
+    private String sendBTText(){
+        StringBuilder sendText = new StringBuilder();
+
+        //imageId、Time、Speedの文字列を連結
+        for(int i=0; i<listAdapter.getCount(); i++){
+            sendText.append(item.getImageId(i));
+            sendText.append(item.getTime(i));
+            sendText.append(item.getSpeed(i));
+        }
+
+        return sendText.toString();
     }
 }
