@@ -50,7 +50,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }else{
             Toast.makeText(this, "BlueTooth機能が見つかりませんでした\n機能が制限されます", Toast.LENGTH_SHORT).show();
         }
-        
+
+        bluetooth.setCommunicationCallback(this);
 
         //final ListView listView = findViewById(R.id.listView);
         listView = findViewById(R.id.listView);
@@ -65,10 +66,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         layoutManager = new LinearLayoutManager(this);
         recyclerAdapter = new RecyclerAdapter(item);
 
-        setButtonListener(10, 100, "0001", R.id.button1);
-        setButtonListener(20, 200, "0002", R.id.button2);
-        setButtonListener(30, 300, "0003", R.id.button3);
-        setButtonListener(40, 400, "0004", R.id.button4);
+        setButtonListener(100, 02, "1", R.id.button1);
+        setButtonListener(100, 02, "2", R.id.button2);
+        setButtonListener(100, 02, "3", R.id.button3);
+        setButtonListener(100, 02, "4", R.id.button4);
 
         Button startButton = findViewById(R.id.startButton);
         Button finishButton = findViewById(R.id.finishButton);
@@ -87,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 }
 
                 if(bluetooth.isConnected()){
-                    //bluetooth.send(sendBTText());
+                    bluetooth.send(sendBTText());
                 }else{
                     Toast.makeText(MainActivity.this, "ロボットが接続されていません", Toast.LENGTH_SHORT).show();
                 }
@@ -232,9 +233,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private String sendBTText(){
         StringBuilder sendText = new StringBuilder();
 
-        //imageId文字列を連結
+        //imageId、Time、Speedの文字列を連結
         for(int i=0; i<listAdapter.getCount(); i++){
             sendText.append(item.getImageId(i));
+            sendText.append(item.getTime(i));
+            sendText.append(item.getSpeed(i));
         }
 
         return sendText.toString();
