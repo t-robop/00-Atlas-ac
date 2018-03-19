@@ -5,7 +5,6 @@ import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -15,7 +14,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 import me.aflak.bluetooth.Bluetooth;
@@ -69,10 +67,10 @@ public class DeviceListActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-        String tryConnectDeviceName = null;
+        //String tryConnectDeviceName = null;
         String tryConnectDeviceAddress = null;
         if(!resultPairedDevicesName.isEmpty() && !resultPairedDevicesAddress.isEmpty()){
-            tryConnectDeviceName = resultPairedDevicesName.get(position);
+            //tryConnectDeviceName = resultPairedDevicesName.get(position);
             tryConnectDeviceAddress = resultPairedDevicesAddress.get(position);
         }
 

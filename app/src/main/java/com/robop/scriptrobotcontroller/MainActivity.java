@@ -1,5 +1,6 @@
 package com.robop.scriptrobotcontroller;
 
+import android.annotation.SuppressLint;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Android端末のBluetooth有効化
         bluetooth = new Bluetooth(this);
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (bluetoothAdapter != null){
@@ -66,10 +68,10 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         layoutManager = new LinearLayoutManager(this);
         recyclerAdapter = new RecyclerAdapter(item);
 
-        setButtonListener(100, 02, "1", R.id.button1);
-        setButtonListener(100, 02, "2", R.id.button2);
-        setButtonListener(100, 02, "3", R.id.button3);
-        setButtonListener(100, 02, "4", R.id.button4);
+        setButtonListener(100, 2, "1", R.id.button1);
+        setButtonListener(100, 2, "2", R.id.button2);
+        setButtonListener(100, 2, "3", R.id.button3);
+        setButtonListener(100, 2, "4", R.id.button4);
 
         Button startButton = findViewById(R.id.startButton);
         Button finishButton = findViewById(R.id.finishButton);
@@ -80,17 +82,19 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         startButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                //BlueToothで送る文字列の生成メソッド
+                //BlueToothで送る文字列のnullチェック
                 if(!sendBTText().equals("")){
-                    Log.i("bt",sendBTText());   //imageIdがString型で連結されて取得できる
-                }else{
-                    Toast.makeText(MainActivity.this, "送るデータがありません", Toast.LENGTH_SHORT).show();  //スクリプトリストに何もないときは空白でsendBTTextから返される
-                }
+                    Log.i("bt",sendBTText());
 
-                if(bluetooth.isConnected()){
-                    bluetooth.send(sendBTText());
+                    //Bluetooth接続チェック
+                    if(bluetooth.isConnected()){
+                        bluetooth.send(sendBTText());   //データフォーマット通りの文字列が送信される
+                    }else{
+                        Toast.makeText(MainActivity.this, "ロボットが接続されていません", Toast.LENGTH_SHORT).show();
+                    }
+
                 }else{
-                    Toast.makeText(MainActivity.this, "ロボットが接続されていません", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "送るデータがありません", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -230,14 +234,16 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         });
     }
 
+    @SuppressLint("DefaultLocale")
     private String sendBTText(){
         StringBuilder sendText = new StringBuilder();
 
         //imageId、Time、Speedの文字列を連結
         for(int i=0; i<listAdapter.getCount(); i++){
             sendText.append(item.getImageId(i));
-            sendText.append(item.getTime(i));
-            sendText.append(item.getSpeed(i));
+            sendText.append(String.format("%02d", item.getTime(i)));
+            sendText.append(String.format("%03d", item.getSpeed(i)));
+            sendText.append('\0');  //1命令分の終端文字
         }
 
         return sendText.toString();

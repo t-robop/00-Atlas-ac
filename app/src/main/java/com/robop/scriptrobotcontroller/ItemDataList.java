@@ -7,15 +7,11 @@ import android.widget.ImageView;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by user on 2017/12/18.
- */
+public class ItemDataList{
 
-public class ItemDataList extends Activity{
-
-    private List<Integer> speedData = new ArrayList<Integer>();
-    private List<Integer> timeData = new ArrayList<Integer>();
-    private List<String> imageId = new ArrayList<String>();
+    private List<Integer> speedData = new ArrayList<>();
+    private List<Integer> timeData = new ArrayList<>();
+    private List<String> imageId = new ArrayList<>();
 
     ItemDataList(){
 

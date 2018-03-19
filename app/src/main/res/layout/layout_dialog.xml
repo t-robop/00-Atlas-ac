@@ -25,7 +25,9 @@
         android:id="@+id/timepic"
         android:layout_width="wrap_content"
         android:layout_height="92dp"
-        android:layout_gravity="end"></NumberPicker>
+        android:layout_gravity="end">
+
+    </NumberPicker>
 <!-- 参考 : http://android.keicode.com/basics/ui-numberpicker.php -->
 
 
@@ -40,7 +42,9 @@
         android:id="@+id/speedpic"
         android:layout_width="wrap_content"
         android:layout_height="88dp"
-        android:layout_gravity="end"></NumberPicker>
+        android:layout_gravity="end">
+
+    </NumberPicker>
 
 
 
