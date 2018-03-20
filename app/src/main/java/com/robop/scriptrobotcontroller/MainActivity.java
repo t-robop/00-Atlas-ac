@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private final int REQUEST_CONNECT_DEVICE = 9;
     private final int REQUEST_ENABLE_BLUETOOTH = 10;
 
+    //TODO ListViewの項目をドラッグで動かして並び替えられるようにする
     private RecyclerView recyclerView;
     private RecyclerView.Adapter recyclerAdapter;
     private RecyclerView.LayoutManager layoutManager;
@@ -68,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         layoutManager = new LinearLayoutManager(this);
         recyclerAdapter = new RecyclerAdapter(item);
 
+        //TODO 変数化して値変更・保持できるようにする
         setButtonListener(100, 2, "1", R.id.button1);
         setButtonListener(100, 2, "2", R.id.button2);
         setButtonListener(100, 2, "3", R.id.button3);
@@ -88,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
                     //Bluetooth接続チェック
                     if(bluetooth.isConnected()){
-                        bluetooth.send(sendBTText());   //データフォーマット通りの文字列が送信される
+                        bluetooth.send(sendBTText());   //データフォーマット通りの文字列が送信される     //TODO 10命令以上を送りたい場合の処理を考える
                     }else{
                         Toast.makeText(MainActivity.this, "ロボットが接続されていません", Toast.LENGTH_SHORT).show();
                     }

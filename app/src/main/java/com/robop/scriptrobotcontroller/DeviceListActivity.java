@@ -26,8 +26,8 @@ public class DeviceListActivity extends AppCompatActivity implements View.OnClic
     BluetoothAdapter bluetoothAdapter;
     ArrayAdapter<String> pairedDevicesArrayAdapter;
     ListView pairedDevicesListView;
-    ArrayList<String> resultPairedDevicesName;
-    ArrayList<String> resultPairedDevicesAddress;
+    ArrayList<String> resultPairedDevicesName;  //ペアリングされているデバイスの名前
+    ArrayList<String> resultPairedDevicesAddress;   //ペアリングされているデバイスのMACアドレス
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

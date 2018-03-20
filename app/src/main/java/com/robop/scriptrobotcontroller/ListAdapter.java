@@ -9,8 +9,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.List;
-
 public class ListAdapter extends BaseAdapter {
 
     private LayoutInflater mInflater;
