@@ -1,5 +1,6 @@
 package com.robop.scriptrobotcontroller;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,12 +8,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import java.util.List;
-
-/**
- * Created by user on 2017/12/11.
- */
 
 public class ListAdapter extends BaseAdapter {
 
@@ -49,12 +44,13 @@ public class ListAdapter extends BaseAdapter {
         ImageView image;
 
         ViewHolder(View view){
-            this.speed = (TextView)view.findViewById(R.id.text1);
-            this.time = (TextView)view.findViewById(R.id.text2);
-            this.image  = (ImageView)view.findViewById(R.id.directionImage);
+            this.speed = view.findViewById(R.id.text1);
+            this.time = view.findViewById(R.id.text2);
+            this.image  = view.findViewById(R.id.directionImage);
         }
     }
 
+    @SuppressLint({"InflateParams", "SetTextI18n"})
     @Override
     public View getView(int position, View convertView, ViewGroup viewGroup) {
 
@@ -67,9 +63,31 @@ public class ListAdapter extends BaseAdapter {
         else {
             holder = (ViewHolder)convertView.getTag();
         }
-        holder.speed.setText("" + item.getSpeed(position));
-        holder.time.setText("" + item.getTime(position));
-        holder.image.setImageResource(R.drawable.edit_icon);
+        holder.speed.setText("パワー : " + item.getSpeed(position));
+        holder.time.setText(item.getTime(position) + "秒");
+        //holder.image.setImageResource(R.drawable.edit_icon);
+
+        switch (item.getImageId(position)){
+            case "1":
+                holder.image.setImageResource(R.mipmap.forward);
+                break;
+
+            case "2":
+                holder.image.setImageResource(R.mipmap.backward);
+                break;
+
+            case "3":
+                holder.image.setImageResource(R.mipmap.left_rotation);
+                break;
+
+            case "4":
+                holder.image.setImageResource(R.mipmap.right_rotation);
+                break;
+
+            default:
+                holder.image.setImageResource(R.drawable.edit_icon);
+                break;
+        }
 
         return convertView;
     }
