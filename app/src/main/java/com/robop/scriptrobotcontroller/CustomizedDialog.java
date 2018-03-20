@@ -44,7 +44,6 @@ public class CustomizedDialog extends DialogFragment{
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
         inputView = inflater.inflate(R.layout.layout_dialog,null);
-        textView = inputView.findViewById(R.id.tex);
         timeText = inputView.findViewById(R.id.timetext);
         speedText = inputView.findViewById(R.id.speedtext);
         timePic = inputView.findViewById(R.id.timepic);
