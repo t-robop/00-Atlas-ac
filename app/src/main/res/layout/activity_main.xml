@@ -103,13 +103,6 @@
                 android:layout_weight="1"
                 android:text="Button4" />
 
-            <Button
-                android:id="@+id/finishButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="finishButton" />
-
         </LinearLayout>
 
     </LinearLayout>

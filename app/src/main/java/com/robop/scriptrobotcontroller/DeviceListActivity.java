@@ -46,7 +46,7 @@ public class DeviceListActivity extends AppCompatActivity implements View.OnClic
 
         pairedDevicesArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
 
-        searchPairedDevices();
+        searchPairedDevices();  //ペアリングされているBlueTooth端末の検索
 
         pairedDevicesListView.setEmptyView(emptyView);
         pairedDevicesListView.setAdapter(pairedDevicesArrayAdapter);
@@ -73,9 +73,6 @@ public class DeviceListActivity extends AppCompatActivity implements View.OnClic
             //tryConnectDeviceName = resultPairedDevicesName.get(position);
             tryConnectDeviceAddress = resultPairedDevicesAddress.get(position);
         }
-
-        //Log.i("result", tryConnectDeviceName);
-        //Log.i("result", tryConnectDeviceAddress);
 
         Intent intent = new Intent();
         if(tryConnectDeviceAddress != null){
