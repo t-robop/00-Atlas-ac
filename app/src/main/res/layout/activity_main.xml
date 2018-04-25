@@ -6,55 +6,62 @@
     android:layout_height="match_parent"
     tools:context="com.robop.scriptrobotcontroller.MainActivity">
 
-    <FrameLayout xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:background="@drawable/repeat_rasen">
 
-        <ListView
-            android:id="@+id/listView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
+        <FrameLayout
+            android:id="@+id/back_ground"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
-        </ListView>
+            <ListView
+                android:id="@+id/listView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
 
-        <LinearLayout
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="20dp"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            </ListView>
 
-            <Button
-                android:id="@+id/connectButton"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+            <LinearLayout
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="20dp"
                 android:layout_weight="1"
-                android:background="@drawable/bluetooth" />
+                android:orientation="vertical">
 
-        </LinearLayout>
+                <Button
+                    android:id="@+id/connectButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/bluetooth" />
 
-        <LinearLayout
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_gravity="left|bottom"
-            android:layout_marginLeft="20dp"
-            android:layout_marginBottom="20dp"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            </LinearLayout>
 
-            <Button
-                android:id="@+id/startButton"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+            <LinearLayout
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_gravity="left|bottom"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="20dp"
                 android:layout_weight="1"
-                android:background="@drawable/start" />
+                android:orientation="vertical">
 
-        </LinearLayout>
+                <Button
+                    android:id="@+id/startButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/start" />
 
-    </FrameLayout>
+            </LinearLayout>
+
+        </FrameLayout>
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/left_drawer"
