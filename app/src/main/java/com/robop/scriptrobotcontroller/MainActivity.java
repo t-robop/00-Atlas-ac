@@ -28,12 +28,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private final int REQUEST_CONNECT_DEVICE = 9;
     private final int REQUEST_ENABLE_BLUETOOTH = 10;
 
-    //TODO ListViewの項目をドラッグで動かして並び替えられるようにする
-    private RecyclerView recyclerView;
-    private RecyclerView.Adapter recyclerAdapter;
-    private RecyclerView.LayoutManager layoutManager;
-
-    ItemDataList item;
+    ItemDataList item;  //命令のパラメータクラス
     private ListView listView;
     private ListAdapter listAdapter;
 
@@ -42,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //Android端末のBluetooth有効化
+        //BlueTooth処理
         bluetooth = new Bluetooth(this);
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (bluetoothAdapter != null){
@@ -56,19 +51,17 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         bluetooth.setCommunicationCallback(this);
 
-        //final ListView listView = findViewById(R.id.listView);
+        //ListView処理
         listView = findViewById(R.id.listView);
-        //RecyclerView recyclerView = findViewById(R.id.listView);
-        //final ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
 
         item = new ItemDataList();
         listAdapter = new ListAdapter(getApplicationContext(),item);
         listView.setAdapter(listAdapter);
 
-        //recyclerView.setHasFixedSize(true);
-        layoutManager = new LinearLayoutManager(this);
-        recyclerAdapter = new RecyclerAdapter(item);
+        listView.setOnItemClickListener(this);
+        listView.setOnItemLongClickListener(this);
 
+        //Button処理
         //TODO 変数化して値変更・保持できるようにする
         setButtonListener(100, 2, "1", R.id.button1);
         setButtonListener(100, 2, "2", R.id.button2);
@@ -78,15 +71,11 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         Button startButton = findViewById(R.id.startButton);
         Button connectButton = findViewById(R.id.connectButton);
 
-        listView.setOnItemClickListener(this);
-        listView.setOnItemLongClickListener(this);
-
         startButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
                 //BlueToothで送る文字列のnullチェック
                 if(!sendBTText().equals("")){
-                    Log.i("bt",sendBTText());
 
                     //Bluetooth接続チェック
                     if(bluetooth.isConnected()){
