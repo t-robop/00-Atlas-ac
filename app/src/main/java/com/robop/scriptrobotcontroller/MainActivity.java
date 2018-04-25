@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         setButtonListener(100, 2, "4", R.id.button4);
 
         Button startButton = findViewById(R.id.startButton);
-        Button finishButton = findViewById(R.id.finishButton);
+        Button connectButton = findViewById(R.id.connectButton);
 
         listView.setOnItemClickListener(this);
         listView.setOnItemLongClickListener(this);
@@ -101,9 +101,17 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             }
         });
 
-        finishButton.setOnClickListener(new View.OnClickListener(){
+        connectButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
+                if(bluetooth.isConnected()){
+                    bluetooth.disconnect();
+                }else{
+                    if (bluetoothAdapter != null){
+                        Intent intent = new Intent(MainActivity.this,DeviceListActivity.class);
+                        startActivityForResult(intent, REQUEST_CONNECT_DEVICE);
+                    }
+                }
             }
         });
 
@@ -196,29 +204,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         item.remove(position);
         listView.setAdapter(listAdapter);
         return false;
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu){
-        getMenuInflater().inflate(R.menu.option,menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item){
-        switch (item.getItemId()){
-            case R.id.connectBT:
-                if(bluetooth.isConnected()){
-                    bluetooth.disconnect();
-                }else{
-                    if (bluetoothAdapter != null){
-                        Intent intent = new Intent(this,DeviceListActivity.class);
-                        startActivityForResult(intent, REQUEST_CONNECT_DEVICE);
-                    }
-                }
-                break;
-        }
-        return true;
     }
 
     void setButtonListener(final int speed, final int time, final String imageId, int id) {

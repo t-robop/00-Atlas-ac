@@ -69,19 +69,19 @@ public class ListAdapter extends BaseAdapter {
 
         switch (item.getImageId(position)){
             case "1":
-                holder.image.setImageResource(R.mipmap.forward);
+                holder.image.setImageResource(R.drawable.move_front);
                 break;
 
             case "2":
-                holder.image.setImageResource(R.mipmap.backward);
+                holder.image.setImageResource(R.drawable.move_back);
                 break;
 
             case "3":
-                holder.image.setImageResource(R.mipmap.left_rotation);
+                holder.image.setImageResource(R.drawable.move_left);
                 break;
 
             case "4":
-                holder.image.setImageResource(R.mipmap.right_rotation);
+                holder.image.setImageResource(R.drawable.move_right);
                 break;
 
             default:
