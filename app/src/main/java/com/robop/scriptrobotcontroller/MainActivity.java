@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 import android.app.Activity;
@@ -36,6 +37,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+//
+//        FrameLayout fl=findViewById(R.id.back_ground);
+//        fl.setBackgroundResource(R.drawable.repeat_rasen);
 
         //BlueTooth処理
         bluetooth = new Bluetooth(this);

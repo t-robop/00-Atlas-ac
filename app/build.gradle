@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 27
-    buildToolsVersion "27.0.2"
+    buildToolsVersion '27.0.2'
     defaultConfig {
         applicationId "com.robop.scriptrobotcontroller"
         minSdkVersion 19
@@ -25,6 +25,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
+    //noinspection GradleCompatible
     compile 'com.android.support:appcompat-v7:27.0.2'
     compile 'me.aflak.libraries:bluetooth:1.3.0'
     compile 'com.google.code.gson:gson:2.8.0'
