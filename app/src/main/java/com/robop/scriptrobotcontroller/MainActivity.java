@@ -210,6 +210,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // ダイアログの表示
         EditImageParamDialog editImageParamDialog = new EditImageParamDialog();
         Bundle data = new Bundle();
+        data.putInt("currentImageSpeed", item.getSpeed(position));
+        data.putInt("currentImageTime", item.getTime(position));
         data.putInt("currentImagePosition", position);
         editImageParamDialog.setArguments(data);
 
