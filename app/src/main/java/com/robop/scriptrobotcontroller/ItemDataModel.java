@@ -1,65 +1,43 @@
 package com.robop.scriptrobotcontroller;
 
-import android.app.Activity;
-import android.content.res.Resources;
-import android.widget.ImageView;
-
-import java.util.ArrayList;
-import java.util.List;
-
 public class ItemDataModel {
 
-    private List<Integer> speedData = new ArrayList<>();
-    private List<Integer> timeData = new ArrayList<>();
-    private List<String> imageId = new ArrayList<>();
+    private int rightSpeed;
+    private int leftSpeed;
+    private int time;
+    private int orderId;
 
-    ItemDataModel(){
-
+    ItemDataModel(int orderId, int rightSpeed, int leftSpeed, int time){
+        setOrderId(orderId);
+        setRightSpeed(rightSpeed);
+        setLeftSpeed(leftSpeed);
+        setTime(time);
     }
-
-    public int getSpeed(int position){
-        return speedData.get(position);
+    public int getRightSpeed(){
+        return rightSpeed;
     }
-    public int getTime(int position){
-        return timeData.get(position);
+    public int getLeftSpeed(){
+        return leftSpeed;
     }
-    public String getImageId(int position) {
-        return imageId.get(position);
+    public int getTime(){
+        return time;
     }
-
-    public void setSpeed(int position, int speed){
-        speedData.set(position, speed);
-    }
-    public  void setTime(int position, int time){
-        timeData.set(position, time);
-    }
-    public void setImageId(int position, String id){
-        imageId.set(position, id);
+    public int getOrderId() {
+        return orderId;
     }
 
-    public void addSpeed(int speed){
-        speedData.add(speed);
+    private void setRightSpeed(int rightSpeed){
+        this.rightSpeed = rightSpeed;
     }
-    public void addTime(int time){
-        timeData.add(time);
+    private void setLeftSpeed(int leftSpeed){
+        this.leftSpeed = leftSpeed;
     }
-    public void addImageId(String id){
-        imageId.add(id);
+    private void setTime(int time){
+        this.time = time;
     }
-
-    public int listSize(){
-        if(imageId.size() == speedData.size() && imageId.size() == timeData.size()) {
-            return imageId.size();
-        }else {
-            //個数が合わない
-            return -1;
-        }
+    private void setOrderId(int orderId){
+        this.orderId = orderId ;
     }
 
-    public void remove(int position){
-        speedData.remove(position);
-        timeData.remove(position);
-        imageId.remove(position);
-    }
 
 }

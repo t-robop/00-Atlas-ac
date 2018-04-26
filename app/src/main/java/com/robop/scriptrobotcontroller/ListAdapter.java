@@ -9,27 +9,31 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 public class ListAdapter extends BaseAdapter {
 
     private LayoutInflater mInflater;
-    private ItemDataModel item;
+    //private ItemDataModel item;
+    ArrayList<ItemDataModel> ItemDataArray = new ArrayList<>();
 
-    ListAdapter(Context context, ItemDataModel itemDataList){
+
+    ListAdapter(Context context, ArrayList itemDataList){
 
         //レイアウトxmlから、viewを生成
         mInflater = (LayoutInflater)context.getSystemService(
                 Context.LAYOUT_INFLATER_SERVICE);
-        item = itemDataList;
+        ItemDataArray = itemDataList;
     }
 
     @Override
     public int getCount() {
-        return item.listSize();
+        return ItemDataArray.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return item.getImageId(position);
+        return ItemDataArray.get(position);
     }
 
     @Override
@@ -63,24 +67,26 @@ public class ListAdapter extends BaseAdapter {
         else {
             holder = (ViewHolder)convertView.getTag();
         }
-        holder.speed.setText("パワー : " + item.getSpeed(position));
-        holder.time.setText(item.getTime(position) + "秒");
+        //TODO ここ治して！
+        holder.speed.setText("パワー : " + ItemDataArray.get(position).getRightSpeed());
+        holder.speed.setText("パワー : " + ItemDataArray.get(position).getLeftSpeed());
+        holder.time.setText(ItemDataArray.get(position).getTime() + "秒");
         //holder.image.setImageResource(R.drawable.edit_icon);
 
-        switch (item.getImageId(position)){
-            case "1":
+        switch (ItemDataArray.get(position).getOrderId()){
+            case 1:
                 holder.image.setImageResource(R.drawable.move_front);
                 break;
 
-            case "2":
+            case 2:
                 holder.image.setImageResource(R.drawable.move_back);
                 break;
 
-            case "3":
+            case 3:
                 holder.image.setImageResource(R.drawable.move_left);
                 break;
 
-            case "4":
+            case 4:
                 holder.image.setImageResource(R.drawable.move_right);
                 break;
 
