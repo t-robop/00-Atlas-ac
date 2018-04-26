@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -36,6 +37,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ListView listView;
     private ListAdapter listAdapter;
 
+    private TextView connectStatus;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +57,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         bluetooth.setCommunicationCallback(this);
+
+        connectStatus = findViewById(R.id.connectStatus);
 
         //ListView処理
         listView = findViewById(R.id.listView);
@@ -133,13 +138,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onConnect(BluetoothDevice device) {
+        connectStatus.setText(device.getName()+"に接続されています");
         Toast.makeText(this, "接続 to " + device.getName() + "\n" + device.getAddress(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onDisconnect(BluetoothDevice device, String message) {
+        connectStatus.setText("接続されていません");
         Toast.makeText(this, "接続が切れました", Toast.LENGTH_SHORT).show();
     }
 
@@ -155,6 +163,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onConnectError(BluetoothDevice device, String message) {
+        connectStatus.setText("接続されていません");
         Toast.makeText(this, "接続できません", Toast.LENGTH_SHORT).show();
     }
 

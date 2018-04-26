@@ -65,9 +65,10 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/connectStatus"
                     android:layout_width="wrap_content"
                     android:layout_height="0dp"
-                    android:text="接続されてません"
+                    android:text="接続されていません"
                     android:textStyle="bold"
                     android:layout_weight="1" />
 
