@@ -3,111 +3,31 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
-    android:gravity="center"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:layout_margin="10dp">
 
     <TextView
-        android:id="@+id/timetext"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/time"
-        android:textSize="30sp"/>
-
-    <NumberPicker
-        android:id="@+id/timepic"
-        android:layout_width="wrap_content"
-        android:layout_height="92dp"
-        android:layout_gravity="end">
-
-    </NumberPicker>
-<!-- 参考 : http://android.keicode.com/basics/ui-numberpicker.php -->
-
-    <TextView
-        android:id="@+id/speedtext"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/speed"
         android:textSize="30sp"/>
 
-    <NumberPicker
-        android:id="@+id/speedpic"
-        android:layout_width="wrap_content"
-        android:layout_height="88dp"
-        android:layout_gravity="end">
-
-    </NumberPicker>
-
-    <LinearLayout
+    <EditText
+        android:id="@+id/edit_speed"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:hint="速さ"/>
 
-        <Button
-            android:id="@+id/bt_close"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/cancel"
-            android:textColor="@android:color/white" />
-
-        <Button
-            android:id="@+id/bt_ok"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:enabled="false"
-            android:text="@string/ok"
-            android:textColor="@android:color/black" />
-
-    </LinearLayout>
-
-    <!--
-    <LinearLayout
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:text="@string/time"
+        android:textSize="30sp"/>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/move_front"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="前進"/>
-
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/button2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Button2" />
-
-        <Button
-            android:id="@+id/button3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Button3" />
-
-        <Button
-            android:id="@+id/button4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Button4" />
-
-    </LinearLayout>
-
-    -->
+    <EditText
+        android:id="@+id/edit_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="時間"/>
 
 </LinearLayout>
