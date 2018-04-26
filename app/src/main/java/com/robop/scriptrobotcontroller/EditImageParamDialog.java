@@ -21,10 +21,15 @@ public class EditImageParamDialog extends DialogFragment{
         final LayoutInflater inflater = getActivity().getLayoutInflater();
         final View view = inflater.inflate(R.layout.layout_dialog, null);
 
-        final int currentImageRightSpeed = getArguments().getInt("currentImageRightSpeed");
-        final int currentImageLeftSpeed = getArguments().getInt("currentImageLeftSpeed");
-        final int currentImageTime = getArguments().getInt("currentImageTime");
+        final int orderId =  getArguments().getInt("orderId");
+        final int rightSpeed = getArguments().getInt("RightSpeed");
+        final int leftSpeed = getArguments().getInt("LeftSpeed");
+        final int time = getArguments().getInt("time");
         final int listItemPosition = getArguments().getInt("listItemPosition");
+
+        final ItemDataModel dataModel = new ItemDataModel(orderId,rightSpeed,leftSpeed,time);
+
+
 
         final EditText editSpeed = view.findViewById(R.id.edit_speed);
         editSpeed.setInputType(InputType.TYPE_CLASS_NUMBER);
@@ -33,9 +38,9 @@ public class EditImageParamDialog extends DialogFragment{
 
         //TODO ここ治して！View足りない！
 
-        editSpeed.setText(Integer.toString(currentImageRightSpeed));
-        editSpeed.setText(Integer.toString(currentImageLeftSpeed));
-        editTime.setText(Integer.toString(currentImageTime));
+        editSpeed.setText(Integer.toString(dataModel.getRightSpeed()));
+        editSpeed.setText(Integer.toString(dataModel.getLeftSpeed()));
+        editTime.setText(Integer.toString(dataModel.getTime()));
 
         builder.setView(view)
                 .setPositiveButton("決定", new DialogInterface.OnClickListener() {
@@ -46,25 +51,13 @@ public class EditImageParamDialog extends DialogFragment{
                         if (editSpeed.getText().toString().length() != 0 && editTime.getText().toString().length() != 0){
                             // 数値が入力されてる時
                             //TODO ここ治して！View足りない！
-                            int rightSpeedParam = Integer.valueOf(editSpeed.getText().toString());
-                            int leftSpeedParam = Integer.valueOf(editSpeed.getText().toString());
-                            int timeParam = Integer.valueOf(editTime.getText().toString());
-
-                            // とりあえず数値丸め処置した
-                            if (rightSpeedParam > 255){
-                                rightSpeedParam=255;
-                            }
-                            if (leftSpeedParam > 255){
-                                leftSpeedParam=255;
-                            }
-                            if (timeParam>20){
-                                timeParam=20;
-                            }
+                            dataModel.setRightSpeed(Integer.valueOf(editSpeed.getText().toString()));
+                            dataModel.setLeftSpeed(Integer.valueOf(editSpeed.getText().toString()));
+                            dataModel.setTime(Integer.valueOf(editTime.getText().toString()));
 
                             MainActivity mainActivity = (MainActivity) getActivity();
-                            mainActivity.resetItemParam(listItemPosition, rightSpeedParam, leftSpeedParam, timeParam);
+                            mainActivity.updateItemParam(listItemPosition, dataModel);
                         }
-
                     }
                 })
                 .setNegativeButton("キャンセル", null);

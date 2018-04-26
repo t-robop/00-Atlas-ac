@@ -205,9 +205,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // ダイアログの表示
         EditImageParamDialog editImageParamDialog = new EditImageParamDialog();
         Bundle data = new Bundle();
-        data.putInt("currentImageRightSpeed", ItemDataArray.get(position).getRightSpeed());
-        data.putInt("currentImageLeftSpeed", ItemDataArray.get(position).getLeftSpeed());
-        data.putInt("currentImageTime", ItemDataArray.get(position).getTime());
+        data.putInt("orderId", ItemDataArray.get(position).getOrderId());
+        data.putInt("RightSpeed", ItemDataArray.get(position).getRightSpeed());
+        data.putInt("LeftSpeed", ItemDataArray.get(position).getLeftSpeed());
+        data.putInt("time", ItemDataArray.get(position).getTime());
         data.putInt("listItemPosition", position);
         editImageParamDialog.setArguments(data);
         editImageParamDialog.show(getFragmentManager(), null);
@@ -221,11 +222,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return true;
     }
 
-    //TODO 紛らわしいのでresetではなくupdateとかにして
-    public void resetItemParam(int listPosition, int rightSpeed, int leftSpeed, int time) {
-        int orderId = ItemDataArray.get(listPosition).getOrderId();
-        ItemDataModel itemDataModel = new ItemDataModel(orderId, rightSpeed, leftSpeed, time);
-        ItemDataArray.set(listPosition,itemDataModel);
+    public void updateItemParam(int listPosition, ItemDataModel dataModel) {
+        ItemDataArray.set(listPosition,dataModel);
         listAdapter.notifyDataSetChanged();
     }
 
