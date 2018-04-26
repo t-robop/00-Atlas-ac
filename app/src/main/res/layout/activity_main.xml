@@ -19,8 +19,7 @@
             <ListView
                 android:id="@+id/listView"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1">
+                android:layout_height="wrap_content">
 
             </ListView>
 
@@ -28,14 +27,13 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="20dp"
-                android:layout_weight="1"
+                android:layout_marginStart="20dp"
                 android:orientation="vertical">
 
                 <Button
                     android:id="@+id/connectButton"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="0dp"
                     android:layout_weight="1"
                     android:background="@drawable/bluetooth" />
 
@@ -44,16 +42,15 @@
             <LinearLayout
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:layout_gravity="left|bottom"
+                android:layout_gravity="start|bottom"
                 android:layout_marginBottom="20dp"
-                android:layout_marginLeft="20dp"
-                android:layout_weight="1"
+                android:layout_marginStart="20dp"
                 android:orientation="vertical">
 
                 <Button
                     android:id="@+id/startButton"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="0dp"
                     android:layout_weight="1"
                     android:background="@drawable/start" />
 
@@ -62,16 +59,16 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right|bottom"
+                android:layout_gravity="end|bottom"
                 android:layout_marginBottom="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_weight="1"
+                android:layout_marginEnd="10dp"
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/connectStatus"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="接続されてません"
+                    android:layout_height="0dp"
+                    android:text="接続されていません"
                     android:textStyle="bold"
                     android:layout_weight="1" />
 
@@ -85,7 +82,7 @@
         android:id="@+id/left_drawer"
         android:layout_width="240dp"
         android:layout_height="match_parent"
-        android:layout_gravity="left"
+        android:layout_gravity="start"
         android:background="#fff">
 
         <LinearLayout
@@ -93,38 +90,10 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <!--<Button
-                android:id="@+id/button1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Button1" />
-
-            <Button
-                android:id="@+id/button2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Button2" />
-
-            <Button
-                android:id="@+id/button3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Button3" />
-
-            <Button
-                android:id="@+id/button4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Button4" />-->
-
             <ListView
                 android:id="@+id/drawer_list"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:layout_weight="1"/>
 
         </LinearLayout>

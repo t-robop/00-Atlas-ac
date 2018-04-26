@@ -1,47 +1,48 @@
 package com.robop.scriptrobotcontroller;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
-import android.view.Menu;
-import android.view.MenuItem;
+
+import java.util.Arrays;
+import java.util.List;
 
 import java.util.ArrayList;
 
 import me.aflak.bluetooth.Bluetooth;
 import me.aflak.bluetooth.CommunicationCallback;
 
-public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener, CommunicationCallback {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener, CommunicationCallback {
 
     Bluetooth bluetooth;
     BluetoothAdapter bluetoothAdapter;
     private final int REQUEST_CONNECT_DEVICE = 9;
     private final int REQUEST_ENABLE_BLUETOOTH = 10;
 
-    ItemDataList item;  //命令のパラメータクラス
+    ItemDataModel item;  //命令のパラメータクラス
     private ListView listView;
     private ListAdapter listAdapter;
+
+    private TextView connectStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//
-//        FrameLayout fl=findViewById(R.id.back_ground);
-//        fl.setBackgroundResource(R.drawable.repeat_rasen);
 
         //BlueTooth処理
         bluetooth = new Bluetooth(this);
@@ -57,22 +58,22 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
         bluetooth.setCommunicationCallback(this);
 
+        connectStatus = findViewById(R.id.connectStatus);
+
         //ListView処理
         listView = findViewById(R.id.listView);
 
-        item = new ItemDataList();
+        item = new ItemDataModel();
         listAdapter = new ListAdapter(getApplicationContext(),item);
         listView.setAdapter(listAdapter);
 
         listView.setOnItemClickListener(this);
         listView.setOnItemLongClickListener(this);
 
-        //Button処理"
-        //TODO 変数化して値変更・保持できるようにする
-//        setButtonListener(100, 2, "1", R.id.button1);
-//        setButtonListener(100, 2, "2", R.id.button2);
-//        setButtonListener(100, 2, "3", R.id.button3);
-//        setButtonListener(100, 2, "4", R.id.button4);
+        /*Button処理
+        SharedPreferences sharedPreferences = getPreferences(Context.MODE_PRIVATE);
+        List<Integer> speedParamList = Arrays.asList(sharedPreferences.getInt("speedParam", 100), sharedPreferences.getInt("speedParam", 100));
+        */
 
         MenuItemAdapter menuItemAdapter =new MenuItemAdapter(this);
         menuItemAdapter.add(new MenuItemModel(R.drawable.move_front,"前進","パワーと時間を設定して、ロボットを前に動かします。"));
@@ -94,38 +95,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         Button startButton = findViewById(R.id.startButton);
         Button connectButton = findViewById(R.id.connectButton);
 
-        startButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view){
-                //BlueToothで送る文字列のnullチェック
-                if(!sendBTText().equals("")){
-
-                    //Bluetooth接続チェック
-                    if(bluetooth.isConnected()){
-                        bluetooth.send(sendBTText());   //データフォーマット通りの文字列が送信される     //TODO 10命令以上を送りたい場合の処理を考える
-                    }else{
-                        Toast.makeText(MainActivity.this, "ロボットが接続されていません", Toast.LENGTH_SHORT).show();
-                    }
-
-                }else{
-                    Toast.makeText(MainActivity.this, "送るデータがありません", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-        connectButton.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view){
-                if(bluetooth.isConnected()){
-                    bluetooth.disconnect();
-                }else{
-                    if (bluetoothAdapter != null){
-                        Intent intent = new Intent(MainActivity.this,DeviceListActivity.class);
-                        startActivityForResult(intent, REQUEST_CONNECT_DEVICE);
-                    }
-                }
-            }
-        });
+        startButton.setOnClickListener(this);
+        connectButton.setOnClickListener(this);
 
     }
 
@@ -167,13 +138,16 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onConnect(BluetoothDevice device) {
+        connectStatus.setText(device.getName()+"に接続されています");
         Toast.makeText(this, "接続 to " + device.getName() + "\n" + device.getAddress(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onDisconnect(BluetoothDevice device, String message) {
+        connectStatus.setText("接続されていません");
         Toast.makeText(this, "接続が切れました", Toast.LENGTH_SHORT).show();
     }
 
@@ -189,48 +163,71 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
     @Override
     public void onConnectError(BluetoothDevice device, String message) {
+        connectStatus.setText("接続されていません");
         Toast.makeText(this, "接続できません", Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        Toast.makeText(getApplicationContext(), "position = " + i, Toast.LENGTH_SHORT).show();
-        // ダイアログの表示
-        final CustomizedDialog dialog = CustomizedDialog.newInstance();
-        dialog.setOnSetButtonClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //ダイアログから値を取得して、output用のTextViewに表示
-                //tvOutput.setText(String.format("%1$,3d", dialog.getInputValue()));
-                //ダイアログを消す
-                dialog.dismiss();
-            }
-        });
-        dialog.show(getFragmentManager(), "dialog_fragment");
-        dialog.setCancelable(false);
+    public void onClick(View view) {
+        switch (view.getId()){
+
+            case R.id.connectButton:
+
+                if(bluetooth.isConnected()){
+                    bluetooth.disconnect();
+                }else{
+                    if (bluetoothAdapter != null){
+                        Intent intent = new Intent(MainActivity.this,DeviceListActivity.class);
+                        startActivityForResult(intent, REQUEST_CONNECT_DEVICE);
+                    }
+                }
+
+                break;
+
+            case R.id.startButton:
+
+                //BlueToothで送る文字列のnullチェック
+                if(!sendBTText().equals("")){
+
+                    //Bluetooth接続チェック
+                    if(bluetooth.isConnected()){
+                        bluetooth.send(sendBTText());   //データフォーマット通りの文字列が送信される     //TODO 10命令以上を送りたい場合の処理を考える
+                    }else{
+                        Toast.makeText(MainActivity.this, "ロボットが接続されていません", Toast.LENGTH_SHORT).show();
+                    }
+
+                }else{
+                    Toast.makeText(MainActivity.this, "送るデータがありません", Toast.LENGTH_SHORT).show();
+                }
+
+                break;
+        }
     }
 
     @Override
-    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long l) {
+    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+
+        // ダイアログの表示
+        EditImageParamDialog editImageParamDialog = new EditImageParamDialog();
+        Bundle data = new Bundle();
+        data.putInt("currentImagePosition", position);
+        editImageParamDialog.setArguments(data);
+
+        editImageParamDialog.show(getFragmentManager(), null);
+    }
+
+    @Override
+    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
         //とりあえずアイテム消す為。後で消す
         item.remove(position);
         listView.setAdapter(listAdapter);
         return false;
     }
 
-    void setButtonListener(final int speed, final int time, final String imageId, int id) {
-
-        Button button = findViewById(id);
-
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                item.addSpeed(speed);
-                item.addTime(time);
-                item.addImageId(imageId);
-                listView.setAdapter(listAdapter);
-            }
-        });
+    public void resetItemParam(int speed, int time, int position){
+        item.setSpeed(position, speed);
+        item.setTime(position, time);
+        listAdapter.notifyDataSetChanged();
     }
 
     @SuppressLint("DefaultLocale")

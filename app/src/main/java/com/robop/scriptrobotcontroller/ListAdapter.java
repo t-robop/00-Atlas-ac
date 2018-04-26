@@ -12,9 +12,9 @@ import android.widget.TextView;
 public class ListAdapter extends BaseAdapter {
 
     private LayoutInflater mInflater;
-    private ItemDataList item;
+    private ItemDataModel item;
 
-    ListAdapter(Context context, ItemDataList itemDataList){
+    ListAdapter(Context context, ItemDataModel itemDataList){
 
         //レイアウトxmlから、viewを生成
         mInflater = (LayoutInflater)context.getSystemService(

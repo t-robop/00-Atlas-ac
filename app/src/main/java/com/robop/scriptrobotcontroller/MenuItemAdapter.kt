@@ -4,12 +4,10 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import java.util.*
-import kotlin.collections.ArrayList
 
 /**
  * Created by taiga on 2018/04/26.
@@ -26,15 +24,10 @@ class MenuItemAdapter(context: Context) :BaseAdapter() {
     }
 
     internal class ViewHolder(view: View) {
-        var imgV: ImageView
-        var titleV: TextView
-        var subV: TextView
+        var imgV: ImageView = view.findViewById(R.id.directionImage)
+        var titleV: TextView = view.findViewById(R.id.text_title)
+        var subV: TextView = view.findViewById(R.id.text_sub)
 
-        init {
-            this.imgV = view.findViewById(R.id.directionImage)
-            this.titleV = view.findViewById(R.id.text_title)
-            this.subV = view.findViewById(R.id.text_sub)
-        }
     }
 
     fun add(item:MenuItemModel){

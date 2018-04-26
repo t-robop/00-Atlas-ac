@@ -7,13 +7,13 @@ import android.widget.ImageView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ItemDataList{
+public class ItemDataModel {
 
     private List<Integer> speedData = new ArrayList<>();
     private List<Integer> timeData = new ArrayList<>();
     private List<String> imageId = new ArrayList<>();
 
-    ItemDataList(){
+    ItemDataModel(){
 
     }
 
@@ -27,7 +27,7 @@ public class ItemDataList{
         return imageId.get(position);
     }
 
-    public void setSpeeed(int position, int speed){
+    public void setSpeed(int position, int speed){
         speedData.set(position, speed);
     }
     public  void setTime(int position, int time){
@@ -55,37 +55,11 @@ public class ItemDataList{
             return -1;
         }
     }
+
     public void remove(int position){
         speedData.remove(position);
         timeData.remove(position);
         imageId.remove(position);
     }
-    public void change(int myPos, int changePos){
-
-        int tempI;
-        String tempS;
-
-        tempI = speedData.get(myPos);
-        speedData.set(myPos, speedData.get(changePos));
-        speedData.set(changePos, tempI);
-
-        tempI = timeData.get(myPos);
-        timeData.set(myPos, timeData.get(changePos));
-        timeData.set(changePos, tempI);
-
-        tempS = imageId.get(myPos);
-        imageId.set(myPos, imageId.get(changePos));
-        imageId.set(changePos, tempS);
-    }
-
-    //interruptPosの上に割り込み
-    public void interrupt(int myPos, int interruptPos){
-        for(int i = myPos; i > interruptPos; i--)
-            change(i, i - 1);
-        for(int i = myPos; i < interruptPos - 1; i++)
-            change(i, i + 1);
-    }
-
-
 
 }
