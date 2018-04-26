@@ -12,27 +12,36 @@ import android.widget.EditText;
 
 public class EditImageParamDialog extends DialogFragment{
 
-    @SuppressLint("InflateParams")
+    @SuppressLint({"InflateParams", "SetTextI18n"})
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         final LayoutInflater inflater = getActivity().getLayoutInflater();
         final View view = inflater.inflate(R.layout.layout_dialog, null);
+
+        int currentImageSpeed = getArguments().getInt("currentImageSpeed");
+        int currentImageTime = getArguments().getInt("currentImageTime");
         final int currentImagePosition = getArguments().getInt("currentImagePosition");
+
+        final EditText editSpeed = view.findViewById(R.id.edit_speed);
+        final EditText editTime = view.findViewById(R.id.edit_time);
+
+        editSpeed.setText(Integer.toString(currentImageSpeed));
+        editTime.setText(Integer.toString(currentImageTime));
 
         builder.setView(view)
                 .setPositiveButton("決定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        EditText editSpeed = view.findViewById(R.id.edit_speed);
-                        EditText editTime = view.findViewById(R.id.edit_time);
 
                         int speedParam = Integer.valueOf(editSpeed.getText().toString());
                         int timeParam = Integer.valueOf(editTime.getText().toString());
 
-                        MainActivity mainActivity = (MainActivity) getActivity();
-                        mainActivity.resetItemParam(speedParam, timeParam, currentImagePosition);
+                        if (!editSpeed.toString().equals("") || !editTime.toString().equals("")){
+                            MainActivity mainActivity = (MainActivity) getActivity();
+                            mainActivity.resetItemParam(speedParam, timeParam, currentImagePosition);
+                        }
 
                     }
                 })
