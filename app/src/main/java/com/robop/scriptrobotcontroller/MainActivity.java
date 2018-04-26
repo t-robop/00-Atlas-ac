@@ -246,4 +246,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         return sendText.toString();
     }
+    String[] generateText() {
+        StringBuilder tmpText = new StringBuilder();
+
+        for(int i=0; i<listAdapter.getCount(); i++) {
+
+        }
+
+        }
 }
