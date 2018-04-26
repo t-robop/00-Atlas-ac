@@ -218,9 +218,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //とりあえずアイテム消す為。後で消す
         ItemDataArray.remove(position);
         listView.setAdapter(listAdapter);
-        return false;
+        return true;
     }
 
+    //TODO 紛らわしいのでresetではなくupdateとかにして
     public void resetItemParam(int listPosition, int rightSpeed, int leftSpeed, int time) {
         int orderId = ItemDataArray.get(listPosition).getOrderId();
         ItemDataModel itemDataModel = new ItemDataModel(orderId, rightSpeed, leftSpeed, time);
