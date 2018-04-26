@@ -19,6 +19,8 @@ import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.ArrayList;
+
 import me.aflak.bluetooth.Bluetooth;
 import me.aflak.bluetooth.CommunicationCallback;
 
@@ -65,12 +67,29 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         listView.setOnItemClickListener(this);
         listView.setOnItemLongClickListener(this);
 
-        //Button処理
+        //Button処理"
         //TODO 変数化して値変更・保持できるようにする
-        setButtonListener(100, 2, "1", R.id.button1);
-        setButtonListener(100, 2, "2", R.id.button2);
-        setButtonListener(100, 2, "3", R.id.button3);
-        setButtonListener(100, 2, "4", R.id.button4);
+//        setButtonListener(100, 2, "1", R.id.button1);
+//        setButtonListener(100, 2, "2", R.id.button2);
+//        setButtonListener(100, 2, "3", R.id.button3);
+//        setButtonListener(100, 2, "4", R.id.button4);
+
+        MenuItemAdapter menuItemAdapter =new MenuItemAdapter(this);
+        menuItemAdapter.add(new MenuItemModel(R.drawable.move_front,"前進","パワーと時間を設定して、ロボットを前に動かします。"));
+        menuItemAdapter.add(new MenuItemModel(R.drawable.move_back,"後退","パワーと時間を設定して、ロボットを後ろに動かします。"));
+        menuItemAdapter.add(new MenuItemModel(R.drawable.move_left,"左回転","パワーと時間を設定して、ロボットを左に回転させます。"));
+        menuItemAdapter.add(new MenuItemModel(R.drawable.move_right,"右回転","パワーと時間を設定して、ロボットを右に回転させます。"));
+        ListView menuList=findViewById(R.id.drawer_list);
+        menuList.setAdapter(menuItemAdapter);
+        menuList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                item.addSpeed(100);
+                item.addTime(2);
+                item.addImageId(String.valueOf(i+1));//imageIdではなく、どの操作を行うか
+                listView.setAdapter(listAdapter);
+            }
+        });
 
         Button startButton = findViewById(R.id.startButton);
         Button connectButton = findViewById(R.id.connectButton);
