@@ -5,10 +5,10 @@ public class ItemDataModel {
     private int rightSpeed;
     private int leftSpeed;
     private int time;
-    private int id;
+    private int orderId;
 
-    ItemDataModel(int id, int rightSpeed, int leftSpeed, int time){
-        setImageId(id);
+    ItemDataModel(int orderId, int rightSpeed, int leftSpeed, int time){
+        setOrderId(orderId);
         setRightSpeed(rightSpeed);
         setLeftSpeed(leftSpeed);
         setTime(time);
@@ -22,8 +22,8 @@ public class ItemDataModel {
     public int getTime(){
         return time;
     }
-    public int getImageId() {
-        return id;
+    public int getOrderId() {
+        return orderId;
     }
 
     private void setRightSpeed(int rightSpeed){
@@ -35,8 +35,8 @@ public class ItemDataModel {
     private void setTime(int time){
         this.time = time;
     }
-    private void setImageId(int id){
-        this.id = id ;
+    private void setOrderId(int orderId){
+        this.orderId = orderId ;
     }
 
 

@@ -20,14 +20,18 @@ public class EditImageParamDialog extends DialogFragment{
         final LayoutInflater inflater = getActivity().getLayoutInflater();
         final View view = inflater.inflate(R.layout.layout_dialog, null);
 
-        int currentImageSpeed = getArguments().getInt("currentImageSpeed");
+        int currentImageRightSpeed = getArguments().getInt("currentImageRightSpeed");
+        int currentImageLeftSpeed = getArguments().getInt("currentImageLeftSpeed");
         int currentImageTime = getArguments().getInt("currentImageTime");
-        final int currentImagePosition = getArguments().getInt("currentImagePosition");
+        final int listItemPosition = getArguments().getInt("listItemPosition");
 
         final EditText editSpeed = view.findViewById(R.id.edit_speed);
         final EditText editTime = view.findViewById(R.id.edit_time);
 
-        editSpeed.setText(Integer.toString(currentImageSpeed));
+        //TODO ここ治して！View足りない！
+        editSpeed.setText(Integer.toString(currentImageRightSpeed));
+        editSpeed.setText(Integer.toString(currentImageLeftSpeed));
+
         editTime.setText(Integer.toString(currentImageTime));
 
         builder.setView(view)
@@ -35,12 +39,14 @@ public class EditImageParamDialog extends DialogFragment{
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
-                        int speedParam = Integer.valueOf(editSpeed.getText().toString());
+                        //TODO ここ治して！View足りない！
+                        int rightSpeedParam = Integer.valueOf(editSpeed.getText().toString());
+                        int leftSpeedParam = Integer.valueOf(editSpeed.getText().toString());
                         int timeParam = Integer.valueOf(editTime.getText().toString());
 
                         if (!editSpeed.toString().equals("") || !editTime.toString().equals("")){
                             MainActivity mainActivity = (MainActivity) getActivity();
-                            mainActivity.resetItemParam(speedParam, timeParam, currentImagePosition);
+                            mainActivity.resetItemParam(listItemPosition, rightSpeedParam, leftSpeedParam, timeParam);
                         }
 
                     }
