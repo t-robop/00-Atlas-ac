@@ -1,15 +1,13 @@
 package com.robop.scriptrobotcontroller;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,11 +15,6 @@ import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
-
-import java.util.Arrays;
-import java.util.List;
-
-import java.util.ArrayList;
 
 import me.aflak.bluetooth.Bluetooth;
 import me.aflak.bluetooth.CommunicationCallback;
@@ -37,7 +30,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ListView listView;
     private ListAdapter listAdapter;
 
-    private TextView connectStatus;
+    private TextView textConnectStatus;
+
+    ImageView imgConnectStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +53,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         bluetooth.setCommunicationCallback(this);
 
-        connectStatus = findViewById(R.id.connectStatus);
+        textConnectStatus = findViewById(R.id.connectStatus);
+
+        imgConnectStatus=findViewById(R.id.connectColor);
 
         //ListView処理
         listView = findViewById(R.id.listView);
@@ -141,13 +138,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @SuppressLint("SetTextI18n")
     @Override
     public void onConnect(BluetoothDevice device) {
-        connectStatus.setText(device.getName()+"に接続されています");
+        textConnectStatus.setText(device.getName()+"に接続されています");
+        imgConnectStatus.setImageResource(R.drawable.disconnect);
         Toast.makeText(this, "接続 to " + device.getName() + "\n" + device.getAddress(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onDisconnect(BluetoothDevice device, String message) {
-        connectStatus.setText("接続されていません");
+        textConnectStatus.setText("接続されていません");
+        imgConnectStatus.setImageResource(R.drawable.connect);
         Toast.makeText(this, "接続が切れました", Toast.LENGTH_SHORT).show();
     }
 
@@ -163,7 +162,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onConnectError(BluetoothDevice device, String message) {
-        connectStatus.setText("接続されていません");
+        textConnectStatus.setText("接続されていません");
         Toast.makeText(this, "接続できません", Toast.LENGTH_SHORT).show();
     }
 
