@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 import android.app.Activity;
@@ -18,6 +19,8 @@ import android.content.Intent;
 
 import java.util.Arrays;
 import java.util.List;
+
+import java.util.ArrayList;
 
 import me.aflak.bluetooth.Bluetooth;
 import me.aflak.bluetooth.CommunicationCallback;
@@ -32,8 +35,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     ItemDataModel item;  //命令のパラメータクラス
     private ListView listView;
     private ListAdapter listAdapter;
-
-    private Button imageButton[] = new Button[4];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,23 +65,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         listView.setOnItemClickListener(this);
         listView.setOnItemLongClickListener(this);
 
-        //Button処理
+        /*Button処理
         SharedPreferences sharedPreferences = getPreferences(Context.MODE_PRIVATE);
         List<Integer> speedParamList = Arrays.asList(sharedPreferences.getInt("speedParam", 100), sharedPreferences.getInt("speedParam", 100));
+        */
 
-        for (int i=0; i<imageButton.length; i++){
-            imageButton[i] = new Button(this);
-            imageButton[i].setTag("imageButton" + i);
-
-            final String imageId = String.valueOf(i);
-            imageButton[i].setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View view) {
-                    //TODO 変数化して値変更・保持できるようにする
-                    setItemData(100, 2, imageId);
-                }
-            });
-        }
+        MenuItemAdapter menuItemAdapter =new MenuItemAdapter(this);
+        menuItemAdapter.add(new MenuItemModel(R.drawable.move_front,"前進","パワーと時間を設定して、ロボットを前に動かします。"));
+        menuItemAdapter.add(new MenuItemModel(R.drawable.move_back,"後退","パワーと時間を設定して、ロボットを後ろに動かします。"));
+        menuItemAdapter.add(new MenuItemModel(R.drawable.move_left,"左回転","パワーと時間を設定して、ロボットを左に回転させます。"));
+        menuItemAdapter.add(new MenuItemModel(R.drawable.move_right,"右回転","パワーと時間を設定して、ロボットを右に回転させます。"));
+        ListView menuList=findViewById(R.id.drawer_list);
+        menuList.setAdapter(menuItemAdapter);
+        menuList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                item.addSpeed(100);
+                item.addTime(2);
+                item.addImageId(String.valueOf(i+1));//imageIdではなく、どの操作を行うか
+                listView.setAdapter(listAdapter);
+            }
+        });
 
         Button startButton = findViewById(R.id.startButton);
         Button connectButton = findViewById(R.id.connectButton);
@@ -208,13 +213,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         item.remove(position);
         listView.setAdapter(listAdapter);
         return false;
-    }
-
-    private void setItemData(int speed, int time, String imageId){
-        item.addSpeed(speed);
-        item.addTime(time);
-        item.addImageId(imageId);
-        listView.setAdapter(listAdapter);
     }
 
     public void resetItemParam(int speed, int time, int position){

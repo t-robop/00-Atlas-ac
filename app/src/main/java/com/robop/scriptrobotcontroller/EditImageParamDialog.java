@@ -12,8 +12,6 @@ import android.widget.EditText;
 
 public class EditImageParamDialog extends DialogFragment{
 
-    private int currentImagePosition;
-
     @SuppressLint("InflateParams")
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState){
@@ -21,7 +19,7 @@ public class EditImageParamDialog extends DialogFragment{
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         final LayoutInflater inflater = getActivity().getLayoutInflater();
         final View view = inflater.inflate(R.layout.layout_dialog, null);
-        currentImagePosition = getArguments().getInt("currentImagePosition");
+        final int currentImagePosition = getArguments().getInt("currentImagePosition");
 
         builder.setView(view)
                 .setPositiveButton("決定", new DialogInterface.OnClickListener() {
@@ -30,8 +28,11 @@ public class EditImageParamDialog extends DialogFragment{
                         EditText editSpeed = view.findViewById(R.id.edit_speed);
                         EditText editTime = view.findViewById(R.id.edit_time);
 
+                        int speedParam = Integer.valueOf(editSpeed.getText().toString());
+                        int timeParam = Integer.valueOf(editTime.getText().toString());
+
                         MainActivity mainActivity = (MainActivity) getActivity();
-                        //mainActivity.resetItemParam();
+                        mainActivity.resetItemParam(speedParam, timeParam, currentImagePosition);
 
                     }
                 })
