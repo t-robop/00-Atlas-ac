@@ -37,15 +37,15 @@ public class EditImageParamDialog extends DialogFragment{
 
         editTime.setText(Integer.toString(currentImageTime));
 
+        //TODO ここ治して！View足りない！
+        final int rightSpeedParam = Integer.valueOf(editSpeed.getText().toString());
+        final int leftSpeedParam = Integer.valueOf(editSpeed.getText().toString());
+        final int timeParam = Integer.valueOf(editTime.getText().toString());
+
         builder.setView(view)
                 .setPositiveButton("決定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-
-                        //TODO ここ治して！View足りない！
-                        int rightSpeedParam = Integer.valueOf(editSpeed.getText().toString());
-                        int leftSpeedParam = Integer.valueOf(editSpeed.getText().toString());
-                        int timeParam = Integer.valueOf(editTime.getText().toString());
 
                         if (!editSpeed.toString().equals("") || !editTime.toString().equals("")){
                             MainActivity mainActivity = (MainActivity) getActivity();
