@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -25,7 +26,9 @@ public class EditImageParamDialog extends DialogFragment{
         final int currentImagePosition = getArguments().getInt("currentImagePosition");
 
         final EditText editSpeed = view.findViewById(R.id.edit_speed);
+        editSpeed.setInputType(InputType.TYPE_CLASS_NUMBER);
         final EditText editTime = view.findViewById(R.id.edit_time);
+        editTime.setInputType(InputType.TYPE_CLASS_NUMBER);
 
         editSpeed.setText(Integer.toString(currentImageSpeed));
         editTime.setText(Integer.toString(currentImageTime));
