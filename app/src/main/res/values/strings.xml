@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">ScriptRobotController</string>
     <string name="time">時間</string>
-    <string name="speed">速さ</string>
+    <string name="speed">パワー</string>
     <string name="err_msg">値が設定されていません</string>
     <string name="ok">決定</string>h
     <string name="cancel">キャンセル</string>
