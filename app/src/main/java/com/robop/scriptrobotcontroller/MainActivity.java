@@ -175,7 +175,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.startButton:
                 //BlueToothで送る文字列のnullチェック
-                if (generateBTCommand()[0].equals("")) {
+                if (generateBTCommand()[0].length() == 0) {
                     Toast.makeText(MainActivity.this, "送るデータがありません", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -232,8 +232,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             sendText.append(String.format("%02d", listAdapter.getItem(i).getTime()));
             sendText.append(String.format("%03d", listAdapter.getItem(i).getRightSpeed()));
             sendText.append(String.format("%03d", listAdapter.getItem(i).getLeftSpeed()));
-            sendText.append('\0');  //1命令分の終端文字
         }
+        sendText.append('\0');  //1命令分の終端文字
 
         return sendText.toString();
     }
@@ -243,18 +243,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         int arrayNum = listAdapter.getCount() / 6 + 1;
         String[] strings = new String[arrayNum];
         StringBuilder tmpText = new StringBuilder();
-        for (int i = 0; i < listAdapter.getCount(); i++) {
-            tmpText.append(listAdapter.getItem(i).getOrderId());
-            tmpText.append(String.format("%02d", listAdapter.getItem(i).getTime()));
-            tmpText.append(String.format("%03d", listAdapter.getItem(i).getRightSpeed()));
-            tmpText.append(String.format("%03d", listAdapter.getItem(i).getLeftSpeed()));
-            tmpText.append('\0');  //1命令分の終端文字
+        for (int i = 1; i <= listAdapter.getCount(); i++) {
+            tmpText.append(listAdapter.getItem(i-1).getOrderId());
+            tmpText.append(String.format("%02d", listAdapter.getItem(i-1).getTime()));
+            tmpText.append(String.format("%03d", listAdapter.getItem(i-1).getRightSpeed()));
+            tmpText.append(String.format("%03d", listAdapter.getItem(i-1).getLeftSpeed()));
 
             if (i % 6 == 0) {
-                strings[i / 6] = tmpText.toString();
+                tmpText.append('\0');  //1命令分の終端文字
+                strings[(i / 6) -1] = tmpText.toString();
                 tmpText.setLength(0);
             }
         }
+        tmpText.append('\0');  //1命令分の終端文字
+        strings[arrayNum-1] = tmpText.toString();
         ArrayList<String> multiBTCommand = new ArrayList<>();
         String header = "ff" + strings.length;
         multiBTCommand.add(header);
@@ -266,7 +268,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private String[] generateBTCommand() {
         if (listAdapter.getCount() < 7) {
-            singleBT();
+            //singleBT();
             return new String[]{singleBT()};
         } else {
             return multiBT();
