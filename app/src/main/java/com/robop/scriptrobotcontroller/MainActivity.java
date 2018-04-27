@@ -16,6 +16,8 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 
+import java.util.ArrayList;
+
 import me.aflak.bluetooth.Bluetooth;
 import me.aflak.bluetooth.CommunicationCallback;
 
@@ -26,7 +28,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private final int REQUEST_CONNECT_DEVICE = 9;
     private final int REQUEST_ENABLE_BLUETOOTH = 10;
 
-    ItemDataModel item;  //命令のパラメータクラス
+    ArrayList<ItemDataModel> ItemDataArray = new ArrayList<>();
+    //ItemDataModel item;  //命令のパラメータクラス
     private ListView listView;
     private ListAdapter listAdapter;
 
@@ -60,8 +63,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //ListView処理
         listView = findViewById(R.id.listView);
 
-        item = new ItemDataModel();
-        listAdapter = new ListAdapter(getApplicationContext(),item);
+        //item = new ItemDataModel();
+        listAdapter = new ListAdapter(getApplicationContext(),ItemDataArray);
         listView.setAdapter(listAdapter);
 
         listView.setOnItemClickListener(this);
@@ -82,9 +85,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         menuList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                item.addSpeed(100);
-                item.addTime(2);
-                item.addImageId(String.valueOf(i+1));//imageIdではなく、どの操作を行うか
+                // positionが1から始まるため
+                int id = i + 1;
+                ItemDataArray.add(new ItemDataModel(id,100,100,2));
                 listView.setAdapter(listAdapter);
             }
         });
@@ -209,25 +212,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         // ダイアログの表示
         EditImageParamDialog editImageParamDialog = new EditImageParamDialog();
         Bundle data = new Bundle();
-        data.putInt("currentImageSpeed", item.getSpeed(position));
-        data.putInt("currentImageTime", item.getTime(position));
-        data.putInt("currentImagePosition", position);
+        data.putInt("currentImageRightSpeed", ItemDataArray.get(position).getRightSpeed());
+        data.putInt("currentImageLeftSpeed", ItemDataArray.get(position).getLeftSpeed());
+        data.putInt("currentImageTime", ItemDataArray.get(position).getTime());
+        data.putInt("listItemPosition", position);
         editImageParamDialog.setArguments(data);
-
         editImageParamDialog.show(getFragmentManager(), null);
     }
 
     @Override
     public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
         //とりあえずアイテム消す為。後で消す
-        item.remove(position);
+        ItemDataArray.remove(position);
         listView.setAdapter(listAdapter);
         return false;
     }
 
-    public void resetItemParam(int speed, int time, int position){
-        item.setSpeed(position, speed);
-        item.setTime(position, time);
+    public void resetItemParam(int listPosition, int rightSpeed, int leftSpeed, int time) {
+        int orderId = ItemDataArray.get(listPosition).getOrderId();
+        ItemDataModel itemDataModel = new ItemDataModel(orderId, rightSpeed, leftSpeed, time);
+        ItemDataArray.set(listPosition,itemDataModel);
         listAdapter.notifyDataSetChanged();
     }
 
@@ -237,12 +241,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         //imageId、Time、Speedの文字列を連結
         for(int i=0; i<listAdapter.getCount(); i++){
-            sendText.append(item.getImageId(i));
-            sendText.append(String.format("%02d", item.getTime(i)));
-            sendText.append(String.format("%03d", item.getSpeed(i)));
+            sendText.append(ItemDataArray.get(i).getOrderId());
+            sendText.append(String.format("%02d", ItemDataArray.get(i).getTime()));
+            sendText.append(String.format("%03d", ItemDataArray.get(i).getRightSpeed()));
+            sendText.append(String.format("%03d", ItemDataArray.get(i).getLeftSpeed()));
             sendText.append('\0');  //1命令分の終端文字
         }
 
         return sendText.toString();
     }
+
 }
