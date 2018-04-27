@@ -12,8 +12,7 @@ import java.util.ArrayList;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder>{
 
-    ArrayList<ItemDataModel> ItemDataArray = new ArrayList<>();
-
+    ArrayList<ItemDataModel> ItemDataArray;
     static class ViewHolder extends RecyclerView.ViewHolder{
         TextView speed;
         TextView time;
