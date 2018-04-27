@@ -31,7 +31,11 @@ class MenuItemAdapter(context: Context) :BaseAdapter() {
     }
 
     fun add(item:MenuItemModel){
-        this.mItemList!!.add(item)
+        this.mItemList?.add(item)
+    }
+
+    fun set(item: MenuItemModel,pos:Int){
+        this.mItemList?.set(pos,item)
     }
 
     override fun getCount(): Int {
