@@ -32,7 +32,7 @@ public class ListAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int position) {
+    public ItemDataModel getItem(int position) {
         return ItemDataArray.get(position);
     }
 
