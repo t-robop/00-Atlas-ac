@@ -21,10 +21,15 @@ public class EditImageParamDialog extends DialogFragment{
         final LayoutInflater inflater = getActivity().getLayoutInflater();
         final View view = inflater.inflate(R.layout.layout_dialog, null);
 
-        int currentImageRightSpeed = getArguments().getInt("currentImageRightSpeed");
-        int currentImageLeftSpeed = getArguments().getInt("currentImageLeftSpeed");
-        int currentImageTime = getArguments().getInt("currentImageTime");
+        final int orderId =  getArguments().getInt("orderId");
+        final int rightSpeed = getArguments().getInt("RightSpeed");
+        final int leftSpeed = getArguments().getInt("LeftSpeed");
+        final int time = getArguments().getInt("time");
         final int listItemPosition = getArguments().getInt("listItemPosition");
+
+        final ItemDataModel dataModel = new ItemDataModel(orderId,rightSpeed,leftSpeed,time);
+
+
 
         final EditText editSpeed = view.findViewById(R.id.edit_speed);
         editSpeed.setInputType(InputType.TYPE_CLASS_NUMBER);
@@ -32,26 +37,27 @@ public class EditImageParamDialog extends DialogFragment{
         editTime.setInputType(InputType.TYPE_CLASS_NUMBER);
 
         //TODO ここ治して！View足りない！
-        editSpeed.setText(Integer.toString(currentImageRightSpeed));
-        editSpeed.setText(Integer.toString(currentImageLeftSpeed));
 
-        editTime.setText(Integer.toString(currentImageTime));
-
-        //TODO ここ治して！View足りない！
-        final int rightSpeedParam = Integer.valueOf(editSpeed.getText().toString());
-        final int leftSpeedParam = Integer.valueOf(editSpeed.getText().toString());
-        final int timeParam = Integer.valueOf(editTime.getText().toString());
+        editSpeed.setText(Integer.toString(dataModel.getRightSpeed()));
+        editSpeed.setText(Integer.toString(dataModel.getLeftSpeed()));
+        editTime.setText(Integer.toString(dataModel.getTime()));
 
         builder.setView(view)
                 .setPositiveButton("決定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
-                        if (!editSpeed.toString().equals("") || !editTime.toString().equals("")){
-                            MainActivity mainActivity = (MainActivity) getActivity();
-                            mainActivity.resetItemParam(listItemPosition, rightSpeedParam, leftSpeedParam, timeParam);
-                        }
+                        // EditTextの空白判定
+                        if (editSpeed.getText().toString().length() != 0 && editTime.getText().toString().length() != 0){
+                            // 数値が入力されてる時
+                            //TODO ここ治して！View足りない！
+                            dataModel.setRightSpeed(Integer.valueOf(editSpeed.getText().toString()));
+                            dataModel.setLeftSpeed(Integer.valueOf(editSpeed.getText().toString()));
+                            dataModel.setTime(Integer.valueOf(editTime.getText().toString()));
 
+                            MainActivity mainActivity = (MainActivity) getActivity();
+                            mainActivity.updateItemParam(listItemPosition, dataModel);
+                        }
                     }
                 })
                 .setNegativeButton("キャンセル", null);

@@ -16,7 +16,7 @@
         android:id="@+id/edit_speed"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="速さ"/>
+        android:hint="@string/speed"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -28,6 +28,6 @@
         android:id="@+id/edit_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="時間"/>
+        android:hint="@string/time"/>
 
 </LinearLayout>
