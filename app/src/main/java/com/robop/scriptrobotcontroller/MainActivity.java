@@ -1,8 +1,12 @@
 package com.robop.scriptrobotcontroller;
 
 import android.annotation.SuppressLint;
+import android.content.ClipData;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -31,6 +35,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ListView listView;
     private ListAdapter listAdapter;
 
+    //RecyclerView
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
+
     private TextView connectStatus;
 
     @Override
@@ -54,15 +63,48 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         connectStatus = findViewById(R.id.connectStatus);
 
-        //ListView処理
-        listView = findViewById(R.id.listView);
+//        //ListView処理
+//        listView = findViewById(R.id.listView);
+//
+//        //item = new ItemDataModel();
+//        listAdapter = new ListAdapter(getApplicationContext(), ItemDataArray);
+//        listView.setAdapter(listAdapter);
+//
+//        listView.setOnItemClickListener(this);
+//        listView.setOnItemLongClickListener(this);
 
-        //item = new ItemDataModel();
-        listAdapter = new ListAdapter(getApplicationContext(), ItemDataArray);
-        listView.setAdapter(listAdapter);
+        //RecyclerView処理
+        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
 
-        listView.setOnItemClickListener(this);
-        listView.setOnItemLongClickListener(this);
+        mRecyclerView.setHasFixedSize(true);
+
+        mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+        mAdapter = new RecyclerAdapter(getApplicationContext(),ItemDataArray);
+        mRecyclerView.setAdapter(mAdapter);
+
+        //ItemTouchHelper
+        ItemTouchHelper itemDecor = new ItemTouchHelper(
+                new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.RIGHT) {
+                    @Override
+                    public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                        final int fromPos = viewHolder.getAdapterPosition();
+                        final int toPos = target.getAdapterPosition();
+                        mAdapter.notifyItemMoved(fromPos, toPos);
+                        return true;
+                    }
+
+                    @Override
+                    public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                        final int fromPos = viewHolder.getAdapterPosition();
+                        ItemDataArray.remove(fromPos);
+
+                        mAdapter.notifyItemRemoved(fromPos);
+
+                    }
+                });
+        itemDecor.attachToRecyclerView(mRecyclerView);
 
         /*Button処理
         SharedPreferences sharedPreferences = getPreferences(Context.MODE_PRIVATE);
@@ -82,7 +124,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 // positionが1から始まるため
                 int id = i + 1;
                 ItemDataArray.add(new ItemDataModel(id, 100, 100, 2));
-                listView.setAdapter(listAdapter);
+                //listView.setAdapter(listAdapter);
+                mRecyclerView.setAdapter(mAdapter);
             }
         });
 
