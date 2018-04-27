@@ -26,16 +26,29 @@ public class ItemDataModel {
         return orderId;
     }
 
-    private void setRightSpeed(int rightSpeed){
+    void setRightSpeed(int rightSpeed){
+        if (rightSpeed > 255) {
+            this.rightSpeed = 255;
+        } else if (rightSpeed < 0) {
+            this.rightSpeed = 0;
+        }
         this.rightSpeed = rightSpeed;
     }
-    private void setLeftSpeed(int leftSpeed){
+    void setLeftSpeed(int leftSpeed){
+        if (leftSpeed > 255) {
+            this.leftSpeed = 255;
+        } else if (leftSpeed < 0) {
+            this.leftSpeed = 0;
+        }
         this.leftSpeed = leftSpeed;
     }
-    private void setTime(int time){
+    void setTime(int time){
+        if (time < 1) {
+            this.time = 1;
+        }
         this.time = time;
     }
-    private void setOrderId(int orderId){
+    void setOrderId(int orderId){
         this.orderId = orderId ;
     }
 
