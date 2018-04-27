@@ -1,7 +1,6 @@
 package com.robop.scriptrobotcontroller;
 
 import android.annotation.SuppressLint;
-import android.content.ClipData;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -32,12 +31,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private final int REQUEST_ENABLE_BLUETOOTH = 10;
 
     ArrayList<ItemDataModel> ItemDataArray = new ArrayList<>();
-    private ListView listView;
-    private ListAdapter listAdapter;
+    //private ListView listView;
+    //private RecyclerView.Adapter mAdapter;
 
     //RecyclerView
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private RecyclerAdapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
     private TextView connectStatus;
@@ -67,8 +66,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        listView = findViewById(R.id.listView);
 //
 //        //item = new ItemDataModel();
-//        listAdapter = new ListAdapter(getApplicationContext(), ItemDataArray);
-//        listView.setAdapter(listAdapter);
+//        mAdapter = new ListAdapter(getApplicationContext(), ItemDataArray);
+//        listView.setAdapter(mAdapter);
 //
 //        listView.setOnItemClickListener(this);
 //        listView.setOnItemLongClickListener(this);
@@ -101,7 +100,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         ItemDataArray.remove(fromPos);
 
                         mAdapter.notifyItemRemoved(fromPos);
-
                     }
                 });
         itemDecor.attachToRecyclerView(mRecyclerView);
@@ -124,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 // positionが1から始まるため
                 int id = i + 1;
                 ItemDataArray.add(new ItemDataModel(id, 100, 100, 2));
-                //listView.setAdapter(listAdapter);
+                //listView.setAdapter(mAdapter);
                 mRecyclerView.setAdapter(mAdapter);
             }
         });
@@ -256,13 +254,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
         //とりあえずアイテム消す為。後で消す
         ItemDataArray.remove(position);
-        listView.setAdapter(listAdapter);
+        mRecyclerView.setAdapter(mAdapter);
         return true;
     }
 
     public void updateItemParam(int listPosition, ItemDataModel dataModel) {
         ItemDataArray.set(listPosition,dataModel);
-        listAdapter.notifyDataSetChanged();
+        mAdapter.notifyDataSetChanged();
     }
 
     @SuppressLint("DefaultLocale")
@@ -270,11 +268,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         StringBuilder sendText = new StringBuilder();
 
         //imageId、Time、Speedの文字列を連結
-        for (int i = 0; i < listAdapter.getCount(); i++) {
-            sendText.append(listAdapter.getItem(i).getOrderId());
-            sendText.append(String.format("%02d", listAdapter.getItem(i).getTime()));
-            sendText.append(String.format("%03d", listAdapter.getItem(i).getRightSpeed()));
-            sendText.append(String.format("%03d", listAdapter.getItem(i).getLeftSpeed()));
+        for (int i = 0; i < mAdapter.getItemCount(); i++) {
+            sendText.append(mAdapter.getItem(i).getOrderId());
+            sendText.append(String.format("%02d", mAdapter.getItem(i).getTime()));
+            sendText.append(String.format("%03d", mAdapter.getItem(i).getRightSpeed()));
+            sendText.append(String.format("%03d", mAdapter.getItem(i).getLeftSpeed()));
         }
         sendText.append('\0');  //1命令分の終端文字
 
@@ -283,14 +281,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @SuppressLint("DefaultLocale")
     private String[] multiBT() {
-        int arrayNum = listAdapter.getCount() / 6 + 1;
+        int arrayNum = mAdapter.getItemCount() / 6 + 1;
         String[] strings = new String[arrayNum];
         StringBuilder tmpText = new StringBuilder();
-        for (int i = 1; i <= listAdapter.getCount(); i++) {
-            tmpText.append(listAdapter.getItem(i-1).getOrderId());
-            tmpText.append(String.format("%02d", listAdapter.getItem(i-1).getTime()));
-            tmpText.append(String.format("%03d", listAdapter.getItem(i-1).getRightSpeed()));
-            tmpText.append(String.format("%03d", listAdapter.getItem(i-1).getLeftSpeed()));
+        for (int i = 1; i <= mAdapter.getItemCount(); i++) {
+            tmpText.append(mAdapter.getItem(i-1).getOrderId());
+            tmpText.append(String.format("%02d", mAdapter.getItem(i-1).getTime()));
+            tmpText.append(String.format("%03d", mAdapter.getItem(i-1).getRightSpeed()));
+            tmpText.append(String.format("%03d", mAdapter.getItem(i-1).getLeftSpeed()));
 
             if (i % 6 == 0) {
                 tmpText.append('\0');  //1命令分の終端文字
@@ -310,7 +308,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private String[] generateBTCommand() {
-        if (listAdapter.getCount() < 7) {
+        if (mAdapter.getItemCount() < 7) {
             //singleBT();
             return new String[]{singleBT()};
         } else {

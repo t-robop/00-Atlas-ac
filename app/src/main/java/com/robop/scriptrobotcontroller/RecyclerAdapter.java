@@ -28,6 +28,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     RecyclerAdapter(Context context, ArrayList itemDataList){
         ItemDataArray = itemDataList;
     }
+    
+    public ItemDataModel getItem(int position) {
+        return ItemDataArray.get(position);
+    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
