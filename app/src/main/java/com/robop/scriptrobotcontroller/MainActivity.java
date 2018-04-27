@@ -1,6 +1,7 @@
 package com.robop.scriptrobotcontroller;
 
 import android.annotation.SuppressLint;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -80,8 +81,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mAdapter = new RecyclerAdapter(getApplicationContext(),ItemDataArray);
+        mAdapter = new RecyclerAdapter(this,ItemDataArray);
         mRecyclerView.setAdapter(mAdapter);
+        mAdapter.setOnItemClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                // TODO:ダイアログの表示 @daidk2
+            }
+        });
 
         //ItemTouchHelper
         ItemTouchHelper itemDecor = new ItemTouchHelper(
@@ -238,16 +245,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 
-        // ダイアログの表示
-        EditImageParamDialog editImageParamDialog = new EditImageParamDialog();
-        Bundle data = new Bundle();
-        data.putInt("orderId", ItemDataArray.get(position).getOrderId());
-        data.putInt("RightSpeed", ItemDataArray.get(position).getRightSpeed());
-        data.putInt("LeftSpeed", ItemDataArray.get(position).getLeftSpeed());
-        data.putInt("time", ItemDataArray.get(position).getTime());
-        data.putInt("listItemPosition", position);
-        editImageParamDialog.setArguments(data);
-        editImageParamDialog.show(getFragmentManager(), null);
+//        // ダイアログの表示
+//        EditImageParamDialog editImageParamDialog = new EditImageParamDialog();
+//        Bundle data = new Bundle();
+//        data.putInt("orderId", ItemDataArray.get(position).getOrderId());
+//        data.putInt("RightSpeed", ItemDataArray.get(position).getRightSpeed());
+//        data.putInt("LeftSpeed", ItemDataArray.get(position).getLeftSpeed());
+//        data.putInt("time", ItemDataArray.get(position).getTime());
+//        data.putInt("listItemPosition", position);
+//        editImageParamDialog.setArguments(data);
+//        editImageParamDialog.show(getFragmentManager(), null);
     }
 
     @Override
