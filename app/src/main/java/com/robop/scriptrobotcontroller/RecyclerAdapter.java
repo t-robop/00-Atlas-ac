@@ -1,5 +1,6 @@
 package com.robop.scriptrobotcontroller;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,10 +15,10 @@ import java.util.ArrayList;
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder>{
     private View.OnClickListener listener;
 
-    ArrayList<ItemDataModel> ItemDataArray;
+    private ArrayList<ItemDataModel> ItemDataArray;
     static class ViewHolder extends RecyclerView.ViewHolder{
         LinearLayout linearLayout;
-        TextView speed;
+        TextView speed;     //TODO 画像の項目足りてない！　speedRightとSpeedLeftを用意して！
         TextView time;
         ImageView image;
         ViewHolder(View view){
@@ -29,7 +30,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         }
     }
 
-    RecyclerAdapter(Context context, ArrayList itemDataList){
+    RecyclerAdapter(Context context, ArrayList<ItemDataModel> itemDataList){
         ItemDataArray = itemDataList;
     }
 
@@ -44,10 +45,12 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         return new ViewHolder(view);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+        //TODO 画像の項目足りてない！　speedRightとSpeedLeftを用意して！
         holder.speed.setText("パワー : " + ItemDataArray.get(position).getRightSpeed());
-        holder.speed.setText("パワー : " + ItemDataArray.get(position).getLeftSpeed());
+        holder.speed.setText("パワー : " + ItemDataArray.get(position).getLeftSpeed());    //TODO 最終的に左パワーの値が表示されるようになっている
         holder.time.setText(ItemDataArray.get(position).getTime() + "秒");
  //       holder.linearLayout.setId(holder.getAdapterPosition());
         holder.linearLayout.setOnClickListener(new View.OnClickListener(){

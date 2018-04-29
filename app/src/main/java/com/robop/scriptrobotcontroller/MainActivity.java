@@ -1,7 +1,6 @@
 package com.robop.scriptrobotcontroller;
 
 import android.annotation.SuppressLint;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,6 +19,7 @@ import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import me.aflak.bluetooth.Bluetooth;
 import me.aflak.bluetooth.CommunicationCallback;
@@ -38,7 +38,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //RecyclerView
     private RecyclerView mRecyclerView;
     private RecyclerAdapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
 
     private TextView connectStatus;
 
@@ -74,11 +73,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        listView.setOnItemLongClickListener(this);
 
         //RecyclerView処理
-        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        mRecyclerView = findViewById(R.id.recyclerView);
 
         mRecyclerView.setHasFixedSize(true);
 
-        mLayoutManager = new LinearLayoutManager(this);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         mAdapter = new RecyclerAdapter(this,ItemDataArray);
@@ -86,7 +85,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mAdapter.setOnItemClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                // TODO:ダイアログの表示 @daidk2
+                // ダイアログの表示
+                EditParamDialog editImageParamDialog = new EditParamDialog();
+                Bundle data = new Bundle();
+
+                ItemDataModel itemDataModel = new ItemDataModel(
+                        ItemDataArray.get(view.getVerticalScrollbarPosition()).getOrderId(),
+                        ItemDataArray.get(view.getVerticalScrollbarPosition()).getRightSpeed(),
+                        ItemDataArray.get(view.getVerticalScrollbarPosition()).getLeftSpeed(),
+                        ItemDataArray.get(view.getVerticalScrollbarPosition()).getTime());
+
+                data.putSerializable("itemData", itemDataModel);
+
+                //data.putInt("orderId", ItemDataArray.get(view.getVerticalScrollbarPosition()).getOrderId());
+                //data.putInt("RightSpeed", ItemDataArray.get(view.getVerticalScrollbarPosition()).getRightSpeed());
+                //data.putInt("LeftSpeed", ItemDataArray.get(view.getVerticalScrollbarPosition()).getLeftSpeed());
+                //data.putInt("time", ItemDataArray.get(view.getVerticalScrollbarPosition()).getTime());
+                data.putInt("listItemPosition", view.getVerticalScrollbarPosition());
+                editImageParamDialog.setArguments(data);
+                editImageParamDialog.show(getFragmentManager(), null);
             }
         });
 
@@ -242,11 +259,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    // TODO RecyclerViewだともう使えないよ！
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 
 //        // ダイアログの表示
-//        EditImageParamDialog editImageParamDialog = new EditImageParamDialog();
+//        EditParamDialog editImageParamDialog = new EditParamDialog();
 //        Bundle data = new Bundle();
 //        data.putInt("orderId", ItemDataArray.get(position).getOrderId());
 //        data.putInt("RightSpeed", ItemDataArray.get(position).getRightSpeed());
@@ -257,11 +275,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        editImageParamDialog.show(getFragmentManager(), null);
     }
 
+    // TODO RecyclerViewだともう使えないよ！
     @Override
     public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
-        //とりあえずアイテム消す為。後で消す
-        ItemDataArray.remove(position);
-        mRecyclerView.setAdapter(mAdapter);
+//      //とりあえずアイテム消す為。後で消す
+//      ItemDataArray.remove(position);
+//      mRecyclerView.setAdapter(mAdapter);
         return true;
     }
 
@@ -308,9 +327,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ArrayList<String> multiBTCommand = new ArrayList<>();
         String header = "ff" + strings.length;
         multiBTCommand.add(header);
-        for (String s : strings){
-            multiBTCommand.add(s);
-        }
+        multiBTCommand.addAll(Arrays.asList(strings));
         return multiBTCommand.toArray(new String[multiBTCommand.size()]);
     }
 
