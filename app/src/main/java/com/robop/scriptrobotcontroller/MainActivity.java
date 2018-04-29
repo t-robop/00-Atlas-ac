@@ -58,10 +58,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         bluetooth.setCommunicationCallback(this);
 
-        connectStatus = findViewById(R.id.connectStatus);
+        connectStatus = findViewById(R.id.connect_status);
 
         //RecyclerView処理
-        mRecyclerView = findViewById(R.id.recyclerView);
+        mRecyclerView = findViewById(R.id.recycler_view);
 
         mRecyclerView.setHasFixedSize(true);
 
@@ -131,8 +131,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-        Button startButton = findViewById(R.id.startButton);
-        Button connectButton = findViewById(R.id.connectButton);
+        Button startButton = findViewById(R.id.start_button);
+        Button connectButton = findViewById(R.id.connect_button);
 
         startButton.setOnClickListener(this);
         connectButton.setOnClickListener(this);
@@ -210,7 +210,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         switch (view.getId()) {
             //Bluetooth接続のボタン
-            case R.id.connectButton:
+            case R.id.connect_button:
                 if (bluetooth.isConnected()) {
                     bluetooth.disconnect();
                 } else if (bluetoothAdapter != null) {
@@ -220,7 +220,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             //Bluetoothデータ送信のボタン
-            case R.id.startButton:
+            case R.id.start_button:
                 //BlueToothで送る文字列のnullチェック
                 if (generateBTCommand()[0].length() == 0) {
                     Toast.makeText(MainActivity.this, "送るデータがありません", Toast.LENGTH_SHORT).show();

@@ -25,11 +25,11 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         ImageView image;
         ViewHolder(View view){
             super(view);
-            this.linearLayout = view.findViewById(R.id.itemFrame);
+            this.linearLayout = view.findViewById(R.id.item_frame);
             this.speedRight = view.findViewById(R.id.text_speed_right);
             this.speedLeft = view.findViewById(R.id.text_speed_left);
             this.time = view.findViewById(R.id.text_time);
-            this.image = view.findViewById(R.id.directionItemImage);
+            this.image = view.findViewById(R.id.direction_item_image);
         }
     }
 

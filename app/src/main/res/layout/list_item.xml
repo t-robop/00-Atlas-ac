@@ -18,12 +18,12 @@
             android:layout_height="80dp"
             android:layout_gravity="center"
             android:orientation="horizontal"
-            android:id="@+id/itemFrame"
+            android:id="@+id/item_frame"
             android:clickable="true"
             android:focusable="true">
 
             <ImageView
-                android:id="@+id/directionItemImage"
+                android:id="@+id/direction_item_image"
                 android:src="@drawable/move_front"
                 android:scaleType="centerInside"
                 android:layout_weight="7"
