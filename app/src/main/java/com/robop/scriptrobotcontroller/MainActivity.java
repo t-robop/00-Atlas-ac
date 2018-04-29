@@ -24,7 +24,7 @@ import java.util.Arrays;
 import me.aflak.bluetooth.Bluetooth;
 import me.aflak.bluetooth.CommunicationCallback;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener, CommunicationCallback {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, CommunicationCallback {
 
     Bluetooth bluetooth;
     BluetoothAdapter bluetoothAdapter;
@@ -32,8 +32,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private final int REQUEST_ENABLE_BLUETOOTH = 10;
 
     ArrayList<ItemDataModel> ItemDataArray = new ArrayList<>();
-    //private ListView listView;
-    //private RecyclerView.Adapter mAdapter;
 
     //RecyclerView
     private RecyclerView mRecyclerView;
@@ -62,16 +60,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         connectStatus = findViewById(R.id.connectStatus);
 
-//        //ListView処理
-//        listView = findViewById(R.id.listView);
-//
-//        //item = new ItemDataModel();
-//        mAdapter = new ListAdapter(getApplicationContext(), ItemDataArray);
-//        listView.setAdapter(mAdapter);
-//
-//        listView.setOnItemClickListener(this);
-//        listView.setOnItemLongClickListener(this);
-
         //RecyclerView処理
         mRecyclerView = findViewById(R.id.recyclerView);
 
@@ -82,6 +70,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mAdapter = new RecyclerAdapter(this,ItemDataArray);
         mRecyclerView.setAdapter(mAdapter);
+        //RecyclerView内のクリック処理
         mAdapter.setOnItemClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
@@ -96,11 +85,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         ItemDataArray.get(view.getVerticalScrollbarPosition()).getTime());
 
                 data.putSerializable("itemData", itemDataModel);
-
-                //data.putInt("orderId", ItemDataArray.get(view.getVerticalScrollbarPosition()).getOrderId());
-                //data.putInt("RightSpeed", ItemDataArray.get(view.getVerticalScrollbarPosition()).getRightSpeed());
-                //data.putInt("LeftSpeed", ItemDataArray.get(view.getVerticalScrollbarPosition()).getLeftSpeed());
-                //data.putInt("time", ItemDataArray.get(view.getVerticalScrollbarPosition()).getTime());
                 data.putInt("listItemPosition", view.getVerticalScrollbarPosition());
                 editImageParamDialog.setArguments(data);
                 editImageParamDialog.show(getFragmentManager(), null);
@@ -128,11 +112,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 });
         itemDecor.attachToRecyclerView(mRecyclerView);
 
-        /*Button処理
-        SharedPreferences sharedPreferences = getPreferences(Context.MODE_PRIVATE);
-        List<Integer> speedParamList = Arrays.asList(sharedPreferences.getInt("speedParam", 100), sharedPreferences.getInt("speedParam", 100));
-        */
-
         MenuItemAdapter menuItemAdapter = new MenuItemAdapter(this);
         menuItemAdapter.add(new MenuItemModel(R.drawable.move_front, "前進", "パワーと時間を設定して、ロボットを前に動かします。"));
         menuItemAdapter.add(new MenuItemModel(R.drawable.move_back, "後退", "パワーと時間を設定して、ロボットを後ろに動かします。"));
@@ -140,6 +119,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         menuItemAdapter.add(new MenuItemModel(R.drawable.move_right, "右回転", "パワーと時間を設定して、ロボットを右に回転させます。"));
         ListView menuList = findViewById(R.id.drawer_list);
         menuList.setAdapter(menuItemAdapter);
+        //Drawer内のクリック処理
         menuList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -229,6 +209,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            //Bluetooth接続のボタン
             case R.id.connectButton:
                 if (bluetooth.isConnected()) {
                     bluetooth.disconnect();
@@ -238,6 +219,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 break;
 
+            //Bluetoothデータ送信のボタン
             case R.id.startButton:
                 //BlueToothで送る文字列のnullチェック
                 if (generateBTCommand()[0].length() == 0) {
@@ -259,31 +241,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    // TODO RecyclerViewだともう使えないよ！
-    @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-
-//        // ダイアログの表示
-//        EditParamDialog editImageParamDialog = new EditParamDialog();
-//        Bundle data = new Bundle();
-//        data.putInt("orderId", ItemDataArray.get(position).getOrderId());
-//        data.putInt("RightSpeed", ItemDataArray.get(position).getRightSpeed());
-//        data.putInt("LeftSpeed", ItemDataArray.get(position).getLeftSpeed());
-//        data.putInt("time", ItemDataArray.get(position).getTime());
-//        data.putInt("listItemPosition", position);
-//        editImageParamDialog.setArguments(data);
-//        editImageParamDialog.show(getFragmentManager(), null);
-    }
-
-    // TODO RecyclerViewだともう使えないよ！
-    @Override
-    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
-//      //とりあえずアイテム消す為。後で消す
-//      ItemDataArray.remove(position);
-//      mRecyclerView.setAdapter(mAdapter);
-        return true;
-    }
-
+    //View更新
     public void updateItemParam(int listPosition, ItemDataModel dataModel) {
         ItemDataArray.set(listPosition,dataModel);
         mAdapter.notifyDataSetChanged();
@@ -333,12 +291,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private String[] generateBTCommand() {
         if (mAdapter.getItemCount() < 7) {
-            //singleBT();
             return new String[]{singleBT()};
         } else {
             return multiBT();
         }
     }
-
-
 }
