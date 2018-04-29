@@ -126,7 +126,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 // positionが1から始まるため
                 int id = i + 1;
                 ItemDataArray.add(new ItemDataModel(id, 100, 100, 2));
-                //listView.setAdapter(mAdapter);
                 mRecyclerView.setAdapter(mAdapter);
             }
         });
