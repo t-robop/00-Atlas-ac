@@ -293,7 +293,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private String singleBT() {
         StringBuilder sendText = new StringBuilder();
 
-        //imageId、Time、Speedの文字列を連結
+        //OrderId、Time、Speedの文字列を連結
         for (int i = 0; i < mAdapter.getItemCount(); i++) {
             sendText.append(mAdapter.getItem(i).getOrderId());
             sendText.append(String.format("%02d", mAdapter.getItem(i).getTime()));
@@ -325,7 +325,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tmpText.append('\0');  //1命令分の終端文字
         strings[arrayNum-1] = tmpText.toString();
         ArrayList<String> multiBTCommand = new ArrayList<>();
-        String header = "ff" + strings.length;
+        String header = "ff" + strings.length + "\0";
         multiBTCommand.add(header);
         multiBTCommand.addAll(Arrays.asList(strings));
         return multiBTCommand.toArray(new String[multiBTCommand.size()]);
