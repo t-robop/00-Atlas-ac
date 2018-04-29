@@ -48,7 +48,7 @@ public class ListAdapter extends BaseAdapter {
         ImageView image;
 
         ViewHolder(View view){
-            this.speed = view.findViewById(R.id.text1);
+            this.speed = view.findViewById(R.id.text_speed_left);
             this.time = view.findViewById(R.id.text2);
             this.image  = view.findViewById(R.id.directionImage);
         }
@@ -67,7 +67,7 @@ public class ListAdapter extends BaseAdapter {
         else {
             holder = (ViewHolder)convertView.getTag();
         }
-        //TODO ここ治して！
+
         holder.speed.setText("パワー : " + ItemDataArray.get(position).getRightSpeed());
         holder.speed.setText("パワー : " + ItemDataArray.get(position).getLeftSpeed());
         holder.time.setText(ItemDataArray.get(position).getTime() + "秒");

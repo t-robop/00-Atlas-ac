@@ -32,7 +32,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="4"
-                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
                 android:layout_marginTop="4dp"
                 android:gravity="center"
                 android:orientation="vertical">
@@ -42,7 +42,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="2"
-                    android:layout_toEndOf="@+id/directionImage"
                     android:gravity="center_vertical"
                     android:lines="1"
                     android:text="前進"
@@ -55,11 +54,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:layout_below="@+id/text1"
-                    android:layout_toEndOf="@+id/directionImage"
                     android:text="パワーと時間を設定して、ロボットを前に動かします。"
                     android:textColor="#ffffff"
-                    android:textSize="10sp"/>
+                    android:textSize="12sp"/>
 
             </LinearLayout>
 

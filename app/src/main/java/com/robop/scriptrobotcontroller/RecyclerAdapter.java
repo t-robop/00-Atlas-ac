@@ -2,6 +2,7 @@ package com.robop.scriptrobotcontroller;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,15 +19,17 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     private ArrayList<ItemDataModel> ItemDataArray;
     static class ViewHolder extends RecyclerView.ViewHolder{
         LinearLayout linearLayout;
-        TextView speed;     //TODO 画像の項目足りてない！　speedRightとSpeedLeftを用意して！
+        TextView speedRight;
+        TextView speedLeft;
         TextView time;
         ImageView image;
         ViewHolder(View view){
             super(view);
             this.linearLayout = view.findViewById(R.id.itemFrame);
-            this.speed = view.findViewById(R.id.text_speed);
+            this.speedRight = view.findViewById(R.id.text_speed_right);
+            this.speedLeft = view.findViewById(R.id.text_speed_left);
             this.time = view.findViewById(R.id.text_time);
-            this.image  = view.findViewById(R.id.directionItemImage);
+            this.image = view.findViewById(R.id.directionItemImage);
         }
     }
 
@@ -38,8 +41,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         return ItemDataArray.get(position);
     }
 
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType){
 
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false);
         return new ViewHolder(view);
@@ -47,10 +51,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        //TODO 画像の項目足りてない！　speedRightとSpeedLeftを用意して！
-        holder.speed.setText("パワー : " + ItemDataArray.get(position).getRightSpeed());
-        holder.speed.setText("パワー : " + ItemDataArray.get(position).getLeftSpeed());    //TODO 最終的に左パワーの値が表示されるようになっている
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        holder.speedRight.setText("右パワー : " + ItemDataArray.get(position).getRightSpeed());
+        holder.speedLeft.setText("左パワー : " + ItemDataArray.get(position).getLeftSpeed());
         holder.time.setText(ItemDataArray.get(position).getTime() + "秒");
  //       holder.linearLayout.setId(holder.getAdapterPosition());
         holder.linearLayout.setOnClickListener(new View.OnClickListener(){
