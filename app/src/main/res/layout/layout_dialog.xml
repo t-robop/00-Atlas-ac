@@ -9,14 +9,26 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/speed"
+        android:text="@string/rightSpeed"
         android:textSize="30sp"/>
 
     <EditText
-        android:id="@+id/edit_speed"
+        android:id="@+id/edit_speed_right"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/speed"/>
+        android:hint="@string/rightSpeed"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/leftSpeed"
+        android:textSize="30sp" />
+
+    <EditText
+        android:id="@+id/edit_speed_left"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/leftSpeed" />
 
     <TextView
         android:layout_width="match_parent"

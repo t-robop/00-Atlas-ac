@@ -19,6 +19,7 @@ import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import me.aflak.bluetooth.Bluetooth;
 import me.aflak.bluetooth.CommunicationCallback;
@@ -37,7 +38,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //RecyclerView
     private RecyclerView mRecyclerView;
     private RecyclerAdapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
 
     private TextView connectStatus;
 
@@ -73,15 +73,39 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        listView.setOnItemLongClickListener(this);
 
         //RecyclerView処理
-        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        mRecyclerView = findViewById(R.id.recyclerView);
 
         mRecyclerView.setHasFixedSize(true);
 
-        mLayoutManager = new LinearLayoutManager(this);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mAdapter = new RecyclerAdapter(getApplicationContext(),ItemDataArray);
+        mAdapter = new RecyclerAdapter(this,ItemDataArray);
         mRecyclerView.setAdapter(mAdapter);
+        mAdapter.setOnItemClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                // ダイアログの表示
+                EditParamDialog editImageParamDialog = new EditParamDialog();
+                Bundle data = new Bundle();
+
+                ItemDataModel itemDataModel = new ItemDataModel(
+                        ItemDataArray.get(view.getVerticalScrollbarPosition()).getOrderId(),
+                        ItemDataArray.get(view.getVerticalScrollbarPosition()).getRightSpeed(),
+                        ItemDataArray.get(view.getVerticalScrollbarPosition()).getLeftSpeed(),
+                        ItemDataArray.get(view.getVerticalScrollbarPosition()).getTime());
+
+                data.putSerializable("itemData", itemDataModel);
+
+                //data.putInt("orderId", ItemDataArray.get(view.getVerticalScrollbarPosition()).getOrderId());
+                //data.putInt("RightSpeed", ItemDataArray.get(view.getVerticalScrollbarPosition()).getRightSpeed());
+                //data.putInt("LeftSpeed", ItemDataArray.get(view.getVerticalScrollbarPosition()).getLeftSpeed());
+                //data.putInt("time", ItemDataArray.get(view.getVerticalScrollbarPosition()).getTime());
+                data.putInt("listItemPosition", view.getVerticalScrollbarPosition());
+                editImageParamDialog.setArguments(data);
+                editImageParamDialog.show(getFragmentManager(), null);
+            }
+        });
 
         //ItemTouchHelper
         ItemTouchHelper itemDecor = new ItemTouchHelper(
@@ -235,26 +259,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    // TODO RecyclerViewだともう使えないよ！
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 
-        // ダイアログの表示
-        EditImageParamDialog editImageParamDialog = new EditImageParamDialog();
-        Bundle data = new Bundle();
-        data.putInt("orderId", ItemDataArray.get(position).getOrderId());
-        data.putInt("RightSpeed", ItemDataArray.get(position).getRightSpeed());
-        data.putInt("LeftSpeed", ItemDataArray.get(position).getLeftSpeed());
-        data.putInt("time", ItemDataArray.get(position).getTime());
-        data.putInt("listItemPosition", position);
-        editImageParamDialog.setArguments(data);
-        editImageParamDialog.show(getFragmentManager(), null);
+//        // ダイアログの表示
+//        EditParamDialog editImageParamDialog = new EditParamDialog();
+//        Bundle data = new Bundle();
+//        data.putInt("orderId", ItemDataArray.get(position).getOrderId());
+//        data.putInt("RightSpeed", ItemDataArray.get(position).getRightSpeed());
+//        data.putInt("LeftSpeed", ItemDataArray.get(position).getLeftSpeed());
+//        data.putInt("time", ItemDataArray.get(position).getTime());
+//        data.putInt("listItemPosition", position);
+//        editImageParamDialog.setArguments(data);
+//        editImageParamDialog.show(getFragmentManager(), null);
     }
 
+    // TODO RecyclerViewだともう使えないよ！
     @Override
     public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
-        //とりあえずアイテム消す為。後で消す
-        ItemDataArray.remove(position);
-        mRecyclerView.setAdapter(mAdapter);
+//      //とりあえずアイテム消す為。後で消す
+//      ItemDataArray.remove(position);
+//      mRecyclerView.setAdapter(mAdapter);
         return true;
     }
 
@@ -267,7 +293,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private String singleBT() {
         StringBuilder sendText = new StringBuilder();
 
-        //imageId、Time、Speedの文字列を連結
+        //OrderId、Time、Speedの文字列を連結
         for (int i = 0; i < mAdapter.getItemCount(); i++) {
             sendText.append(mAdapter.getItem(i).getOrderId());
             sendText.append(String.format("%02d", mAdapter.getItem(i).getTime()));
@@ -299,11 +325,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tmpText.append('\0');  //1命令分の終端文字
         strings[arrayNum-1] = tmpText.toString();
         ArrayList<String> multiBTCommand = new ArrayList<>();
-        String header = "ff" + strings.length;
+        String header = "ff" + strings.length + "\0";
         multiBTCommand.add(header);
-        for (String s : strings){
-            multiBTCommand.add(s);
-        }
+        multiBTCommand.addAll(Arrays.asList(strings));
         return multiBTCommand.toArray(new String[multiBTCommand.size()]);
     }
 
