@@ -17,10 +17,13 @@
             android:layout_width="200dp"
             android:layout_height="80dp"
             android:layout_gravity="center"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:id="@+id/itemFrame"
+            android:clickable="true"
+            android:focusable="true">
 
             <ImageView
-                android:id="@+id/directionImage"
+                android:id="@+id/directionItemImage"
                 android:src="@drawable/move_front"
                 android:scaleType="centerInside"
                 android:layout_weight="7"
@@ -31,30 +34,39 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="4"
-                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
                 android:gravity="center"
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/text1"
+                    android:id="@+id/text_speed_right"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:layout_toEndOf="@+id/directionImage"
                     android:gravity="center_vertical"
                     android:lines="1"
-                    android:text="パワー : "
+                    android:text="右パワー : "
                     android:textColor="#ffffff"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/text2"
+                    android:id="@+id/text_speed_left"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:layout_below="@+id/text1"
-                    android:layout_toEndOf="@+id/directionImage"
+                    android:gravity="center_vertical"
+                    android:lines="1"
+                    android:text="左パワー : "
+                    android:textColor="#ffffff"
+                    android:textSize="18sp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/text_time"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
                     android:gravity="center_vertical"
                     android:lines="1"
                     android:text="秒"

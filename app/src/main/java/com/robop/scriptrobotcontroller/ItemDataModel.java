@@ -1,6 +1,8 @@
 package com.robop.scriptrobotcontroller;
 
-public class ItemDataModel {
+import java.io.Serializable;
+
+public class ItemDataModel implements Serializable {
 
     private int rightSpeed;
     private int leftSpeed;
