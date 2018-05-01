@@ -22,9 +22,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import me.aflak.bluetooth.Bluetooth;
-import me.aflak.bluetooth.CommunicationCallback;
+import me.aflak.bluetooth.DeviceCallback;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, CommunicationCallback {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, DeviceCallback {
 
     Bluetooth bluetooth;
     BluetoothAdapter bluetoothAdapter;
@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Toast.makeText(this, "BlueTooth機能が見つかりませんでした\n機能が制限されます", Toast.LENGTH_SHORT).show();
         }
 
-        bluetooth.setCommunicationCallback(this);
+        bluetooth.setDeviceCallback(this);
 
         connectStatus = findViewById(R.id.connect_status);
 
@@ -178,13 +178,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void onConnect(BluetoothDevice device) {
+    public void onDeviceConnected(BluetoothDevice device) {
         connectStatus.setText(device.getName() + "に接続されています");
         Toast.makeText(this, "接続 to " + device.getName() + "\n" + device.getAddress(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void onDisconnect(BluetoothDevice device, String message) {
+    public void onDeviceDisconnected(BluetoothDevice device, String message) {
         connectStatus.setText("接続されていません");
         Toast.makeText(this, "接続が切れました", Toast.LENGTH_SHORT).show();
     }
