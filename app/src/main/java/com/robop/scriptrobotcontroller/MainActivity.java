@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,24 +23,24 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import me.aflak.bluetooth.Bluetooth;
-import me.aflak.bluetooth.CommunicationCallback;
+import me.aflak.bluetooth.DeviceCallback;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener, CommunicationCallback {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, DeviceCallback {
 
     Bluetooth bluetooth;
     BluetoothAdapter bluetoothAdapter;
+    BluetoothDevice bluetoothDevice;
     private final int REQUEST_CONNECT_DEVICE = 9;
     private final int REQUEST_ENABLE_BLUETOOTH = 10;
 
     ArrayList<ItemDataModel> ItemDataArray = new ArrayList<>();
-    //private ListView listView;
-    //private RecyclerView.Adapter mAdapter;
 
     //RecyclerView
     private RecyclerView mRecyclerView;
     private RecyclerAdapter mAdapter;
 
     private TextView connectStatus;
+    private ImageView connectImg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,33 +59,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Toast.makeText(this, "BlueTooth機能が見つかりませんでした\n機能が制限されます", Toast.LENGTH_SHORT).show();
         }
 
-        bluetooth.setCommunicationCallback(this);
+        bluetooth.setDeviceCallback(this);
 
-        connectStatus = findViewById(R.id.connectStatus);
-
-//        //ListView処理
-//        listView = findViewById(R.id.listView);
-//
-//        //item = new ItemDataModel();
-//        mAdapter = new ListAdapter(getApplicationContext(), ItemDataArray);
-//        listView.setAdapter(mAdapter);
-//
-//        listView.setOnItemClickListener(this);
-//        listView.setOnItemLongClickListener(this);
+        connectStatus = findViewById(R.id.connect_status);
+        connectImg=findViewById(R.id.connect_img);
 
         //RecyclerView処理
-        mRecyclerView = findViewById(R.id.recyclerView);
+        mRecyclerView = findViewById(R.id.recycler_view);
 
         mRecyclerView.setHasFixedSize(true);
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mAdapter = new RecyclerAdapter(this,ItemDataArray);
+        mAdapter = new RecyclerAdapter(this, ItemDataArray);
         mRecyclerView.setAdapter(mAdapter);
-        mAdapter.setOnItemClickListener(new View.OnClickListener(){
+        //RecyclerView内のクリック処理
+        mAdapter.setOnItemClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view){
+            public void onClick(View view) {
                 // ダイアログの表示
                 EditParamDialog editImageParamDialog = new EditParamDialog();
                 Bundle data = new Bundle();
@@ -96,11 +89,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         ItemDataArray.get(view.getVerticalScrollbarPosition()).getTime());
 
                 data.putSerializable("itemData", itemDataModel);
-
-                //data.putInt("orderId", ItemDataArray.get(view.getVerticalScrollbarPosition()).getOrderId());
-                //data.putInt("RightSpeed", ItemDataArray.get(view.getVerticalScrollbarPosition()).getRightSpeed());
-                //data.putInt("LeftSpeed", ItemDataArray.get(view.getVerticalScrollbarPosition()).getLeftSpeed());
-                //data.putInt("time", ItemDataArray.get(view.getVerticalScrollbarPosition()).getTime());
                 data.putInt("listItemPosition", view.getVerticalScrollbarPosition());
                 editImageParamDialog.setArguments(data);
                 editImageParamDialog.show(getFragmentManager(), null);
@@ -128,31 +116,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 });
         itemDecor.attachToRecyclerView(mRecyclerView);
 
-        /*Button処理
-        SharedPreferences sharedPreferences = getPreferences(Context.MODE_PRIVATE);
-        List<Integer> speedParamList = Arrays.asList(sharedPreferences.getInt("speedParam", 100), sharedPreferences.getInt("speedParam", 100));
-        */
+        MenuItemAdapter drawerMenuItemAdapter = new MenuItemAdapter(this);
+        drawerMenuItemAdapter.add(new MenuItemModel(R.drawable.move_front, "前進", "パワーと時間を設定して、ロボットを前に動かします。"));
+        drawerMenuItemAdapter.add(new MenuItemModel(R.drawable.move_back, "後退", "パワーと時間を設定して、ロボットを後ろに動かします。"));
+        drawerMenuItemAdapter.add(new MenuItemModel(R.drawable.move_left, "左回転", "パワーと時間を設定して、ロボットを左に回転させます。"));
+        drawerMenuItemAdapter.add(new MenuItemModel(R.drawable.move_right, "右回転", "パワーと時間を設定して、ロボットを右に回転させます。"));
+        ListView drawerMenuList = findViewById(R.id.drawer_list);
+        drawerMenuList.setAdapter(drawerMenuItemAdapter);
 
-        MenuItemAdapter menuItemAdapter = new MenuItemAdapter(this);
-        menuItemAdapter.add(new MenuItemModel(R.drawable.move_front, "前進", "パワーと時間を設定して、ロボットを前に動かします。"));
-        menuItemAdapter.add(new MenuItemModel(R.drawable.move_back, "後退", "パワーと時間を設定して、ロボットを後ろに動かします。"));
-        menuItemAdapter.add(new MenuItemModel(R.drawable.move_left, "左回転", "パワーと時間を設定して、ロボットを左に回転させます。"));
-        menuItemAdapter.add(new MenuItemModel(R.drawable.move_right, "右回転", "パワーと時間を設定して、ロボットを右に回転させます。"));
-        ListView menuList = findViewById(R.id.drawer_list);
-        menuList.setAdapter(menuItemAdapter);
-        menuList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        drawerMenuList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 // positionが1から始まるため
                 int id = i + 1;
                 ItemDataArray.add(new ItemDataModel(id, 100, 100, 2));
-                //listView.setAdapter(mAdapter);
                 mRecyclerView.setAdapter(mAdapter);
             }
         });
 
-        Button startButton = findViewById(R.id.startButton);
-        Button connectButton = findViewById(R.id.connectButton);
+        Button startButton = findViewById(R.id.start_button);
+        Button connectButton = findViewById(R.id.connect_button);
 
         startButton.setOnClickListener(this);
         connectButton.setOnClickListener(this);
@@ -199,15 +182,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void onConnect(BluetoothDevice device) {
-        connectStatus.setText(device.getName() + "に接続されています");
-        Toast.makeText(this, "接続 to " + device.getName() + "\n" + device.getAddress(), Toast.LENGTH_SHORT).show();
+    public void onDeviceConnected(BluetoothDevice device) {
+        bluetoothDevice = device;
+        this.runOnUiThread(new Runnable() {
+            public void run() {
+                connectImg.setImageResource(R.drawable.connect);
+                connectStatus.setText(bluetoothDevice.getName() + "に接続されています");
+                Toast.makeText(MainActivity.this, "接続 to " + bluetoothDevice.getName() + "\n" + bluetoothDevice.getAddress(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
-    public void onDisconnect(BluetoothDevice device, String message) {
-        connectStatus.setText("接続されていません");
-        Toast.makeText(this, "接続が切れました", Toast.LENGTH_SHORT).show();
+    public void onDeviceDisconnected(BluetoothDevice device, String message) {
+        bluetoothDevice = device;
+        this.runOnUiThread(new Runnable() {
+            public void run() {
+                connectImg.setImageResource(R.drawable.disconnect);
+                connectStatus.setText("接続されていません");
+                Toast.makeText(MainActivity.this, "接続が切れました", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
@@ -222,14 +217,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onConnectError(BluetoothDevice device, String message) {
-        connectStatus.setText("接続されていません");
-        Toast.makeText(this, "接続できません", Toast.LENGTH_SHORT).show();
+        bluetoothDevice = device;
+        this.runOnUiThread(new Runnable() {
+            public void run() {
+                connectStatus.setText("接続されていません");
+                Toast.makeText(MainActivity.this, "接続できません", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.connectButton:
+            case R.id.connect_button:
                 if (bluetooth.isConnected()) {
                     bluetooth.disconnect();
                 } else if (bluetoothAdapter != null) {
@@ -238,7 +238,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 break;
 
-            case R.id.startButton:
+            case R.id.start_button:
                 //BlueToothで送る文字列のnullチェック
                 if (generateBTCommand()[0].length() == 0) {
                     Toast.makeText(MainActivity.this, "送るデータがありません", Toast.LENGTH_SHORT).show();
@@ -249,7 +249,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Toast.makeText(MainActivity.this, "ロボットが接続されていません", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                for (String BTCommand :generateBTCommand()) {
+                for (String BTCommand : generateBTCommand()) {
                     // データフォーマット通りの文字列が送信される
                     // 最初に f が2つあったら複数送信 ffのあとに送る回数が入ってる
                     bluetooth.send(BTCommand);
@@ -259,33 +259,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    // TODO RecyclerViewだともう使えないよ！
-    @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-
-//        // ダイアログの表示
-//        EditParamDialog editImageParamDialog = new EditParamDialog();
-//        Bundle data = new Bundle();
-//        data.putInt("orderId", ItemDataArray.get(position).getOrderId());
-//        data.putInt("RightSpeed", ItemDataArray.get(position).getRightSpeed());
-//        data.putInt("LeftSpeed", ItemDataArray.get(position).getLeftSpeed());
-//        data.putInt("time", ItemDataArray.get(position).getTime());
-//        data.putInt("listItemPosition", position);
-//        editImageParamDialog.setArguments(data);
-//        editImageParamDialog.show(getFragmentManager(), null);
-    }
-
-    // TODO RecyclerViewだともう使えないよ！
-    @Override
-    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
-//      //とりあえずアイテム消す為。後で消す
-//      ItemDataArray.remove(position);
-//      mRecyclerView.setAdapter(mAdapter);
-        return true;
-    }
-
+    //View更新
     public void updateItemParam(int listPosition, ItemDataModel dataModel) {
-        ItemDataArray.set(listPosition,dataModel);
+        ItemDataArray.set(listPosition, dataModel);
         mAdapter.notifyDataSetChanged();
     }
 
@@ -311,19 +287,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String[] strings = new String[arrayNum];
         StringBuilder tmpText = new StringBuilder();
         for (int i = 1; i <= mAdapter.getItemCount(); i++) {
-            tmpText.append(mAdapter.getItem(i-1).getOrderId());
-            tmpText.append(String.format("%02d", mAdapter.getItem(i-1).getTime()));
-            tmpText.append(String.format("%03d", mAdapter.getItem(i-1).getRightSpeed()));
-            tmpText.append(String.format("%03d", mAdapter.getItem(i-1).getLeftSpeed()));
+            tmpText.append(mAdapter.getItem(i - 1).getOrderId());
+            tmpText.append(String.format("%02d", mAdapter.getItem(i - 1).getTime()));
+            tmpText.append(String.format("%03d", mAdapter.getItem(i - 1).getRightSpeed()));
+            tmpText.append(String.format("%03d", mAdapter.getItem(i - 1).getLeftSpeed()));
 
             if (i % 6 == 0) {
                 tmpText.append('\0');  //1命令分の終端文字
-                strings[(i / 6) -1] = tmpText.toString();
+                strings[(i / 6) - 1] = tmpText.toString();
                 tmpText.setLength(0);
             }
         }
         tmpText.append('\0');  //1命令分の終端文字
-        strings[arrayNum-1] = tmpText.toString();
+        strings[arrayNum - 1] = tmpText.toString();
         ArrayList<String> multiBTCommand = new ArrayList<>();
         String header = "ff" + strings.length + "\0";
         multiBTCommand.add(header);
@@ -333,12 +309,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private String[] generateBTCommand() {
         if (mAdapter.getItemCount() < 7) {
-            //singleBT();
             return new String[]{singleBT()};
         } else {
             return multiBT();
         }
     }
-
-
 }

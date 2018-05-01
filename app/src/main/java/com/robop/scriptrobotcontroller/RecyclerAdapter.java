@@ -25,11 +25,11 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         ImageView image;
         ViewHolder(View view){
             super(view);
-            this.linearLayout = view.findViewById(R.id.itemFrame);
+            this.linearLayout = view.findViewById(R.id.item_frame);
             this.speedRight = view.findViewById(R.id.text_speed_right);
             this.speedLeft = view.findViewById(R.id.text_speed_left);
             this.time = view.findViewById(R.id.text_time);
-            this.image = view.findViewById(R.id.directionItemImage);
+            this.image = view.findViewById(R.id.direction_item_image);
         }
     }
 
@@ -51,11 +51,11 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         holder.speedRight.setText("右パワー : " + ItemDataArray.get(position).getRightSpeed());
         holder.speedLeft.setText("左パワー : " + ItemDataArray.get(position).getLeftSpeed());
         holder.time.setText(ItemDataArray.get(position).getTime() + "秒");
- //       holder.linearLayout.setId(holder.getAdapterPosition());
+
         holder.linearLayout.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
