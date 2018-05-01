@@ -23,13 +23,8 @@ public class EditParamDialog extends DialogFragment{
         final LayoutInflater inflater = getActivity().getLayoutInflater();
         final View view = inflater.inflate(R.layout.layout_dialog, null);
 
-        //final int orderId =  getArguments().getInt("orderId");
-        //final int rightSpeed = getArguments().getInt("RightSpeed");
-        //final int leftSpeed = getArguments().getInt("LeftSpeed");
-        //final int time = getArguments().getInt("time");
+        //ItemDataModelとposition受取
         final int listItemPosition = getArguments().getInt("listItemPosition");
-
-        //final ItemDataModel dataModel = new ItemDataModel(orderId,rightSpeed,leftSpeed,time);
         final ItemDataModel dataModel = Objects.requireNonNull((ItemDataModel) getArguments().getSerializable("itemData"));
 
         final EditText editSpeedRight = view.findViewById(R.id.edit_speed_right);

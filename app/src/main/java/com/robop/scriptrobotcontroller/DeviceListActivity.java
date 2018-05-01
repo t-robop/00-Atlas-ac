@@ -39,10 +39,10 @@ public class DeviceListActivity extends AppCompatActivity implements View.OnClic
 
         resultPairedDevicesName = new ArrayList<>();
         resultPairedDevicesAddress = new ArrayList<>();
-        Button scanButton = findViewById(R.id.scanDevice);
+        Button scanButton = findViewById(R.id.scan_device);
 
-        pairedDevicesListView = findViewById(R.id.deviceList);
-        TextView emptyView = findViewById(R.id.emptyTextView);
+        pairedDevicesListView = findViewById(R.id.device_list);
+        TextView emptyView = findViewById(R.id.empty_pairing_device);
 
         pairedDevicesArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
 
@@ -58,7 +58,7 @@ public class DeviceListActivity extends AppCompatActivity implements View.OnClic
     @Override
     public void onClick(View view) {
         //pairedDevicesListViewの更新
-        if (view.getId() == R.id.scanDevice){
+        if (view.getId() == R.id.scan_device){
             pairedDevicesArrayAdapter.clear();
             searchPairedDevices();
             pairedDevicesArrayAdapter.notifyDataSetChanged();

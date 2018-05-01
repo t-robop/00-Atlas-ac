@@ -21,7 +21,7 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/directionImage"
+                android:id="@+id/direction_image"
                 android:src="@drawable/move_front"
                 android:scaleType="centerInside"
                 android:layout_weight="7"
