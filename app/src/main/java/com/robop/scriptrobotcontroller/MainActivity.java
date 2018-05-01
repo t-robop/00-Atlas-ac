@@ -112,15 +112,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 });
         itemDecor.attachToRecyclerView(mRecyclerView);
 
-        MenuItemAdapter menuItemAdapter = new MenuItemAdapter(this);
-        menuItemAdapter.add(new MenuItemModel(R.drawable.move_front, "前進", "パワーと時間を設定して、ロボットを前に動かします。"));
-        menuItemAdapter.add(new MenuItemModel(R.drawable.move_back, "後退", "パワーと時間を設定して、ロボットを後ろに動かします。"));
-        menuItemAdapter.add(new MenuItemModel(R.drawable.move_left, "左回転", "パワーと時間を設定して、ロボットを左に回転させます。"));
-        menuItemAdapter.add(new MenuItemModel(R.drawable.move_right, "右回転", "パワーと時間を設定して、ロボットを右に回転させます。"));
-        ListView menuList = findViewById(R.id.drawer_list);
-        menuList.setAdapter(menuItemAdapter);
-        //Drawer内のクリック処理
-        menuList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        MenuItemAdapter drawerMenuItemAdapter = new MenuItemAdapter(this);
+        drawerMenuItemAdapter.add(new MenuItemModel(R.drawable.move_front, "前進", "パワーと時間を設定して、ロボットを前に動かします。"));
+        drawerMenuItemAdapter.add(new MenuItemModel(R.drawable.move_back, "後退", "パワーと時間を設定して、ロボットを後ろに動かします。"));
+        drawerMenuItemAdapter.add(new MenuItemModel(R.drawable.move_left, "左回転", "パワーと時間を設定して、ロボットを左に回転させます。"));
+        drawerMenuItemAdapter.add(new MenuItemModel(R.drawable.move_right, "右回転", "パワーと時間を設定して、ロボットを右に回転させます。"));
+        ListView drawerMenuList = findViewById(R.id.drawer_list);
+        drawerMenuList.setAdapter(drawerMenuItemAdapter);
+
+        drawerMenuList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 // positionが1から始まるため
@@ -208,7 +208,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            //Bluetooth接続のボタン
             case R.id.connect_button:
                 if (bluetooth.isConnected()) {
                     bluetooth.disconnect();
@@ -218,7 +217,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 break;
 
-            //Bluetoothデータ送信のボタン
             case R.id.start_button:
                 //BlueToothで送る文字列のnullチェック
                 if (generateBTCommand()[0].length() == 0) {
