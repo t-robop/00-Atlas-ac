@@ -51,7 +51,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
         holder.speedRight.setText("右パワー : " + ItemDataArray.get(position).getRightSpeed());
         holder.speedLeft.setText("左パワー : " + ItemDataArray.get(position).getLeftSpeed());
         holder.time.setText(ItemDataArray.get(position).getTime() + "秒");

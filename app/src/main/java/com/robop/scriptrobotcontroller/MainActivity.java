@@ -217,8 +217,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onConnectError(BluetoothDevice device, String message) {
-        connectStatus.setText("接続されていません");
-        Toast.makeText(this, "接続できません", Toast.LENGTH_SHORT).show();
+        bluetoothDevice = device;
+        this.runOnUiThread(new Runnable() {
+            public void run() {
+                connectStatus.setText("接続されていません");
+                Toast.makeText(MainActivity.this, "接続できません", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
