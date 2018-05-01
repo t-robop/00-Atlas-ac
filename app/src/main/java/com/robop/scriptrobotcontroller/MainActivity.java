@@ -24,7 +24,7 @@ import java.util.Arrays;
 import me.aflak.bluetooth.Bluetooth;
 import me.aflak.bluetooth.CommunicationCallback;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, CommunicationCallback {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, CommunicationCallback, RecyclerAdapter.OnRecyclerListener {
 
     Bluetooth bluetooth;
     BluetoothAdapter bluetoothAdapter;
@@ -68,9 +68,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mAdapter = new RecyclerAdapter(this,ItemDataArray);
+        mAdapter = new RecyclerAdapter(this,ItemDataArray, this);
         mRecyclerView.setAdapter(mAdapter);
         //RecyclerView内のクリック処理
+        /*
         mAdapter.setOnItemClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
@@ -90,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 editImageParamDialog.show(getFragmentManager(), null);
             }
         });
-
+        */
         //ItemTouchHelper
         ItemTouchHelper itemDecor = new ItemTouchHelper(
                 new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.RIGHT) {
@@ -238,6 +239,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    @Override
+    public void onRecyclerClicked(View view, int position) {
+        // ダイアログの表示
+        EditParamDialog editImageParamDialog = new EditParamDialog();
+        Bundle data = new Bundle();
+
+        ItemDataModel itemDataModel = new ItemDataModel(
+                ItemDataArray.get(position).getOrderId(),
+                ItemDataArray.get(position).getRightSpeed(),
+                ItemDataArray.get(position).getLeftSpeed(),
+                ItemDataArray.get(position).getTime());
+
+        data.putSerializable("itemData", itemDataModel);
+        data.putInt("listItemPosition", position);
+        editImageParamDialog.setArguments(data);
+        editImageParamDialog.show(getFragmentManager(), null);
+    }
+
     //View更新
     public void updateItemParam(int listPosition, ItemDataModel dataModel) {
         ItemDataArray.set(listPosition,dataModel);
@@ -293,4 +312,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return multiBT();
         }
     }
+
 }

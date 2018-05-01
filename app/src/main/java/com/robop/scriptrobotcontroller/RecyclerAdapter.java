@@ -14,15 +14,18 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder>{
-    private View.OnClickListener listener;
+    private View.OnClickListener clickListener;
+    private OnRecyclerListener recyclerListener;
 
     private ArrayList<ItemDataModel> ItemDataArray;
-    static class ViewHolder extends RecyclerView.ViewHolder{
+
+    static class ViewHolder extends RecyclerView.ViewHolder {
         LinearLayout linearLayout;
         TextView speedRight;
         TextView speedLeft;
         TextView time;
         ImageView image;
+
         ViewHolder(View view){
             super(view);
             this.linearLayout = view.findViewById(R.id.item_frame);
@@ -33,8 +36,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         }
     }
 
-    RecyclerAdapter(Context context, ArrayList<ItemDataModel> itemDataList){
+    RecyclerAdapter(Context context, ArrayList<ItemDataModel> itemDataList, OnRecyclerListener listener){
         ItemDataArray = itemDataList;
+        recyclerListener = listener;
     }
 
     public ItemDataModel getItem(int position) {
@@ -51,7 +55,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         holder.speedRight.setText("右パワー : " + ItemDataArray.get(position).getRightSpeed());
         holder.speedLeft.setText("左パワー : " + ItemDataArray.get(position).getLeftSpeed());
         holder.time.setText(ItemDataArray.get(position).getTime() + "秒");
@@ -59,7 +63,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         holder.linearLayout.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                listener.onClick(view);
+                //clickListener.onClick(view);
+                recyclerListener.onRecyclerClicked(view, position);
             }
         });
         switch (ItemDataArray.get(position).getOrderId()){
@@ -86,11 +91,15 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     }
 
     public void setOnItemClickListener(View.OnClickListener listener) {
-        this.listener = listener;
+        this.clickListener = listener;
     }
 
     @Override
     public int getItemCount(){
         return ItemDataArray.size();
+    }
+
+    public interface OnRecyclerListener {
+        void onRecyclerClicked(View view, int position);
     }
 }
