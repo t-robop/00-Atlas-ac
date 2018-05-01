@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     Bluetooth bluetooth;
     BluetoothAdapter bluetoothAdapter;
+    BluetoothDevice bluetoothDevice;
     private final int REQUEST_CONNECT_DEVICE = 9;
     private final int REQUEST_ENABLE_BLUETOOTH = 10;
 
@@ -38,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private RecyclerAdapter mAdapter;
 
     private TextView connectStatus;
+    private ImageView connectImg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         bluetooth.setDeviceCallback(this);
 
         connectStatus = findViewById(R.id.connect_status);
+        connectImg=findViewById(R.id.connect_img);
 
         //RecyclerView処理
         mRecyclerView = findViewById(R.id.recycler_view);
@@ -68,12 +72,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mAdapter = new RecyclerAdapter(this,ItemDataArray);
+        mAdapter = new RecyclerAdapter(this, ItemDataArray);
         mRecyclerView.setAdapter(mAdapter);
         //RecyclerView内のクリック処理
-        mAdapter.setOnItemClickListener(new View.OnClickListener(){
+        mAdapter.setOnItemClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view){
+            public void onClick(View view) {
                 // ダイアログの表示
                 EditParamDialog editImageParamDialog = new EditParamDialog();
                 Bundle data = new Bundle();
@@ -179,14 +183,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @SuppressLint("SetTextI18n")
     @Override
     public void onDeviceConnected(BluetoothDevice device) {
-        connectStatus.setText(device.getName() + "に接続されています");
-        Toast.makeText(this, "接続 to " + device.getName() + "\n" + device.getAddress(), Toast.LENGTH_SHORT).show();
+        bluetoothDevice = device;
+        this.runOnUiThread(new Runnable() {
+            public void run() {
+                connectImg.setImageResource(R.drawable.connect);
+                connectStatus.setText(bluetoothDevice.getName() + "に接続されています");
+                Toast.makeText(MainActivity.this, "接続 to " + bluetoothDevice.getName() + "\n" + bluetoothDevice.getAddress(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
     public void onDeviceDisconnected(BluetoothDevice device, String message) {
-        connectStatus.setText("接続されていません");
-        Toast.makeText(this, "接続が切れました", Toast.LENGTH_SHORT).show();
+        bluetoothDevice = device;
+        this.runOnUiThread(new Runnable() {
+            public void run() {
+                connectImg.setImageResource(R.drawable.disconnect);
+                connectStatus.setText("接続されていません");
+                Toast.makeText(MainActivity.this, "接続が切れました", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
@@ -230,7 +246,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Toast.makeText(MainActivity.this, "ロボットが接続されていません", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                for (String BTCommand :generateBTCommand()) {
+                for (String BTCommand : generateBTCommand()) {
                     // データフォーマット通りの文字列が送信される
                     // 最初に f が2つあったら複数送信 ffのあとに送る回数が入ってる
                     bluetooth.send(BTCommand);
@@ -242,7 +258,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     //View更新
     public void updateItemParam(int listPosition, ItemDataModel dataModel) {
-        ItemDataArray.set(listPosition,dataModel);
+        ItemDataArray.set(listPosition, dataModel);
         mAdapter.notifyDataSetChanged();
     }
 
@@ -268,19 +284,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String[] strings = new String[arrayNum];
         StringBuilder tmpText = new StringBuilder();
         for (int i = 1; i <= mAdapter.getItemCount(); i++) {
-            tmpText.append(mAdapter.getItem(i-1).getOrderId());
-            tmpText.append(String.format("%02d", mAdapter.getItem(i-1).getTime()));
-            tmpText.append(String.format("%03d", mAdapter.getItem(i-1).getRightSpeed()));
-            tmpText.append(String.format("%03d", mAdapter.getItem(i-1).getLeftSpeed()));
+            tmpText.append(mAdapter.getItem(i - 1).getOrderId());
+            tmpText.append(String.format("%02d", mAdapter.getItem(i - 1).getTime()));
+            tmpText.append(String.format("%03d", mAdapter.getItem(i - 1).getRightSpeed()));
+            tmpText.append(String.format("%03d", mAdapter.getItem(i - 1).getLeftSpeed()));
 
             if (i % 6 == 0) {
                 tmpText.append('\0');  //1命令分の終端文字
-                strings[(i / 6) -1] = tmpText.toString();
+                strings[(i / 6) - 1] = tmpText.toString();
                 tmpText.setLength(0);
             }
         }
         tmpText.append('\0');  //1命令分の終端文字
-        strings[arrayNum-1] = tmpText.toString();
+        strings[arrayNum - 1] = tmpText.toString();
         ArrayList<String> multiBTCommand = new ArrayList<>();
         String header = "ff" + strings.length + "\0";
         multiBTCommand.add(header);
