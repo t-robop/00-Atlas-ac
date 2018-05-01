@@ -1,7 +1,6 @@
 package com.robop.scriptrobotcontroller;
 
 import android.annotation.SuppressLint;
-import android.media.midi.MidiManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -73,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mAdapter = new RecyclerAdapter(this,ItemDataArray, this);
+        mAdapter = new RecyclerAdapter(ItemDataArray, this);
         mRecyclerView.setAdapter(mAdapter);
 
         //ItemTouchHelper
@@ -198,8 +197,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onConnectError(BluetoothDevice device, String message) {
-        connectStatus.setText("接続されていません");
-        Toast.makeText(this, "接続できません", Toast.LENGTH_SHORT).show();
+        bluetoothDevice = device;
+        this.runOnUiThread(new Runnable() {
+            public void run() {
+                connectStatus.setText("接続されていません");
+                Toast.makeText(MainActivity.this, "接続できません", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override

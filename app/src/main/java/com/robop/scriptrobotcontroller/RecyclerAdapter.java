@@ -35,7 +35,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         }
     }
 
-    RecyclerAdapter(Context context, ArrayList<ItemDataModel> itemDataList, OnRecyclerListener listener){
+    RecyclerAdapter(ArrayList<ItemDataModel> itemDataList, OnRecyclerListener listener){
         ItemDataArray = itemDataList;
         recyclerListener = listener;
     }
@@ -62,7 +62,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         holder.linearLayout.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                //clickListener.onClick(view);
                 recyclerListener.onRecyclerClicked(view, position);
             }
         });
