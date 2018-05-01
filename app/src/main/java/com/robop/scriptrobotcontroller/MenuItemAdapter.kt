@@ -24,7 +24,7 @@ class MenuItemAdapter(context: Context) :BaseAdapter() {
     }
 
     internal class ViewHolder(view: View) {
-        var imgV: ImageView = view.findViewById(R.id.directionImage)
+        var imgV: ImageView = view.findViewById(R.id.direction_image)
         var titleV: TextView = view.findViewById(R.id.text_title)
         var subV: TextView = view.findViewById(R.id.text_sub)
 
