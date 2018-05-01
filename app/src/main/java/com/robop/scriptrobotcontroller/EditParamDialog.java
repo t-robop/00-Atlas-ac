@@ -25,7 +25,7 @@ public class EditParamDialog extends DialogFragment{
 
         //ItemDataModelとposition受取
         final int listItemPosition = getArguments().getInt("listItemPosition");
-        final ItemDataModel dataModel = Objects.requireNonNull((ItemDataModel) getArguments().getSerializable("itemData"));
+        final ItemDataModel dataModel = (ItemDataModel) getArguments().getSerializable("itemData");
 
         final EditText editSpeedRight = view.findViewById(R.id.edit_speed_right);
         editSpeedRight.setInputType(InputType.TYPE_CLASS_NUMBER);

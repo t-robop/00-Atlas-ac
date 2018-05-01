@@ -14,7 +14,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder>{
-    private View.OnClickListener clickListener;
     private OnRecyclerListener recyclerListener;
 
     private ArrayList<ItemDataModel> ItemDataArray;
@@ -55,7 +54,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") final int position) {
         holder.speedRight.setText("右パワー : " + ItemDataArray.get(position).getRightSpeed());
         holder.speedLeft.setText("左パワー : " + ItemDataArray.get(position).getLeftSpeed());
         holder.time.setText(ItemDataArray.get(position).getTime() + "秒");
@@ -88,10 +87,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                 holder.image.setImageResource(R.drawable.edit_icon);
                 break;
         }
-    }
-
-    public void setOnItemClickListener(View.OnClickListener listener) {
-        this.clickListener = listener;
     }
 
     @Override
