@@ -41,6 +41,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private TextView connectStatus;
     private ImageView connectImg;
+    
+    private int DEFAULT_SPEED_R = 100;
+    private int DEFAULT_SPEED_L = 100;
+    private int DEFAULT_TIME = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,7 +115,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 // positionが1から始まるため
                 int id = i + 1;
-                mAdapter.addItem(new ItemDataModel(id, 100, 100, 2));
+                mAdapter.addItem(new ItemDataModel(id, DEFAULT_SPEED_R, DEFAULT_SPEED_L, DEFAULT_TIME));
                 mRecyclerView.setAdapter(mAdapter);
             }
         });
