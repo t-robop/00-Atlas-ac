@@ -1,6 +1,7 @@
 package com.robop.scriptrobotcontroller;
 
 import android.annotation.SuppressLint;
+import android.content.ClipData;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -43,8 +44,25 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     public ItemDataModel getItem(int position) {
         return ItemDataArray.get(position);
     }
+    public void setItem(int position, ItemDataModel dataModel) {
+        ItemDataArray.set(position,dataModel);
+    }
 
-    @NonNull
+    public void addItem(ItemDataModel dataModel) {
+        ItemDataArray.add(dataModel);
+    }
+    public void removeItem(int position) {
+        ItemDataArray.remove(position);
+    }
+
+    public void itemMoved(int fromPos, int toPos){
+        ItemDataModel item = ItemDataArray.get(toPos);
+        ItemDataArray.set(toPos,ItemDataArray.get(fromPos));
+        ItemDataArray.set(fromPos,item);
+    }
+
+
+        @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType){
 

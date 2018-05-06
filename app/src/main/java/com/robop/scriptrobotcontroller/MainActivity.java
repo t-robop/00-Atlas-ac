@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private final int REQUEST_CONNECT_DEVICE = 9;
     private final int REQUEST_ENABLE_BLUETOOTH = 10;
 
-    ArrayList<ItemDataModel> ItemDataArray = new ArrayList<>();
+    //ArrayList<ItemDataModel> ItemDataArray = new ArrayList<>();
 
     //RecyclerView
     private RecyclerView mRecyclerView;
@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
-
+        ArrayList<ItemDataModel> ItemDataArray = new ArrayList<>();
         mAdapter = new RecyclerAdapter(ItemDataArray, this);
         mRecyclerView.setAdapter(mAdapter);
 
@@ -82,6 +82,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
                         final int fromPos = viewHolder.getAdapterPosition();
                         final int toPos = target.getAdapterPosition();
+                        mAdapter.itemMoved(fromPos, toPos);
                         mAdapter.notifyItemMoved(fromPos, toPos);
                         return true;
                     }
@@ -89,9 +90,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                         final int fromPos = viewHolder.getAdapterPosition();
-                        ItemDataArray.remove(fromPos);
-
+                        //ItemDataArray.remove(fromPos);
+                        mAdapter.removeItem(fromPos);
                         mAdapter.notifyItemRemoved(fromPos);
+                        Log.d("","");
                     }
                 });
         itemDecor.attachToRecyclerView(mRecyclerView);
@@ -109,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 // positionが1から始まるため
                 int id = i + 1;
-                ItemDataArray.add(new ItemDataModel(id, 100, 100, 2));
+                mAdapter.addItem(new ItemDataModel(id, 100, 100, 2));
                 mRecyclerView.setAdapter(mAdapter);
             }
         });
@@ -247,10 +249,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Bundle data = new Bundle();
 
         ItemDataModel itemDataModel = new ItemDataModel(
-                ItemDataArray.get(position).getOrderId(),
-                ItemDataArray.get(position).getRightSpeed(),
-                ItemDataArray.get(position).getLeftSpeed(),
-                ItemDataArray.get(position).getTime());
+                mAdapter.getItem(position).getOrderId(),
+                mAdapter.getItem(position).getRightSpeed(),
+                mAdapter.getItem(position).getLeftSpeed(),
+                mAdapter.getItem(position).getTime());
 
         data.putSerializable("itemData", itemDataModel);
         data.putInt("listItemPosition", position);
@@ -260,8 +262,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     //View更新
     public void updateItemParam(int listPosition, ItemDataModel dataModel) {
-        ItemDataArray.set(listPosition, dataModel);
-        mAdapter.notifyDataSetChanged();
+        mAdapter.setItem(listPosition,dataModel);
     }
 
     @SuppressLint("DefaultLocale")
