@@ -267,6 +267,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //View更新
     public void updateItemParam(int listPosition, ItemDataModel dataModel) {
         mAdapter.setItem(listPosition,dataModel);
+        mAdapter.notifyDataSetChanged();
     }
 
     @SuppressLint("DefaultLocale")
