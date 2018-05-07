@@ -1,17 +1,14 @@
 # ScriptRobotController
 スクリプト組み立て型 ロボPArduinoラジコンシステム (操作コントローラー用Androidアプリ) 
 
-ラジコン側のプログラム : https://github.com/Dai1678/ScriptArduinoRC   
+ラジコン側のプログラム : https://github.com/t-robop/ScriptArduinoRC   
 
 # 目的
 GUIでプログラムのフローチャートを作って、ラジコンを動かす　⇛　思い通りの動作を実行させるための論理的思考力を養おう   
 
 # 開発環境
-AndroidStudio 3.0.1 (gradle3.0.1)
+AndroidStudio 3.1.1 (gradle3.0.1)
 java
-
-# 動作確認環境
-デバッグできた端末を追記
 
 # 開発中で使用する用語
 - ブロック　 ：　前進や後退などのラジコン各処理のこと
