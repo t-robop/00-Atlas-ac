@@ -21,7 +21,12 @@ import android.content.Intent;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
+import io.realm.RealmQuery;
+import io.realm.RealmResults;
 import me.aflak.bluetooth.Bluetooth;
 import me.aflak.bluetooth.DeviceCallback;
 
@@ -225,6 +230,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.start_button:
+                autoSave();
                 //BlueToothで送る文字列のnullチェック
                 if (generateBTCommand()[0].length() == 0) {
                     Toast.makeText(MainActivity.this, "送るデータがありません", Toast.LENGTH_SHORT).show();
@@ -235,6 +241,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Toast.makeText(MainActivity.this, "ロボットが接続されていません", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                //autoSave();
                 for (String BTCommand : generateBTCommand()) {
                     // データフォーマット通りの文字列が送信される
                     // 最初に f が2つあったら複数送信 ffのあとに送る回数が入ってる
@@ -319,5 +326,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return multiBT();
         }
     }
+    void autoSave() {
+        Realm.init(this);
+        // context
 
+        //realm 削除
+        RealmConfiguration myConfig = new RealmConfiguration.Builder().build();
+        Realm.deleteRealm(myConfig);
+        Realm realm = Realm.getDefaultInstance();
+
+        List<ItemDataModel> items = new ArrayList<>();
+
+        for (int i = 0; i < mAdapter.getItemCount(); i++) {
+            items.add(mAdapter.getItem(i));
+        }
+        realm.beginTransaction();
+        realm.insert(items);
+        realm.commitTransaction();
+        realm.close();
+    }
+    void realmDebug() {
+        Realm realm = Realm.getDefaultInstance();
+        RealmQuery<ItemDataModel> query = realm.where(ItemDataModel.class);
+        RealmResults<ItemDataModel> items = query.findAll();
+
+        for (int i = 0; i < items.size(); i++) {
+            System.out.println("aaaaaa    "+ items.get(i).getOrderId());
+        }
+        realm.close();
+
+    }
 }

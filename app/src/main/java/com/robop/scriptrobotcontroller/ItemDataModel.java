@@ -2,13 +2,16 @@ package com.robop.scriptrobotcontroller;
 
 import java.io.Serializable;
 
-public class ItemDataModel implements Serializable {
+import io.realm.RealmObject;
+
+public class ItemDataModel extends RealmObject implements Serializable {
 
     private int rightSpeed;
     private int leftSpeed;
     private int time;
     private int orderId;
 
+    public ItemDataModel(){}
     ItemDataModel(int orderId, int rightSpeed, int leftSpeed, int time){
         setOrderId(orderId);
         setRightSpeed(rightSpeed);
