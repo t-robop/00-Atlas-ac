@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#ffffff"
     tools:context="com.robop.scriptrobotcontroller.DeviceListActivity">
 
     <TextView
@@ -19,21 +20,26 @@
         android:layout_height="wrap_content"
         android:id="@+id/device_list"
         android:layout_alignParentTop="true"
-        android:layout_above="@+id/scan_device"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="16dp"
         android:smoothScrollbar="true">
 
     </ListView>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom|right"
+        android:layout_marginRight="24dp"
+        android:layout_marginBottom="24dp">
+
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentStart="true"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:id="@+id/scan_device"
-        android:text="SCAN FOR DEVICES" />
+        android:background="@drawable/reload"
+        android:textStyle="bold"/>
+
+    </LinearLayout>
 
 </RelativeLayout>
