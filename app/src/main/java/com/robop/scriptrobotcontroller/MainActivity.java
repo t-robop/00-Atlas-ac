@@ -1,6 +1,7 @@
 package com.robop.scriptrobotcontroller;
 
 import android.annotation.SuppressLint;
+import android.content.ClipData;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -50,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private int DEFAULT_SPEED_R = 100;
     private int DEFAULT_SPEED_L = 100;
     private int DEFAULT_TIME = 2;
+    private int DEFAULT_BLOCKSTATE = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 // positionが1から始まるため
                 int id = i + 1;
-                mAdapter.addItem(new ItemDataModel(id, DEFAULT_SPEED_R, DEFAULT_SPEED_L, DEFAULT_TIME));
+                mAdapter.addItem(new ItemDataModel(id, DEFAULT_SPEED_R, DEFAULT_SPEED_L, DEFAULT_TIME, DEFAULT_BLOCKSTATE, 0));
                 mRecyclerView.setAdapter(mAdapter);
             }
         });
@@ -263,7 +265,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mAdapter.getItem(position).getOrderId(),
                 mAdapter.getItem(position).getRightSpeed(),
                 mAdapter.getItem(position).getLeftSpeed(),
-                mAdapter.getItem(position).getTime());
+                mAdapter.getItem(position).getTime(),
+                mAdapter.getItem(position).getBlockState(),
+                mAdapter.getItem(position).getLoopCount());
 
         data.putSerializable("itemData", itemDataModel);
         data.putInt("listItemPosition", position);
@@ -317,6 +321,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         multiBTCommand.add(header);
         multiBTCommand.addAll(Arrays.asList(strings));
         return multiBTCommand.toArray(new String[multiBTCommand.size()]);
+    }
+
+
+    private ArrayList<ItemDataModel> generateDataArray;
+    private void convertLoopCommand(){
+        ArrayList<ItemDataModel> tempDataArray = mAdapter.getAllItem();
+        int startLoop = 0, endLoop = 0, loopCount = 0;
+        for (int i = 0; i < tempDataArray.size(); i++){
+            if(tempDataArray.get(i).getBlockState() == 1){
+                startLoop = i;
+                loopCount = tempDataArray.get(i).getLoopCount();
+            }
+            if(tempDataArray.get(i).getBlockState() == 2){
+                endLoop = i;
+            }
+        }
+        for (int i = 0; i < loopCount; i++){
+            for (int j = startLoop; j < endLoop + 1; i++){
+                generateDataArray.add(j, mAdapter.getItem(j));
+            }
+        }
+
     }
 
     private String[] generateBTCommand() {
