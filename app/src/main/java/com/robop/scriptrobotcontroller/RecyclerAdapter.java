@@ -44,6 +44,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     public ItemDataModel getItem(int position) {
         return ItemDataArray.get(position);
     }
+    public ArrayList<ItemDataModel> getAllItem(){
+        return ItemDataArray;
+    }
+
     public void setItem(int position, ItemDataModel dataModel) {
         ItemDataArray.set(position,dataModel);
     }

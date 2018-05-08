@@ -10,13 +10,17 @@ public class ItemDataModel extends RealmObject implements Serializable {
     private int leftSpeed;
     private int time;
     private int orderId;
+    private int blockState;
+    private int loopCount;
 
     public ItemDataModel(){}
-    ItemDataModel(int orderId, int rightSpeed, int leftSpeed, int time){
+    ItemDataModel(int orderId, int rightSpeed, int leftSpeed, int time, int blockState, int loopCount){
         setOrderId(orderId);
         setRightSpeed(rightSpeed);
         setLeftSpeed(leftSpeed);
         setTime(time);
+        setBlockState(blockState);
+        setLoopCount(loopCount);
     }
     public int getRightSpeed(){
         return rightSpeed;
@@ -29,6 +33,12 @@ public class ItemDataModel extends RealmObject implements Serializable {
     }
     public int getOrderId() {
         return orderId;
+    }
+    public int getBlockState(){
+        return blockState;
+    }
+    public int getLoopCount(){
+        return loopCount;
     }
 
     void setRightSpeed(int rightSpeed){
@@ -55,6 +65,18 @@ public class ItemDataModel extends RealmObject implements Serializable {
     }
     void setOrderId(int orderId){
         this.orderId = orderId ;
+    }
+    void setBlockState(int blockState){
+        if(blockState < 0){
+            this.blockState = 0;
+        }
+        this.blockState = blockState;
+    }
+    void setLoopCount(int loopCount){
+        if(loopCount < 0){
+            this.loopCount = 0;
+        }
+        this.loopCount = loopCount;
     }
 
 
