@@ -3,6 +3,9 @@ package com.robop.scriptrobotcontroller;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Handler;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -20,7 +23,7 @@ import me.aflak.bluetooth.Bluetooth;
 
 //Android端末にペアリングされているBlueTooth機器の一覧
 
-public class DeviceListActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
+public class DeviceListActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     Bluetooth bluetooth;
     BluetoothAdapter bluetoothAdapter;
@@ -28,6 +31,8 @@ public class DeviceListActivity extends AppCompatActivity implements View.OnClic
     ListView pairedDevicesListView;
     ArrayList<String> resultPairedDevicesName;  //ペアリングされているデバイスの名前
     ArrayList<String> resultPairedDevicesAddress;   //ペアリングされているデバイスのMACアドレス
+
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +44,7 @@ public class DeviceListActivity extends AppCompatActivity implements View.OnClic
 
         resultPairedDevicesName = new ArrayList<>();
         resultPairedDevicesAddress = new ArrayList<>();
-        Button scanButton = findViewById(R.id.scan_device);
+        //Button scanButton = findViewById(R.id.scan_device);
 
         pairedDevicesListView = findViewById(R.id.device_list);
         TextView emptyView = findViewById(R.id.empty_pairing_device);
@@ -52,17 +57,19 @@ public class DeviceListActivity extends AppCompatActivity implements View.OnClic
         pairedDevicesListView.setAdapter(pairedDevicesArrayAdapter);
 
         pairedDevicesListView.setOnItemClickListener(this);
-        scanButton.setOnClickListener(this);
+//        scanButton.setOnClickListener(this);
+
+        // SwipeRefreshLayoutの設定
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refresh);
+        mSwipeRefreshLayout.setOnRefreshListener(mOnRefreshListener);
+        //mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent,R.color.colorPrimary);
+        mSwipeRefreshLayout.setColorSchemeColors(Color.parseColor("#aaaaff"),Color.parseColor("#333333"));
     }
 
-    @Override
-    public void onClick(View view) {
-        //pairedDevicesListViewの更新
-        if (view.getId() == R.id.scan_device){
-            pairedDevicesArrayAdapter.clear();
-            searchPairedDevices();
-            pairedDevicesArrayAdapter.notifyDataSetChanged();
-        }
+    private void scanDevices(){
+        pairedDevicesArrayAdapter.clear();
+        searchPairedDevices();
+        pairedDevicesArrayAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -99,4 +106,19 @@ public class DeviceListActivity extends AppCompatActivity implements View.OnClic
             pairedDevicesArrayAdapter.add(noDevices);
         }
     }
+
+    private SwipeRefreshLayout.OnRefreshListener mOnRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
+        @Override
+        public void onRefresh() {
+            scanDevices();
+
+            // 3秒待機
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mSwipeRefreshLayout.setRefreshing(false);
+                }
+            }, 1000);
+        }
+    };
 }
