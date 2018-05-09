@@ -245,18 +245,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.start_button:
                 fullGenerateDataArray.clear();
-                convertLoopCommand(0,mAdapter.getItemCount()-1,0);
-//                if (generateDataArray != null){
-//
-//
-//                    for (ItemDataModel data: generateDataArray) {
-//                        System.out.println(data.getOrderId());
-//                    }
-//
-//                }
 
                 autoSave();
                 //BlueToothで送る文字列のnullチェック
+                //TODO nullチェック用のメソッドを新規で作るべき
                 if (generateBTCommand(mAdapter.getAllItem())[0].length() == 0) {
                     Toast.makeText(MainActivity.this, "送るデータがありません", Toast.LENGTH_SHORT).show();
                     return;
@@ -266,8 +258,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Toast.makeText(MainActivity.this, "ロボットが接続されていません", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                //autoSave();
-                for (String BTCommand : generateBTCommand(mAdapter.getAllItem())) {
+                for (String BTCommand : GenerateBTWrapper()) {
                     // データフォーマット通りの文字列が送信される
                     // 最初に f が2つあったら複数送信 ffのあとに送る回数が入ってる
                     bluetooth.send(BTCommand);
@@ -346,23 +337,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return multiBTCommand.toArray(new String[multiBTCommand.size()]);
     }
 
-
-    private ArrayList<ItemDataModel> fullGenerateDataArray = new ArrayList<>();
-    private void convertLoopCommand(int start,int end, int depth) {
+    private String[] GenerateBTWrapper() {
         String str = null;
         for (int i = 0; i < mAdapter.getItemCount(); i++) {
             str += mAdapter.getItem(i).getBlockState();
         }
+        //  for が入ってなかった時
         if (str.indexOf("1") == -1) {
             // 一致しなかったら
-            return;
+            return generateBTCommand(mAdapter.getAllItem());
+
+
+            // forが入ってた時
+        } else {
+            convertLoopCommand(0,mAdapter.getItemCount()-1,0);
+            return generateBTCommand(fullGenerateDataArray);
         }
+
+    }
+
+
+    private ArrayList<ItemDataModel> fullGenerateDataArray = new ArrayList<>();
+    private void convertLoopCommand(int start,int end, int depth) {
 
         for (int i = start; i <= end; i++) {
             if (mAdapter.getItem(i).getBlockState() == 1) {
                 convertLoopCommand(i + 1, end, depth + 1);
                 // iがloop後の値を差していないから困ってる
-                for (i=i;i < end; i++){
+                for (;i < end; i++){
                     if (mAdapter.getItem(i).getBlockState() == 2) {
                         break;
                     }
