@@ -139,6 +139,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onStart() {
         super.onStart();
         bluetooth.onStart();
+
+
+        Realm.init(this);
+        Realm realm = Realm.getDefaultInstance();
+        RealmQuery<ItemDataModel> query = realm.where(ItemDataModel.class);
+        ItemDataModel item = query.findFirst();
+        realm.close();
+        if (item != null) {
+            DataLoadDialogFragment dataLoadDialogFragment = new DataLoadDialogFragment();
+            dataLoadDialogFragment.show(getFragmentManager(), null);
+        }
+
     }
 
     @Override
@@ -355,23 +367,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     void autoSave() {
         Realm.init(this);
         // context
-
         //realm 削除
-        RealmConfiguration myConfig = new RealmConfiguration.Builder().build();
-        Realm.deleteRealm(myConfig);
         Realm realm = Realm.getDefaultInstance();
 
-        List<ItemDataModel> items = new ArrayList<>();
 
+        realm.beginTransaction();
+        RealmResults<ItemDataModel> datas = realm.where(ItemDataModel.class).findAll();
+        datas.deleteAllFromRealm();
+        //realm.commitTransaction();
+
+
+        /*
+        RealmConfiguration myConfig = new RealmConfiguration.Builder().build();
+        Realm.deleteRealm(myConfig);
+        */
+
+        List<ItemDataModel> items = new ArrayList<>();
+        //realm.beginTransaction();
         for (int i = 0; i < mAdapter.getItemCount(); i++) {
             items.add(mAdapter.getItem(i));
         }
-        realm.beginTransaction();
         realm.insert(items);
         realm.commitTransaction();
         realm.close();
     }
     void realmDebug() {
+        Realm.init(this);
         Realm realm = Realm.getDefaultInstance();
         RealmQuery<ItemDataModel> query = realm.where(ItemDataModel.class);
         RealmResults<ItemDataModel> items = query.findAll();
@@ -381,5 +402,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         realm.close();
 
+    }
+    public void setAdapter(ItemDataModel dataModel){
+        mAdapter.addItem(dataModel);
+        mAdapter.notifyDataSetChanged();
     }
 }
