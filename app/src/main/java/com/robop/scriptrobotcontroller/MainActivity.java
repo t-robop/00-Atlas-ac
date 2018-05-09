@@ -1,6 +1,7 @@
 package com.robop.scriptrobotcontroller;
 
 import android.annotation.SuppressLint;
+import android.content.ClipData;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,7 +22,12 @@ import android.content.Intent;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
+import io.realm.RealmQuery;
+import io.realm.RealmResults;
 import me.aflak.bluetooth.Bluetooth;
 import me.aflak.bluetooth.DeviceCallback;
 
@@ -45,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private int DEFAULT_SPEED_R = 100;
     private int DEFAULT_SPEED_L = 100;
     private int DEFAULT_TIME = 2;
+    private int DEFAULT_BLOCKSTATE = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 // positionが1から始まるため
                 int id = i + 1;
-                mAdapter.addItem(new ItemDataModel(id, DEFAULT_SPEED_R, DEFAULT_SPEED_L, DEFAULT_TIME));
+                mAdapter.addItem(new ItemDataModel(id, DEFAULT_SPEED_R, DEFAULT_SPEED_L, DEFAULT_TIME, DEFAULT_BLOCKSTATE, 0));
                 mRecyclerView.setAdapter(mAdapter);
             }
         });
@@ -225,6 +232,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.start_button:
+                autoSave();
                 //BlueToothで送る文字列のnullチェック
                 if (generateBTCommand()[0].length() == 0) {
                     Toast.makeText(MainActivity.this, "送るデータがありません", Toast.LENGTH_SHORT).show();
@@ -235,6 +243,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Toast.makeText(MainActivity.this, "ロボットが接続されていません", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                //autoSave();
                 for (String BTCommand : generateBTCommand()) {
                     // データフォーマット通りの文字列が送信される
                     // 最初に f が2つあったら複数送信 ffのあとに送る回数が入ってる
@@ -256,7 +265,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mAdapter.getItem(position).getOrderId(),
                 mAdapter.getItem(position).getRightSpeed(),
                 mAdapter.getItem(position).getLeftSpeed(),
-                mAdapter.getItem(position).getTime());
+                mAdapter.getItem(position).getTime(),
+                mAdapter.getItem(position).getBlockState(),
+                mAdapter.getItem(position).getLoopCount());
 
         data.putSerializable("itemData", itemDataModel);
         data.putInt("listItemPosition", position);
@@ -312,6 +323,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return multiBTCommand.toArray(new String[multiBTCommand.size()]);
     }
 
+
+    private ArrayList<ItemDataModel> generateDataArray;
+    private void convertLoopCommand(){
+        ArrayList<ItemDataModel> tempDataArray = mAdapter.getAllItem();
+        int startLoop = 0, endLoop = 0, loopCount = 0;
+        for (int i = 0; i < tempDataArray.size(); i++){
+            if(tempDataArray.get(i).getBlockState() == 1){
+                startLoop = i;
+                loopCount = tempDataArray.get(i).getLoopCount();
+            }
+            if(tempDataArray.get(i).getBlockState() == 2){
+                endLoop = i;
+            }
+        }
+        for (int i = 0; i < loopCount; i++){
+            for (int j = startLoop; j < endLoop + 1; i++){
+                generateDataArray.add(j, mAdapter.getItem(j));
+            }
+        }
+
+    }
+
     private String[] generateBTCommand() {
         if (mAdapter.getItemCount() < 7) {
             return new String[]{singleBT()};
@@ -319,5 +352,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return multiBT();
         }
     }
+    void autoSave() {
+        Realm.init(this);
+        // context
 
+        //realm 削除
+        RealmConfiguration myConfig = new RealmConfiguration.Builder().build();
+        Realm.deleteRealm(myConfig);
+        Realm realm = Realm.getDefaultInstance();
+
+        List<ItemDataModel> items = new ArrayList<>();
+
+        for (int i = 0; i < mAdapter.getItemCount(); i++) {
+            items.add(mAdapter.getItem(i));
+        }
+        realm.beginTransaction();
+        realm.insert(items);
+        realm.commitTransaction();
+        realm.close();
+    }
+    void realmDebug() {
+        Realm realm = Realm.getDefaultInstance();
+        RealmQuery<ItemDataModel> query = realm.where(ItemDataModel.class);
+        RealmResults<ItemDataModel> items = query.findAll();
+
+        for (int i = 0; i < items.size(); i++) {
+            System.out.println("aaaaaa    "+ items.get(i).getOrderId());
+        }
+        realm.close();
+
+    }
 }
