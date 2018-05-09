@@ -3,37 +3,33 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#ffffff"
     tools:context="com.robop.scriptrobotcontroller.DeviceListActivity">
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/empty_pairing_device"
-        android:text="No Device"
-        android:textSize="20sp"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"/>
-
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/device_list"
-        android:layout_alignParentTop="true"
-        android:layout_above="@+id/scan_device"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginTop="20dp"
-        android:smoothScrollbar="true">
-
-    </ListView>
-
-    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/scan_device"
-        android:text="SCAN FOR DEVICES" />
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:text="No Device"
+        android:textSize="20sp" />
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/refresh"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ListView
+            android:id="@+id/device_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="16dp"
+            android:smoothScrollbar="true" />
+
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 </RelativeLayout>

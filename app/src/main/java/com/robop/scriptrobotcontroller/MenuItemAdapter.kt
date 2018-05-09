@@ -24,6 +24,7 @@ class MenuItemAdapter(context: Context) :BaseAdapter() {
     }
 
     internal class ViewHolder(view: View) {
+        var imgBack:ImageView=view.findViewById(R.id.menu_item_bg)
         var imgV: ImageView = view.findViewById(R.id.direction_image)
         var titleV: TextView = view.findViewById(R.id.text_title)
         var subV: TextView = view.findViewById(R.id.text_sub)
@@ -61,6 +62,12 @@ class MenuItemAdapter(context: Context) :BaseAdapter() {
         holder.imgV.setImageResource(mItemList!![position].itemImage)
         holder.titleV.text = mItemList!![position].itemTitle
         holder.subV.text=mItemList!![position].itemSub
+
+        if(position==4||position==5){
+            holder.imgBack.setImageResource(R.drawable.back_loop);
+        }else{
+            holder.imgBack.setImageResource(R.drawable.back_move);
+        }
 
         return convertView
     }
