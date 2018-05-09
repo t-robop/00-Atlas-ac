@@ -161,8 +161,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    protected void onStop() {
+        super.onStop();
         bluetooth.onStop();
     }
 
