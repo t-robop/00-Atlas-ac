@@ -9,6 +9,7 @@
         android:layout_height="100dp">
 
         <ImageView
+            android:id="@+id/img_loop_back"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="5dp"
