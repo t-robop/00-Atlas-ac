@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -26,6 +27,12 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         TextView time;
         ImageView image;
 
+        FrameLayout containerMove;
+        FrameLayout containerLoop;
+        LinearLayout containerLoopNum;
+        TextView textLoopNum;
+        ImageView imgLoopBack;
+
         ViewHolder(View view){
             super(view);
             this.linearLayout = view.findViewById(R.id.item_frame);
@@ -33,6 +40,12 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             this.speedLeft = view.findViewById(R.id.text_speed_left);
             this.time = view.findViewById(R.id.text_time);
             this.image = view.findViewById(R.id.direction_item_image);
+
+            this.containerMove=view.findViewById(R.id.container_move);
+            this.containerLoop=view.findViewById(R.id.container_loop);
+            this.containerLoopNum=view.findViewById(R.id.container_loop_text);
+            this.textLoopNum=view.findViewById(R.id.cnt_loop);
+            this.imgLoopBack=view.findViewById(R.id.img_loop_back);
         }
     }
 
@@ -44,6 +57,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     public ItemDataModel getItem(int position) {
         return ItemDataArray.get(position);
     }
+    public ArrayList<ItemDataModel> getAllItem(){
+        return ItemDataArray;
+    }
+
     public void setItem(int position, ItemDataModel dataModel) {
         ItemDataArray.set(position,dataModel);
     }
@@ -73,36 +90,62 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") final int position) {
-        holder.speedRight.setText("右パワー : " + ItemDataArray.get(position).getRightSpeed());
-        holder.speedLeft.setText("左パワー : " + ItemDataArray.get(position).getLeftSpeed());
-        holder.time.setText(ItemDataArray.get(position).getTime() + "秒");
 
-        holder.linearLayout.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view){
-                recyclerListener.onRecyclerClicked(view, position);
+
+        if(ItemDataArray.get(position).getOrderId()==5||ItemDataArray.get(position).getOrderId()==6){
+            holder.containerLoop.setVisibility(View.VISIBLE);
+            holder.containerMove.setVisibility(View.GONE);
+
+            switch (ItemDataArray.get(position).getOrderId()) {
+                case 5:
+                    holder.containerLoopNum.setVisibility(View.VISIBLE);
+                    holder.textLoopNum.setText("2");
+                    holder.imgLoopBack.setImageResource(R.drawable.loop_start_block);
+                    break;
+
+                case 6:
+                    holder.containerLoopNum.setVisibility(View.GONE);
+                    holder.imgLoopBack.setImageResource(R.drawable.loop_end_block);
+                    break;
             }
-        });
-        switch (ItemDataArray.get(position).getOrderId()){
-            case 1:
-                holder.image.setImageResource(R.drawable.move_front);
-                break;
+        }else {
 
-            case 2:
-                holder.image.setImageResource(R.drawable.move_back);
-                break;
+            holder.speedRight.setText("右パワー : " + ItemDataArray.get(position).getRightSpeed());
+            holder.speedLeft.setText("左パワー : " + ItemDataArray.get(position).getLeftSpeed());
+            holder.time.setText(ItemDataArray.get(position).getTime() + "秒");
 
-            case 3:
-                holder.image.setImageResource(R.drawable.move_left);
-                break;
+            holder.linearLayout.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View view){
+                    recyclerListener.onRecyclerClicked(view, position);
+                }
+            });
 
-            case 4:
-                holder.image.setImageResource(R.drawable.move_right);
-                break;
+            holder.containerLoop.setVisibility(View.GONE);
+            holder.containerMove.setVisibility(View.VISIBLE);
+            holder.containerLoopNum.setVisibility(View.GONE);
 
-            default:
-                holder.image.setImageResource(R.drawable.edit_icon);
-                break;
+            switch (ItemDataArray.get(position).getOrderId()) {
+                case 1:
+                    holder.image.setImageResource(R.drawable.move_front);
+                    break;
+
+                case 2:
+                    holder.image.setImageResource(R.drawable.move_back);
+                    break;
+
+                case 3:
+                    holder.image.setImageResource(R.drawable.move_left);
+                    break;
+
+                case 4:
+                    holder.image.setImageResource(R.drawable.move_right);
+                    break;
+
+                default:
+                    holder.image.setImageResource(R.drawable.edit_icon);
+                    break;
+            }
         }
     }
 

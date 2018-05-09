@@ -1,6 +1,7 @@
 package com.robop.scriptrobotcontroller;
 
 import android.annotation.SuppressLint;
+import android.content.ClipData;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -21,7 +22,12 @@ import android.content.Intent;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
+import io.realm.RealmQuery;
+import io.realm.RealmResults;
 import me.aflak.bluetooth.Bluetooth;
 import me.aflak.bluetooth.DeviceCallback;
 
@@ -45,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private int DEFAULT_SPEED_R = 100;
     private int DEFAULT_SPEED_L = 100;
     private int DEFAULT_TIME = 2;
+    private int DEFAULT_BLOCKSTATE = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,6 +114,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         drawerMenuItemAdapter.add(new MenuItemModel(R.drawable.move_back, "後退", "パワーと時間を設定して、ロボットを後ろに動かします。"));
         drawerMenuItemAdapter.add(new MenuItemModel(R.drawable.move_left, "左回転", "パワーと時間を設定して、ロボットを左に回転させます。"));
         drawerMenuItemAdapter.add(new MenuItemModel(R.drawable.move_right, "右回転", "パワーと時間を設定して、ロボットを右に回転させます。"));
+        drawerMenuItemAdapter.add(new MenuItemModel(R.drawable.loop_start, "ループ開始", "ループの始まり"));
+        drawerMenuItemAdapter.add(new MenuItemModel(R.drawable.loop_end, "ループ終了", "ループの終わり"));
         ListView drawerMenuList = findViewById(R.id.drawer_list);
         drawerMenuList.setAdapter(drawerMenuItemAdapter);
 
@@ -115,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 // positionが1から始まるため
                 int id = i + 1;
-                mAdapter.addItem(new ItemDataModel(id, DEFAULT_SPEED_R, DEFAULT_SPEED_L, DEFAULT_TIME));
+                mAdapter.addItem(new ItemDataModel(id, DEFAULT_SPEED_R, DEFAULT_SPEED_L, DEFAULT_TIME, DEFAULT_BLOCKSTATE, 0));
                 mRecyclerView.setAdapter(mAdapter);
             }
         });
@@ -132,6 +141,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onStart() {
         super.onStart();
         bluetooth.onStart();
+
+
+        Realm.init(this);
+        Realm realm = Realm.getDefaultInstance();
+        RealmQuery<ItemDataModel> query = realm.where(ItemDataModel.class);
+        ItemDataModel item = query.findFirst();
+        realm.close();
+        if (item != null) {
+            DataLoadDialogFragment dataLoadDialogFragment = new DataLoadDialogFragment();
+            dataLoadDialogFragment.show(getFragmentManager(), null);
+        }
+
     }
 
     @Override
@@ -225,8 +246,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.start_button:
+                fullGenerateDataArray.clear();
+                convertLoopCommand(0,mAdapter.getItemCount()-1,0);
+//                if (generateDataArray != null){
+//
+//
+//                    for (ItemDataModel data: generateDataArray) {
+//                        System.out.println(data.getOrderId());
+//                    }
+//
+//                }
+
+                autoSave();
                 //BlueToothで送る文字列のnullチェック
-                if (generateBTCommand()[0].length() == 0) {
+                if (generateBTCommand(mAdapter.getAllItem())[0].length() == 0) {
                     Toast.makeText(MainActivity.this, "送るデータがありません", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -235,7 +268,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Toast.makeText(MainActivity.this, "ロボットが接続されていません", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                for (String BTCommand : generateBTCommand()) {
+                //autoSave();
+                for (String BTCommand : generateBTCommand(mAdapter.getAllItem())) {
                     // データフォーマット通りの文字列が送信される
                     // 最初に f が2つあったら複数送信 ffのあとに送る回数が入ってる
                     bluetooth.send(BTCommand);
@@ -256,7 +290,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mAdapter.getItem(position).getOrderId(),
                 mAdapter.getItem(position).getRightSpeed(),
                 mAdapter.getItem(position).getLeftSpeed(),
-                mAdapter.getItem(position).getTime());
+                mAdapter.getItem(position).getTime(),
+                mAdapter.getItem(position).getBlockState(),
+                mAdapter.getItem(position).getLoopCount());
 
         data.putSerializable("itemData", itemDataModel);
         data.putInt("listItemPosition", position);
@@ -271,15 +307,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @SuppressLint("DefaultLocale")
-    private String singleBT() {
+    private String singleBT(ArrayList<ItemDataModel> dataArray) {
         StringBuilder sendText = new StringBuilder();
 
         //OrderId、Time、Speedの文字列を連結
-        for (int i = 0; i < mAdapter.getItemCount(); i++) {
-            sendText.append(mAdapter.getItem(i).getOrderId());
-            sendText.append(String.format("%02d", mAdapter.getItem(i).getTime()));
-            sendText.append(String.format("%03d", mAdapter.getItem(i).getRightSpeed()));
-            sendText.append(String.format("%03d", mAdapter.getItem(i).getLeftSpeed()));
+        for (int i = 0; i < dataArray.size(); i++) {
+            sendText.append(dataArray.get(i).getOrderId());
+            sendText.append(String.format("%02d", dataArray.get(i).getTime()));
+            sendText.append(String.format("%03d", dataArray.get(i).getRightSpeed()));
+            sendText.append(String.format("%03d", dataArray.get(i).getLeftSpeed()));
         }
         sendText.append('\0');  //1命令分の終端文字
 
@@ -287,15 +323,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @SuppressLint("DefaultLocale")
-    private String[] multiBT() {
-        int arrayNum = mAdapter.getItemCount() / 6 + 1;
+    private String[] multiBT(ArrayList<ItemDataModel> dataArray) {
+        int arrayNum = dataArray.size() / 6 + 1;
         String[] strings = new String[arrayNum];
         StringBuilder tmpText = new StringBuilder();
-        for (int i = 1; i <= mAdapter.getItemCount(); i++) {
-            tmpText.append(mAdapter.getItem(i - 1).getOrderId());
-            tmpText.append(String.format("%02d", mAdapter.getItem(i - 1).getTime()));
-            tmpText.append(String.format("%03d", mAdapter.getItem(i - 1).getRightSpeed()));
-            tmpText.append(String.format("%03d", mAdapter.getItem(i - 1).getLeftSpeed()));
+        for (int i = 1; i <= dataArray.size(); i++) {
+            tmpText.append(dataArray.get(i - 1).getOrderId());
+            tmpText.append(String.format("%02d", dataArray.get(i - 1).getTime()));
+            tmpText.append(String.format("%03d", dataArray.get(i - 1).getRightSpeed()));
+            tmpText.append(String.format("%03d", dataArray.get(i - 1).getLeftSpeed()));
 
             if (i % 6 == 0) {
                 tmpText.append('\0');  //1命令分の終端文字
@@ -312,12 +348,99 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return multiBTCommand.toArray(new String[multiBTCommand.size()]);
     }
 
-    private String[] generateBTCommand() {
-        if (mAdapter.getItemCount() < 7) {
-            return new String[]{singleBT()};
-        } else {
-            return multiBT();
+
+    private ArrayList<ItemDataModel> fullGenerateDataArray = new ArrayList<>();
+    private void convertLoopCommand(int start,int end, int depth) {
+        String str = null;
+        for (int i = 0; i < mAdapter.getItemCount(); i++) {
+            str += mAdapter.getItem(i).getBlockState();
         }
+        if (str.indexOf("1") == -1) {
+            // 一致しなかったら
+            return;
+        }
+
+        for (int i = start; i <= end; i++) {
+            if (mAdapter.getItem(i).getBlockState() == 1) {
+                convertLoopCommand(i + 1, end, depth + 1);
+                // iがloop後の値を差していないから困ってる
+                for (i=i;i < end; i++){
+                    if (mAdapter.getItem(i).getBlockState() == 2) {
+                        break;
+                    }
+                }
+
+            }else if (mAdapter.getItem(i).getBlockState() == 2) {
+                System.out.println("aa");
+
+                if (depth != 0) {
+                    ArrayList<ItemDataModel> tmpDataArray = new ArrayList<>();
+                    ArrayList<ItemDataModel> tmpDataArray2 = new ArrayList<>();
+                    for (int j = start; j < i; j++) {
+                        tmpDataArray.add(mAdapter.getItem(j));
+                    }
+                    for (int j = 0; j < mAdapter.getItem(start - 1).getLoopCount(); j++) {
+                        tmpDataArray2.addAll(tmpDataArray);
+                    }
+                    fullGenerateDataArray.addAll(tmpDataArray2);
+                    return;
+                }
+
+            } else if (depth == 0) {
+                fullGenerateDataArray.add(mAdapter.getItem(i));
+            }
+        }
+        System.out.println("aaa");
     }
 
+    private String[] generateBTCommand(ArrayList<ItemDataModel> dataArray) {
+        if (mAdapter.getItemCount() < 7) {
+            return new String[]{singleBT(dataArray)};
+        } else {
+            return multiBT(dataArray);
+        }
+    }
+    void autoSave() {
+        Realm.init(this);
+        // context
+        //realm 削除
+        Realm realm = Realm.getDefaultInstance();
+
+
+        realm.beginTransaction();
+        RealmResults<ItemDataModel> datas = realm.where(ItemDataModel.class).findAll();
+        datas.deleteAllFromRealm();
+        //realm.commitTransaction();
+
+
+        /*
+        RealmConfiguration myConfig = new RealmConfiguration.Builder().build();
+        Realm.deleteRealm(myConfig);
+        */
+
+        List<ItemDataModel> items = new ArrayList<>();
+        //realm.beginTransaction();
+        for (int i = 0; i < mAdapter.getItemCount(); i++) {
+            items.add(mAdapter.getItem(i));
+        }
+        realm.insert(items);
+        realm.commitTransaction();
+        realm.close();
+    }
+    void realmDebug() {
+        Realm.init(this);
+        Realm realm = Realm.getDefaultInstance();
+        RealmQuery<ItemDataModel> query = realm.where(ItemDataModel.class);
+        RealmResults<ItemDataModel> items = query.findAll();
+
+        for (int i = 0; i < items.size(); i++) {
+            System.out.println("aaaaaa    "+ items.get(i).getOrderId());
+        }
+        realm.close();
+
+    }
+    public void setAdapter(ItemDataModel dataModel){
+        mAdapter.addItem(dataModel);
+        mAdapter.notifyDataSetChanged();
+    }
 }
