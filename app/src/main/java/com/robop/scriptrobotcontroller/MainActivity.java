@@ -58,6 +58,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Realm.init(this);
+        Realm realm = Realm.getDefaultInstance();
+        RealmQuery<ItemDataModel> query = realm.where(ItemDataModel.class);
+        ItemDataModel item = query.findFirst();
+        realm.close();
+        if (item != null) {
+            DataLoadDialogFragment dataLoadDialogFragment = new DataLoadDialogFragment();
+            dataLoadDialogFragment.show(getFragmentManager(), null);
+        }
+
         //BlueTooth処理
         bluetooth = new Bluetooth(this);
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -141,18 +151,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onStart() {
         super.onStart();
         bluetooth.onStart();
-
-
-        Realm.init(this);
-        Realm realm = Realm.getDefaultInstance();
-        RealmQuery<ItemDataModel> query = realm.where(ItemDataModel.class);
-        ItemDataModel item = query.findFirst();
-        realm.close();
-        if (item != null) {
-            DataLoadDialogFragment dataLoadDialogFragment = new DataLoadDialogFragment();
-            dataLoadDialogFragment.show(getFragmentManager(), null);
-        }
-
     }
 
     @Override
