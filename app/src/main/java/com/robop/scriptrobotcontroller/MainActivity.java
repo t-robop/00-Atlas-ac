@@ -232,9 +232,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.start_button:
+                fullGenerateDataArray.clear();
+                convertLoopCommand(0,mAdapter.getItemCount()-1,0);
+//                if (generateDataArray != null){
+//
+//
+//                    for (ItemDataModel data: generateDataArray) {
+//                        System.out.println(data.getOrderId());
+//                    }
+//
+//                }
+
                 autoSave();
                 //BlueToothで送る文字列のnullチェック
-                if (generateBTCommand()[0].length() == 0) {
+                if (generateBTCommand(mAdapter.getAllItem())[0].length() == 0) {
                     Toast.makeText(MainActivity.this, "送るデータがありません", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -244,7 +255,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     return;
                 }
                 //autoSave();
-                for (String BTCommand : generateBTCommand()) {
+                for (String BTCommand : generateBTCommand(mAdapter.getAllItem())) {
                     // データフォーマット通りの文字列が送信される
                     // 最初に f が2つあったら複数送信 ffのあとに送る回数が入ってる
                     bluetooth.send(BTCommand);
@@ -282,15 +293,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @SuppressLint("DefaultLocale")
-    private String singleBT() {
+    private String singleBT(ArrayList<ItemDataModel> dataArray) {
         StringBuilder sendText = new StringBuilder();
 
         //OrderId、Time、Speedの文字列を連結
-        for (int i = 0; i < mAdapter.getItemCount(); i++) {
-            sendText.append(mAdapter.getItem(i).getOrderId());
-            sendText.append(String.format("%02d", mAdapter.getItem(i).getTime()));
-            sendText.append(String.format("%03d", mAdapter.getItem(i).getRightSpeed()));
-            sendText.append(String.format("%03d", mAdapter.getItem(i).getLeftSpeed()));
+        for (int i = 0; i < dataArray.size(); i++) {
+            sendText.append(dataArray.get(i).getOrderId());
+            sendText.append(String.format("%02d", dataArray.get(i).getTime()));
+            sendText.append(String.format("%03d", dataArray.get(i).getRightSpeed()));
+            sendText.append(String.format("%03d", dataArray.get(i).getLeftSpeed()));
         }
         sendText.append('\0');  //1命令分の終端文字
 
@@ -298,15 +309,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @SuppressLint("DefaultLocale")
-    private String[] multiBT() {
-        int arrayNum = mAdapter.getItemCount() / 6 + 1;
+    private String[] multiBT(ArrayList<ItemDataModel> dataArray) {
+        int arrayNum = dataArray.size() / 6 + 1;
         String[] strings = new String[arrayNum];
         StringBuilder tmpText = new StringBuilder();
-        for (int i = 1; i <= mAdapter.getItemCount(); i++) {
-            tmpText.append(mAdapter.getItem(i - 1).getOrderId());
-            tmpText.append(String.format("%02d", mAdapter.getItem(i - 1).getTime()));
-            tmpText.append(String.format("%03d", mAdapter.getItem(i - 1).getRightSpeed()));
-            tmpText.append(String.format("%03d", mAdapter.getItem(i - 1).getLeftSpeed()));
+        for (int i = 1; i <= dataArray.size(); i++) {
+            tmpText.append(dataArray.get(i - 1).getOrderId());
+            tmpText.append(String.format("%02d", dataArray.get(i - 1).getTime()));
+            tmpText.append(String.format("%03d", dataArray.get(i - 1).getRightSpeed()));
+            tmpText.append(String.format("%03d", dataArray.get(i - 1).getLeftSpeed()));
 
             if (i % 6 == 0) {
                 tmpText.append('\0');  //1命令分の終端文字
@@ -324,32 +335,55 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    private ArrayList<ItemDataModel> generateDataArray;
-    private void convertLoopCommand(){
-        ArrayList<ItemDataModel> tempDataArray = mAdapter.getAllItem();
-        int startLoop = 0, endLoop = 0, loopCount = 0;
-        for (int i = 0; i < tempDataArray.size(); i++){
-            if(tempDataArray.get(i).getBlockState() == 1){
-                startLoop = i;
-                loopCount = tempDataArray.get(i).getLoopCount();
-            }
-            if(tempDataArray.get(i).getBlockState() == 2){
-                endLoop = i;
-            }
+    private ArrayList<ItemDataModel> fullGenerateDataArray = new ArrayList<>();
+    private void convertLoopCommand(int start,int end, int depth) {
+        String str = null;
+        for (int i = 0; i < mAdapter.getItemCount(); i++) {
+            str += mAdapter.getItem(i).getBlockState();
         }
-        for (int i = 0; i < loopCount; i++){
-            for (int j = startLoop; j < endLoop + 1; i++){
-                generateDataArray.add(j, mAdapter.getItem(j));
-            }
+        if (str.indexOf("1") == -1) {
+            // 一致しなかったら
+            return;
         }
 
+        for (int i = start; i <= end; i++) {
+            if (mAdapter.getItem(i).getBlockState() == 1) {
+                convertLoopCommand(i + 1, end, depth + 1);
+                // iがloop後の値を差していないから困ってる
+                for (i=i;i < end; i++){
+                    if (mAdapter.getItem(i).getBlockState() == 2) {
+                        break;
+                    }
+                }
+
+            }else if (mAdapter.getItem(i).getBlockState() == 2) {
+                System.out.println("aa");
+
+                if (depth != 0) {
+                    ArrayList<ItemDataModel> tmpDataArray = new ArrayList<>();
+                    ArrayList<ItemDataModel> tmpDataArray2 = new ArrayList<>();
+                    for (int j = start; j < i; j++) {
+                        tmpDataArray.add(mAdapter.getItem(j));
+                    }
+                    for (int j = 0; j < mAdapter.getItem(start - 1).getLoopCount(); j++) {
+                        tmpDataArray2.addAll(tmpDataArray);
+                    }
+                    fullGenerateDataArray.addAll(tmpDataArray2);
+                    return;
+                }
+
+            } else if (depth == 0) {
+                fullGenerateDataArray.add(mAdapter.getItem(i));
+            }
+        }
+        System.out.println("aaa");
     }
 
-    private String[] generateBTCommand() {
+    private String[] generateBTCommand(ArrayList<ItemDataModel> dataArray) {
         if (mAdapter.getItemCount() < 7) {
-            return new String[]{singleBT()};
+            return new String[]{singleBT(dataArray)};
         } else {
-            return multiBT();
+            return multiBT(dataArray);
         }
     }
     void autoSave() {
