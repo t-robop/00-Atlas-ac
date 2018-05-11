@@ -76,6 +76,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         ItemDataModel item = ItemDataArray.get(toPos);
         ItemDataArray.set(toPos,ItemDataArray.get(fromPos));
         ItemDataArray.set(fromPos,item);
+
     }
 
 
