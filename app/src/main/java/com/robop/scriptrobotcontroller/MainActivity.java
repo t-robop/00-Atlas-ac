@@ -133,8 +133,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 // positionが1から始まるため
-                int id = i + 1;
-                mAdapter.addItem(new ItemDataModel(id, DEFAULT_SPEED_R, DEFAULT_SPEED_L, DEFAULT_TIME, DEFAULT_BLOCKSTATE, 0));
+                int orderId = i + 1;
+                switch (orderId) {
+                    case 1:
+                    case 2:
+                    case 3:
+                    case 4:
+                        mAdapter.addItem(new ItemDataModel(orderId, DEFAULT_SPEED_R, DEFAULT_SPEED_L, DEFAULT_TIME, DEFAULT_BLOCKSTATE, 0));
+                        break;
+                    case 5:
+                        mAdapter.addItem(new ItemDataModel(orderId, DEFAULT_SPEED_R, DEFAULT_SPEED_L, DEFAULT_TIME, 1, 2));
+                        break;
+                    case 6:
+                        mAdapter.addItem(new ItemDataModel(orderId, DEFAULT_SPEED_R, DEFAULT_SPEED_L, DEFAULT_TIME, 2, 0));
+                        break;
+
+                }
+                //mAdapter.addItem(new ItemDataModel(orderId, DEFAULT_SPEED_R, DEFAULT_SPEED_L, DEFAULT_TIME, DEFAULT_BLOCKSTATE, 0));
                 mRecyclerView.setAdapter(mAdapter);
             }
         });
@@ -245,18 +260,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.start_button:
                 fullGenerateDataArray.clear();
-                convertLoopCommand(0,mAdapter.getItemCount()-1,0);
-//                if (generateDataArray != null){
-//
-//
-//                    for (ItemDataModel data: generateDataArray) {
-//                        System.out.println(data.getOrderId());
-//                    }
-//
-//                }
 
                 autoSave();
                 //BlueToothで送る文字列のnullチェック
+                //TODO nullチェック用のメソッドを新規で作るべき
                 if (generateBTCommand(mAdapter.getAllItem())[0].length() == 0) {
                     Toast.makeText(MainActivity.this, "送るデータがありません", Toast.LENGTH_SHORT).show();
                     return;
@@ -266,8 +273,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Toast.makeText(MainActivity.this, "ロボットが接続されていません", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                //autoSave();
-                for (String BTCommand : generateBTCommand(mAdapter.getAllItem())) {
+                for (String BTCommand : GenerateBTWrapper()) {
                     // データフォーマット通りの文字列が送信される
                     // 最初に f が2つあったら複数送信 ffのあとに送る回数が入ってる
                     bluetooth.send(BTCommand);
@@ -280,22 +286,42 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onRecyclerClicked(View view, int position) {
         Log.d("recyclerView", String.valueOf(position));
-        // ダイアログの表示
-        EditParamDialog editImageParamDialog = new EditParamDialog();
-        Bundle data = new Bundle();
 
-        ItemDataModel itemDataModel = new ItemDataModel(
-                mAdapter.getItem(position).getOrderId(),
-                mAdapter.getItem(position).getRightSpeed(),
-                mAdapter.getItem(position).getLeftSpeed(),
-                mAdapter.getItem(position).getTime(),
-                mAdapter.getItem(position).getBlockState(),
-                mAdapter.getItem(position).getLoopCount());
+        if (mAdapter.getItem(position).getBlockState() == 1) {
+            EditLoopParamDialog editLoopParamDialog = new EditLoopParamDialog();
+            Bundle data = new Bundle();
+            ItemDataModel itemDataModel = new ItemDataModel(
+                    mAdapter.getItem(position).getOrderId(),
+                    mAdapter.getItem(position).getRightSpeed(),
+                    mAdapter.getItem(position).getLeftSpeed(),
+                    mAdapter.getItem(position).getTime(),
+                    mAdapter.getItem(position).getBlockState(),
+                    mAdapter.getItem(position).getLoopCount());
 
-        data.putSerializable("itemData", itemDataModel);
-        data.putInt("listItemPosition", position);
-        editImageParamDialog.setArguments(data);
-        editImageParamDialog.show(getFragmentManager(), null);
+            data.putSerializable("itemData", itemDataModel);
+            data.putInt("listItemPosition", position);
+            editLoopParamDialog.setArguments(data);
+            editLoopParamDialog.show(getFragmentManager(), null);
+
+        } else {
+            // ダイアログの表示
+            EditParamDialog editImageParamDialog = new EditParamDialog();
+            Bundle data = new Bundle();
+
+            ItemDataModel itemDataModel = new ItemDataModel(
+                    mAdapter.getItem(position).getOrderId(),
+                    mAdapter.getItem(position).getRightSpeed(),
+                    mAdapter.getItem(position).getLeftSpeed(),
+                    mAdapter.getItem(position).getTime(),
+                    mAdapter.getItem(position).getBlockState(),
+                    mAdapter.getItem(position).getLoopCount());
+
+            data.putSerializable("itemData", itemDataModel);
+            data.putInt("listItemPosition", position);
+            editImageParamDialog.setArguments(data);
+            editImageParamDialog.show(getFragmentManager(), null);
+        }
+
     }
 
     //View更新
@@ -346,23 +372,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return multiBTCommand.toArray(new String[multiBTCommand.size()]);
     }
 
-
-    private ArrayList<ItemDataModel> fullGenerateDataArray = new ArrayList<>();
-    private void convertLoopCommand(int start,int end, int depth) {
+    private String[] GenerateBTWrapper() {
         String str = null;
         for (int i = 0; i < mAdapter.getItemCount(); i++) {
             str += mAdapter.getItem(i).getBlockState();
         }
+        //  for が入ってなかった時
         if (str.indexOf("1") == -1) {
             // 一致しなかったら
-            return;
+            return generateBTCommand(mAdapter.getAllItem());
+
+
+            // forが入ってた時
+        } else {
+            convertLoopCommand(0,mAdapter.getItemCount()-1,0);
+            return generateBTCommand(fullGenerateDataArray);
         }
+
+    }
+
+
+    private ArrayList<ItemDataModel> fullGenerateDataArray = new ArrayList<>();
+    private void convertLoopCommand(int start,int end, int depth) {
 
         for (int i = start; i <= end; i++) {
             if (mAdapter.getItem(i).getBlockState() == 1) {
                 convertLoopCommand(i + 1, end, depth + 1);
                 // iがloop後の値を差していないから困ってる
-                for (i=i;i < end; i++){
+                for (;i < end; i++){
                     if (mAdapter.getItem(i).getBlockState() == 2) {
                         break;
                     }
