@@ -98,8 +98,14 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
             switch (ItemDataArray.get(position).getOrderId()) {
                 case 5:
+                    holder.containerLoopNum.setOnClickListener(new View.OnClickListener(){
+                        @Override
+                        public void onClick(View view){
+                            recyclerListener.onRecyclerClicked(view, position);
+                        }
+                    });
                     holder.containerLoopNum.setVisibility(View.VISIBLE);
-                    holder.textLoopNum.setText("2");
+                    holder.textLoopNum.setText(String.valueOf(ItemDataArray.get(position).getLoopCount()));
                     holder.imgLoopBack.setImageResource(R.drawable.loop_start_block);
                     break;
 

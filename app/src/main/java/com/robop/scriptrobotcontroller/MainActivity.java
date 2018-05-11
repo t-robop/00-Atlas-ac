@@ -133,8 +133,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 // positionが1から始まるため
-                int id = i + 1;
-                mAdapter.addItem(new ItemDataModel(id, DEFAULT_SPEED_R, DEFAULT_SPEED_L, DEFAULT_TIME, DEFAULT_BLOCKSTATE, 0));
+                int orderId = i + 1;
+                switch (orderId) {
+                    case 1:
+                    case 2:
+                    case 3:
+                    case 4:
+                        mAdapter.addItem(new ItemDataModel(orderId, DEFAULT_SPEED_R, DEFAULT_SPEED_L, DEFAULT_TIME, DEFAULT_BLOCKSTATE, 0));
+                        break;
+                    case 5:
+                        mAdapter.addItem(new ItemDataModel(orderId, DEFAULT_SPEED_R, DEFAULT_SPEED_L, DEFAULT_TIME, 1, 2));
+                        break;
+                    case 6:
+                        mAdapter.addItem(new ItemDataModel(orderId, DEFAULT_SPEED_R, DEFAULT_SPEED_L, DEFAULT_TIME, 2, 0));
+                        break;
+
+                }
+                //mAdapter.addItem(new ItemDataModel(orderId, DEFAULT_SPEED_R, DEFAULT_SPEED_L, DEFAULT_TIME, DEFAULT_BLOCKSTATE, 0));
                 mRecyclerView.setAdapter(mAdapter);
             }
         });
@@ -271,22 +286,42 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onRecyclerClicked(View view, int position) {
         Log.d("recyclerView", String.valueOf(position));
-        // ダイアログの表示
-        EditParamDialog editImageParamDialog = new EditParamDialog();
-        Bundle data = new Bundle();
 
-        ItemDataModel itemDataModel = new ItemDataModel(
-                mAdapter.getItem(position).getOrderId(),
-                mAdapter.getItem(position).getRightSpeed(),
-                mAdapter.getItem(position).getLeftSpeed(),
-                mAdapter.getItem(position).getTime(),
-                mAdapter.getItem(position).getBlockState(),
-                mAdapter.getItem(position).getLoopCount());
+        if (mAdapter.getItem(position).getBlockState() == 1) {
+            EditLoopParamDialog editLoopParamDialog = new EditLoopParamDialog();
+            Bundle data = new Bundle();
+            ItemDataModel itemDataModel = new ItemDataModel(
+                    mAdapter.getItem(position).getOrderId(),
+                    mAdapter.getItem(position).getRightSpeed(),
+                    mAdapter.getItem(position).getLeftSpeed(),
+                    mAdapter.getItem(position).getTime(),
+                    mAdapter.getItem(position).getBlockState(),
+                    mAdapter.getItem(position).getLoopCount());
 
-        data.putSerializable("itemData", itemDataModel);
-        data.putInt("listItemPosition", position);
-        editImageParamDialog.setArguments(data);
-        editImageParamDialog.show(getFragmentManager(), null);
+            data.putSerializable("itemData", itemDataModel);
+            data.putInt("listItemPosition", position);
+            editLoopParamDialog.setArguments(data);
+            editLoopParamDialog.show(getFragmentManager(), null);
+
+        } else {
+            // ダイアログの表示
+            EditParamDialog editImageParamDialog = new EditParamDialog();
+            Bundle data = new Bundle();
+
+            ItemDataModel itemDataModel = new ItemDataModel(
+                    mAdapter.getItem(position).getOrderId(),
+                    mAdapter.getItem(position).getRightSpeed(),
+                    mAdapter.getItem(position).getLeftSpeed(),
+                    mAdapter.getItem(position).getTime(),
+                    mAdapter.getItem(position).getBlockState(),
+                    mAdapter.getItem(position).getLoopCount());
+
+            data.putSerializable("itemData", itemDataModel);
+            data.putInt("listItemPosition", position);
+            editImageParamDialog.setArguments(data);
+            editImageParamDialog.show(getFragmentManager(), null);
+        }
+
     }
 
     //View更新
