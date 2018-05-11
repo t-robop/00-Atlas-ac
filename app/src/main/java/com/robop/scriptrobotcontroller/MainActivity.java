@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         final int fromPos = viewHolder.getAdapterPosition();
                         final int toPos = target.getAdapterPosition();
                         mAdapter.itemMoved(fromPos, toPos);
-                        mAdapter.notifyItemMoved(fromPos, toPos);
+                        mAdapter.notifyDataSetChanged();
                         return true;
                     }
 
