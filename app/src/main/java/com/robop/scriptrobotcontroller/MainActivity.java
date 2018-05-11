@@ -90,21 +90,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mRecyclerView.setHasFixedSize(true);
 
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
+        final RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         ArrayList<ItemDataModel> ItemDataArray = new ArrayList<>();
         mAdapter = new RecyclerAdapter(ItemDataArray, this);
         mRecyclerView.setAdapter(mAdapter);
 
+
         //ItemTouchHelper
         ItemTouchHelper itemDecor = new ItemTouchHelper(
                 new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.RIGHT) {
+
                     @Override
                     public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
                         final int fromPos = viewHolder.getAdapterPosition();
                         final int toPos = target.getAdapterPosition();
+                        //mAdapter.itemMoved(fromPos, toPos);
                         mAdapter.itemMoved(fromPos, toPos);
-                        mAdapter.notifyDataSetChanged();
+                        mAdapter.notifyItemMoved(fromPos, toPos);
+                        //recyclerView.getAdapter().notifyItemChanged(fromPos,toPos);
                         return true;
                     }
 
@@ -151,6 +155,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 //mAdapter.addItem(new ItemDataModel(orderId, DEFAULT_SPEED_R, DEFAULT_SPEED_L, DEFAULT_TIME, DEFAULT_BLOCKSTATE, 0));
                 mRecyclerView.setAdapter(mAdapter);
+
             }
         });
 
@@ -286,6 +291,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onRecyclerClicked(View view, int position) {
         Log.d("recyclerView", String.valueOf(position));
+
 
         if (mAdapter.getItem(position).getBlockState() == 1) {
             EditLoopParamDialog editLoopParamDialog = new EditLoopParamDialog();
