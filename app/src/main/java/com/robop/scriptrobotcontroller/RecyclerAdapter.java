@@ -125,7 +125,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             holder.linearLayout.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View view){
-                    recyclerListener.onRecyclerClicked(view, position);
+                    recyclerListener.onRecyclerClicked(view, viewHolder.getLayoutPosition());
                 }
             });
 
