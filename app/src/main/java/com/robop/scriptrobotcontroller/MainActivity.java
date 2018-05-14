@@ -259,6 +259,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.start_button:
+                if (!loopErrorCheck()) {
+                    return;
+                }
                 fullGenerateDataArray.clear();
 
                 autoSave();
@@ -450,5 +453,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void setAdapter(ItemDataModel dataModel){
         mAdapter.addItem(dataModel);
         mAdapter.notifyDataSetChanged();
+    }
+
+    boolean loopErrorCheck() {
+        int loopStart = 0,loopEnd = 0;
+        for (int i = 0; i < mAdapter.getItemCount(); i++) {
+            if (mAdapter.getItem(i).getBlockState() == 1) {
+                loopStart++;
+            } else if (mAdapter.getItem(i).getBlockState() == 2) {
+                loopEnd++;
+                if (loopStart < loopEnd) {
+                    Toast.makeText(this,"forブロックの始まりより前に終わりが来ています",Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+
+            }
+        }
+        if ((loopStart < loopEnd)) {
+            Toast.makeText(this,"forブロックの終わりの数が多すぎます",Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (loopStart > loopEnd){
+            Toast.makeText(this,"forブロックの始まりの数が多すぎます",Toast.LENGTH_SHORT).show();
+            return false;
+        } else {
+            return true;
+        }
     }
 }
