@@ -73,9 +73,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     }
 
     public void itemMoved(int fromPos, int toPos){
-        ItemDataModel item = ItemDataArray.get(toPos);
-        ItemDataArray.set(toPos,ItemDataArray.get(fromPos));
-        ItemDataArray.set(fromPos,item);
+        ItemDataModel fromItem = ItemDataArray.get(fromPos);
+        ItemDataModel toItem = ItemDataArray.get(toPos);
+        ItemDataArray.set(toPos,fromItem);
+        ItemDataArray.set(fromPos,toItem);
 
     }
 
@@ -91,7 +92,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") final int position) {
-
+        final ViewHolder viewHolder = (ViewHolder)holder;
 
         if(ItemDataArray.get(position).getOrderId()==5||ItemDataArray.get(position).getOrderId()==6){
             holder.containerLoop.setVisibility(View.VISIBLE);
@@ -102,7 +103,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                     holder.containerLoopNum.setOnClickListener(new View.OnClickListener(){
                         @Override
                         public void onClick(View view){
-                            recyclerListener.onRecyclerClicked(view, position);
+                            recyclerListener.onRecyclerClicked(view, viewHolder.getLayoutPosition());
                         }
                     });
                     holder.containerLoopNum.setVisibility(View.VISIBLE);
@@ -124,7 +125,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             holder.linearLayout.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View view){
-                    recyclerListener.onRecyclerClicked(view, position);
+                    recyclerListener.onRecyclerClicked(view, viewHolder.getLayoutPosition());
                 }
             });
 
