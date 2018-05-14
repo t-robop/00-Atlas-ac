@@ -39,8 +39,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private final int REQUEST_CONNECT_DEVICE = 9;
     private final int REQUEST_ENABLE_BLUETOOTH = 10;
 
-    //ArrayList<ItemDataModel> ItemDataArray = new ArrayList<>();
-
     //RecyclerView
     private RecyclerView mRecyclerView;
     private RecyclerAdapter mAdapter;
@@ -90,21 +88,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mRecyclerView.setHasFixedSize(true);
 
-        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
+        final RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
         ArrayList<ItemDataModel> ItemDataArray = new ArrayList<>();
         mAdapter = new RecyclerAdapter(ItemDataArray, this);
         mRecyclerView.setAdapter(mAdapter);
 
+
         //ItemTouchHelper
         ItemTouchHelper itemDecor = new ItemTouchHelper(
                 new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.RIGHT) {
+
                     @Override
                     public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
                         final int fromPos = viewHolder.getAdapterPosition();
                         final int toPos = target.getAdapterPosition();
                         mAdapter.itemMoved(fromPos, toPos);
-                        mAdapter.notifyDataSetChanged();
+                        mAdapter.notifyItemMoved(fromPos, toPos);
                         return true;
                     }
 
@@ -149,8 +149,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         break;
 
                 }
-                //mAdapter.addItem(new ItemDataModel(orderId, DEFAULT_SPEED_R, DEFAULT_SPEED_L, DEFAULT_TIME, DEFAULT_BLOCKSTATE, 0));
                 mRecyclerView.setAdapter(mAdapter);
+
             }
         });
 
@@ -377,13 +377,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         for (int i = 0; i < mAdapter.getItemCount(); i++) {
             str += mAdapter.getItem(i).getBlockState();
         }
-        //  for が入ってなかった時
+        //  forブロックが入ってなかった時
         if (str.indexOf("1") == -1) {
             // 一致しなかったら
             return generateBTCommand(mAdapter.getAllItem());
 
-
-            // forが入ってた時
+            // forブロックが入ってた時
         } else {
             convertLoopCommand(0,mAdapter.getItemCount()-1,0);
             return generateBTCommand(fullGenerateDataArray);
@@ -398,7 +397,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         for (int i = start; i <= end; i++) {
             if (mAdapter.getItem(i).getBlockState() == 1) {
                 convertLoopCommand(i + 1, end, depth + 1);
-                // iがloop後の値を差していないから困ってる
                 for (;i < end; i++){
                     if (mAdapter.getItem(i).getBlockState() == 2) {
                         break;
@@ -406,8 +404,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
 
             }else if (mAdapter.getItem(i).getBlockState() == 2) {
-                System.out.println("aa");
-
                 if (depth != 0) {
                     ArrayList<ItemDataModel> tmpDataArray = new ArrayList<>();
                     ArrayList<ItemDataModel> tmpDataArray2 = new ArrayList<>();
@@ -420,12 +416,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     fullGenerateDataArray.addAll(tmpDataArray2);
                     return;
                 }
-
             } else if (depth == 0) {
                 fullGenerateDataArray.add(mAdapter.getItem(i));
             }
         }
-        System.out.println("aaa");
     }
 
     private String[] generateBTCommand(ArrayList<ItemDataModel> dataArray) {
@@ -437,24 +431,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
     void autoSave() {
         Realm.init(this);
-        // context
+
         //realm 削除
         Realm realm = Realm.getDefaultInstance();
-
-
         realm.beginTransaction();
         RealmResults<ItemDataModel> datas = realm.where(ItemDataModel.class).findAll();
         datas.deleteAllFromRealm();
-        //realm.commitTransaction();
-
-
-        /*
-        RealmConfiguration myConfig = new RealmConfiguration.Builder().build();
-        Realm.deleteRealm(myConfig);
-        */
 
         List<ItemDataModel> items = new ArrayList<>();
-        //realm.beginTransaction();
         for (int i = 0; i < mAdapter.getItemCount(); i++) {
             items.add(mAdapter.getItem(i));
         }
@@ -462,18 +446,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         realm.commitTransaction();
         realm.close();
     }
-    void realmDebug() {
-        Realm.init(this);
-        Realm realm = Realm.getDefaultInstance();
-        RealmQuery<ItemDataModel> query = realm.where(ItemDataModel.class);
-        RealmResults<ItemDataModel> items = query.findAll();
 
-        for (int i = 0; i < items.size(); i++) {
-            System.out.println("aaaaaa    "+ items.get(i).getOrderId());
-        }
-        realm.close();
-
-    }
     public void setAdapter(ItemDataModel dataModel){
         mAdapter.addItem(dataModel);
         mAdapter.notifyDataSetChanged();
