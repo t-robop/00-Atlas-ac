@@ -3,6 +3,7 @@ package com.robop.scriptrobotcontroller;
 import android.annotation.SuppressLint;
 import android.content.ClipData;
 import android.content.Context;
+import android.os.Vibrator;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -73,6 +75,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     }
 
     public void itemMoved(int fromPos, int toPos){
+
         ItemDataModel fromItem = ItemDataArray.get(fromPos);
         ItemDataModel toItem = ItemDataArray.get(toPos);
         ItemDataArray.set(toPos,fromItem);

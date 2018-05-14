@@ -2,6 +2,8 @@ package com.robop.scriptrobotcontroller;
 
 import android.annotation.SuppressLint;
 import android.content.ClipData;
+import android.content.Context;
+import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -30,6 +32,8 @@ import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import me.aflak.bluetooth.Bluetooth;
 import me.aflak.bluetooth.DeviceCallback;
+
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, DeviceCallback, RecyclerAdapter.OnRecyclerListener {
 
@@ -111,10 +115,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
                         final int fromPos = viewHolder.getAdapterPosition();
-                        //ItemDataArray.remove(fromPos);
                         mAdapter.removeItem(fromPos);
                         mAdapter.notifyItemRemoved(fromPos);
                         Log.d("","");
+                    }
+
+                    @Override
+                    public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
+                        super.onSelectedChanged(viewHolder, actionState);
+
+                        if (actionState == ItemTouchHelper.ACTION_STATE_DRAG ) {
+                            ((Vibrator) getSystemService(Context.VIBRATOR_SERVICE)).vibrate(50);
+                        }
                     }
                 });
         itemDecor.attachToRecyclerView(mRecyclerView);
