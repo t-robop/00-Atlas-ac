@@ -12,7 +12,7 @@
             android:id="@+id/menu_item_bg"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/back_loop"
+            android:src="@drawable/back_move"
             android:layout_margin="5dp"/>
 
         <LinearLayout
@@ -23,7 +23,7 @@
 
             <ImageView
                 android:id="@+id/direction_image"
-                android:src="@drawable/loop_start"
+                android:src="@drawable/move_front"
                 android:scaleType="centerInside"
                 android:layout_weight="7"
                 android:layout_width="match_parent"

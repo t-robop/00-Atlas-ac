@@ -1,7 +1,6 @@
 package com.robop.scriptrobotcontroller;
 
 import android.annotation.SuppressLint;
-import android.content.ClipData;
 import android.content.Context;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
@@ -27,13 +26,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import io.realm.Realm;
-import io.realm.RealmConfiguration;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import me.aflak.bluetooth.Bluetooth;
 import me.aflak.bluetooth.DeviceCallback;
-
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, DeviceCallback, RecyclerAdapter.OnRecyclerListener {
 
@@ -168,9 +164,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Button startButton = findViewById(R.id.start_button);
         Button connectButton = findViewById(R.id.connect_button);
+        Button globalSpeedSettingButton = findViewById(R.id.global_setting);
 
         startButton.setOnClickListener(this);
         connectButton.setOnClickListener(this);
+        globalSpeedSettingButton.setOnClickListener(this);
 
     }
 
@@ -183,6 +181,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onResume() {
         super.onResume();
+
+        //TODO SharedPreferenceからデフォルト値を取得
     }
 
     @Override
@@ -268,6 +268,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Intent intent = new Intent(MainActivity.this, DeviceListActivity.class);
                     startActivityForResult(intent, REQUEST_CONNECT_DEVICE);
                 }
+                break;
+
+            case R.id.global_setting:
+                //TODO Issue #97 GlobalSpeedActivityから設定値の取得?
+                Intent intent = new Intent(this, GlobalSettingActivity.class);
+                startActivity(intent);
                 break;
 
             case R.id.start_button:
