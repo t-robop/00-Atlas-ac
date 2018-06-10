@@ -11,7 +11,7 @@ import android.widget.Toast;
 public class GlobalSettingActivity extends AppCompatActivity {
 
     SharedPreferences preferences;
-    EditText frontLeft, frontRight, backLeft, backRight, leftRotateLeft, leftRotateRight, rightRotateLeft, rightRotateRight, loopTime;
+    EditText frontLeft, frontRight, backLeft, backRight, leftRotateLeft, leftRotateRight, rightRotateLeft, rightRotateRight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,9 +26,8 @@ public class GlobalSettingActivity extends AppCompatActivity {
         leftRotateRight = findViewById(R.id.global_left_R);
         rightRotateLeft = findViewById(R.id.global_right_L);
         rightRotateRight = findViewById(R.id.global_right_R);
-        loopTime = findViewById(R.id.global_loop_time);
 
-        final EditText[] editTexts = {frontLeft, frontRight, backLeft, backRight, leftRotateLeft, leftRotateRight, rightRotateLeft, rightRotateRight, loopTime};
+        final EditText[] editTexts = {frontLeft, frontRight, backLeft, backRight, leftRotateLeft, leftRotateRight, rightRotateLeft, rightRotateRight};
 
         Button saveButton = findViewById(R.id.global_save);
         saveButton.setOnClickListener(new View.OnClickListener() {
@@ -57,7 +56,6 @@ public class GlobalSettingActivity extends AppCompatActivity {
                     editor.putInt("leftRotateRight", Integer.valueOf(leftRotateRight.getText().toString()));
                     editor.putInt("rightRotateLeft", Integer.valueOf(rightRotateLeft.getText().toString()));
                     editor.putInt("rightRotateRight", Integer.valueOf(rightRotateRight.getText().toString()));
-                    editor.putInt("loopTime", Integer.valueOf(loopTime.getText().toString()));
 
                     editor.apply();
                     Toast.makeText(GlobalSettingActivity.this, "保存しました", Toast.LENGTH_SHORT).show();
@@ -81,17 +79,15 @@ public class GlobalSettingActivity extends AppCompatActivity {
         int paramLeftRotateRight = preferences.getInt("leftRotateRight", 100);
         int paramRightRotateLeft = preferences.getInt("rightRotateLeft", 100);
         int paramRightRotateRight = preferences.getInt("rightRotateRight", 100);
-        int paramLoopTime = preferences.getInt("loopTime", 2);
 
-        frontLeft.setText(paramFrontLeft);
-        frontRight.setText(paramFrontRight);
-        backLeft.setText(paramBackLeft);
-        backRight.setText(paramBackRight);
-        leftRotateLeft.setText(paramLeftRotateLeft);
-        leftRotateRight.setText(paramLeftRotateRight);
-        rightRotateLeft.setText(paramRightRotateLeft);
-        rightRotateRight.setText(paramRightRotateRight);
-        loopTime.setText(paramLoopTime);
+        frontLeft.setText(String.valueOf(paramFrontLeft));
+        frontRight.setText(String.valueOf(paramFrontRight));
+        backLeft.setText(String.valueOf(paramBackLeft));
+        backRight.setText(String.valueOf(paramBackRight));
+        leftRotateLeft.setText(String.valueOf(paramLeftRotateLeft));
+        leftRotateRight.setText(String.valueOf(paramLeftRotateRight));
+        rightRotateLeft.setText(String.valueOf(paramRightRotateLeft));
+        rightRotateRight.setText(String.valueOf(paramRightRotateRight));
     }
 
     //設定値が0~255の範囲内にあるかどうか

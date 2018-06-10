@@ -2,6 +2,7 @@ package com.robop.scriptrobotcontroller;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -45,11 +46,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private TextView connectStatus;
     private ImageView connectImg;
-    
-    private int DEFAULT_SPEED_R = 100;
-    private int DEFAULT_SPEED_L = 100;
+
     private int DEFAULT_TIME = 2;
-    private int DEFAULT_BLOCKSTATE = 0;
+    private int DEFAULT_BLOCK_STATE = 0;
+
+    private int DEFAULT_FRONT_R = 100;
+    private int DEFAULT_FRONT_L = 100;
+    private int DEFAULT_BACK_R = 100;
+    private int DEFAULT_BACK_L = 100;
+    private int DEFAULT_R_ROTATE_R = 100;
+    private int DEFAULT_R_ROTATE_L = 100;
+    private int DEFAULT_L_ROTATE_R = 100;
+    private int DEFAULT_L_ROTATE_L = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,17 +151,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 // positionが1から始まるため
                 int orderId = i + 1;
                 switch (orderId) {
-                    case 1:
-                    case 2:
-                    case 3:
-                    case 4:
-                        mAdapter.addItem(new ItemDataModel(orderId, DEFAULT_SPEED_R, DEFAULT_SPEED_L, DEFAULT_TIME, DEFAULT_BLOCKSTATE, 0));
+                    case 1: //前進
+                        mAdapter.addItem(new ItemDataModel(orderId, DEFAULT_FRONT_R, DEFAULT_FRONT_L, DEFAULT_TIME, DEFAULT_BLOCK_STATE));
                         break;
-                    case 5:
-                        mAdapter.addItem(new ItemDataModel(orderId, DEFAULT_SPEED_R, DEFAULT_SPEED_L, DEFAULT_TIME, 1, 2));
+                    case 2: //後退
+                        mAdapter.addItem(new ItemDataModel(orderId, DEFAULT_BACK_R, DEFAULT_BACK_L, DEFAULT_TIME, DEFAULT_BLOCK_STATE));
                         break;
-                    case 6:
-                        mAdapter.addItem(new ItemDataModel(orderId, DEFAULT_SPEED_R, DEFAULT_SPEED_L, DEFAULT_TIME, 2, 0));
+                    case 3: //左回転
+                        mAdapter.addItem(new ItemDataModel(orderId, DEFAULT_L_ROTATE_R, DEFAULT_L_ROTATE_L, DEFAULT_TIME, DEFAULT_BLOCK_STATE));
+                        break;
+                    case 4: //右回転
+                        mAdapter.addItem(new ItemDataModel(orderId, DEFAULT_R_ROTATE_R, DEFAULT_R_ROTATE_L, DEFAULT_TIME, DEFAULT_BLOCK_STATE));
+                        break;
+                    case 5: //ループスタート
+                        mAdapter.addItem(new ItemDataModel(orderId, 1, 2));
+                        break;
+                    case 6: //ループエンド
+                        mAdapter.addItem(new ItemDataModel(orderId, 2, 0));
                         break;
 
                 }
@@ -182,7 +196,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onResume() {
         super.onResume();
 
-        //TODO SharedPreferenceからデフォルト値を取得
+        SharedPreferences preferences = getSharedPreferences("globalSetting", MODE_PRIVATE);
+
+        DEFAULT_FRONT_R = preferences.getInt("frontRight", 100);
+        DEFAULT_FRONT_L = preferences.getInt("frontLeft", 100);
+        DEFAULT_BACK_R = preferences.getInt("backRight", 100);
+        DEFAULT_BACK_L = preferences.getInt("backLeft", 100);
+        DEFAULT_R_ROTATE_R = preferences.getInt("rightRotateRight", 100);
+        DEFAULT_R_ROTATE_L = preferences.getInt("rightRotateLeft", 100);
+        DEFAULT_L_ROTATE_R = preferences.getInt("leftRotateRight", 100);
+        DEFAULT_L_ROTATE_L = preferences.getInt("leftRotateLeft", 100);
     }
 
     @Override
@@ -271,7 +294,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.global_setting:
-                //TODO Issue #97 GlobalSpeedActivityから設定値の取得?
                 Intent intent = new Intent(this, GlobalSettingActivity.class);
                 startActivity(intent);
                 break;
@@ -308,14 +330,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onRecyclerClicked(View view, int position) {
         Log.d("recyclerView", String.valueOf(position));
 
+        //ループブロックのとき
         if (mAdapter.getItem(position).getBlockState() == 1) {
             EditLoopParamDialog editLoopParamDialog = new EditLoopParamDialog();
             Bundle data = new Bundle();
             ItemDataModel itemDataModel = new ItemDataModel(
                     mAdapter.getItem(position).getOrderId(),
-                    mAdapter.getItem(position).getRightSpeed(),
-                    mAdapter.getItem(position).getLeftSpeed(),
-                    mAdapter.getItem(position).getTime(),
                     mAdapter.getItem(position).getBlockState(),
                     mAdapter.getItem(position).getLoopCount());
 
@@ -324,9 +344,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             editLoopParamDialog.setArguments(data);
             editLoopParamDialog.show(getFragmentManager(), null);
 
+            //基本動作ブロックのとき
         } else {
-            // ダイアログの表示
-            EditParamDialog editImageParamDialog = new EditParamDialog();
+            EditParamDialog editParamDialog = new EditParamDialog();
             Bundle data = new Bundle();
 
             ItemDataModel itemDataModel = new ItemDataModel(
@@ -334,13 +354,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     mAdapter.getItem(position).getRightSpeed(),
                     mAdapter.getItem(position).getLeftSpeed(),
                     mAdapter.getItem(position).getTime(),
-                    mAdapter.getItem(position).getBlockState(),
-                    mAdapter.getItem(position).getLoopCount());
+                    mAdapter.getItem(position).getBlockState());
 
             data.putSerializable("itemData", itemDataModel);
             data.putInt("listItemPosition", position);
-            editImageParamDialog.setArguments(data);
-            editImageParamDialog.show(getFragmentManager(), null);
+            editParamDialog.setArguments(data);
+            editParamDialog.show(getFragmentManager(), null);
         }
 
     }

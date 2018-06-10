@@ -46,8 +46,12 @@ public class EditParamDialog extends DialogFragment{
                         // EditTextの空白判定
                         if (editSpeedRight.getText().toString().length() != 0 && editSpeedLeft.getText().toString().length() != 0 && editTime.getText().toString().length() != 0){
                             // 数値が入力されてる時
-                            dataModel.setRightSpeed(Integer.valueOf(editSpeedRight.getText().toString()));
-                            dataModel.setLeftSpeed(Integer.valueOf(editSpeedLeft.getText().toString()));
+                            //TODO 実際の出力値をissue #97の仕様でdataModelにわたす
+                            double relativeRight = Double.valueOf(editSpeedRight.getText().toString()) / 100;
+                            double relativeLeft = Double.valueOf(editSpeedLeft.getText().toString()) / 100;
+
+                            dataModel.setRightSpeed((int) (dataModel.getRightSpeed() * relativeRight));
+                            dataModel.setLeftSpeed((int) (dataModel.getLeftSpeed() * relativeLeft));
                             dataModel.setTime(Integer.valueOf(editTime.getText().toString()));
 
                             MainActivity mainActivity = (MainActivity) getActivity();
