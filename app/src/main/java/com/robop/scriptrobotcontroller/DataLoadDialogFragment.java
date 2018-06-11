@@ -61,8 +61,13 @@ public class DataLoadDialogFragment extends DialogFragment {
     void setRecycleView(){
         MainActivity mainActivity = (MainActivity) getActivity();
         for (ItemDataModel model : realmRead()) {
-            ItemDataModel model2 = new ItemDataModel(model.getOrderId(),model.getRightSpeed(),model.getLeftSpeed(),model.getTime(),model.getBlockState(),model.getLoopCount());
-            mainActivity.setAdapter(model2);
+            if (model.getOrderId() < 5){
+                ItemDataModel basicBlockModel = new ItemDataModel(model.getOrderId(), model.getRightSpeed(), model.getLeftSpeed(), model.getTime(), model.getBlockState());
+                mainActivity.setAdapter(basicBlockModel);
+            }else{
+                ItemDataModel loopBlockModel = new ItemDataModel(model.getOrderId(), model.getBlockState(), model.getLoopCount());
+                mainActivity.setAdapter(loopBlockModel);
+            }
         }
     }
 }
