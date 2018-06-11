@@ -14,14 +14,23 @@ public class ItemDataModel extends RealmObject implements Serializable {
     private int loopCount;
 
     public ItemDataModel(){}
-    ItemDataModel(int orderId, int rightSpeed, int leftSpeed, int time, int blockState, int loopCount){
+
+    //基本動作ブロックのコンストラクタ
+    ItemDataModel(int orderId, int rightSpeed, int leftSpeed, int time, int blockState){
         setOrderId(orderId);
         setRightSpeed(rightSpeed);
         setLeftSpeed(leftSpeed);
         setTime(time);
         setBlockState(blockState);
+    }
+
+    //ループブロックのコンストラクタ
+    ItemDataModel(int orderId, int blockState, int loopCount){
+        setOrderId(orderId);
+        setBlockState(blockState);
         setLoopCount(loopCount);
     }
+
     public int getRightSpeed(){
         return rightSpeed;
     }

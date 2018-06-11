@@ -1,8 +1,8 @@
 package com.robop.scriptrobotcontroller;
 
 import android.annotation.SuppressLint;
-import android.content.ClipData;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -27,13 +27,10 @@ import java.util.Arrays;
 import java.util.List;
 
 import io.realm.Realm;
-import io.realm.RealmConfiguration;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import me.aflak.bluetooth.Bluetooth;
 import me.aflak.bluetooth.DeviceCallback;
-
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, DeviceCallback, RecyclerAdapter.OnRecyclerListener {
 
@@ -50,10 +47,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView connectStatus;
     private ImageView connectImg;
 
-    private int DEFAULT_SPEED_R = 100;
-    private int DEFAULT_SPEED_L = 100;
     private int DEFAULT_TIME = 2;
-    private int DEFAULT_BLOCKSTATE = 0;
+    private int DEFAULT_BLOCK_STATE = 0;
+
+    private int DEFAULT_FRONT_WHEEL_R = 100;
+    private int DEFAULT_FRONT_WHEEL_L = 100;
+    private int DEFAULT_BACK_WHEEL_R = 100;
+    private int DEFAULT_BACK_WHEEL_L = 100;
+    private int DEFAULT_R_WHEEL_R = 100;
+    private int DEFAULT_R_WHEEL_L = 100;
+    private int DEFAULT_L_WHEEL_R = 100;
+    private int DEFAULT_L_WHEEL_L = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,33 +135,39 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 });
         itemDecor.attachToRecyclerView(mRecyclerView);
 
-        MenuItemAdapter drawerMenuItemAdapter = new MenuItemAdapter(this);
-        drawerMenuItemAdapter.add(new MenuItemModel(R.drawable.move_front, "前進", "パワーと時間を設定して、ロボットを前に動かします。"));
-        drawerMenuItemAdapter.add(new MenuItemModel(R.drawable.move_back, "後退", "パワーと時間を設定して、ロボットを後ろに動かします。"));
-        drawerMenuItemAdapter.add(new MenuItemModel(R.drawable.move_left, "左回転", "パワーと時間を設定して、ロボットを左に回転させます。"));
-        drawerMenuItemAdapter.add(new MenuItemModel(R.drawable.move_right, "右回転", "パワーと時間を設定して、ロボットを右に回転させます。"));
-        drawerMenuItemAdapter.add(new MenuItemModel(R.drawable.loop_start, "ループ開始", "ループの始まり"));
-        drawerMenuItemAdapter.add(new MenuItemModel(R.drawable.loop_end, "ループ終了", "ループの終わり"));
-        ListView drawerMenuList = findViewById(R.id.drawer_list);
-        drawerMenuList.setAdapter(drawerMenuItemAdapter);
+        MenuItemAdapter menuItemAdapter = new MenuItemAdapter(this);
+        menuItemAdapter.add(new MenuItemModel(R.drawable.move_front, "前進", "パワーと時間を設定して、ロボットを前に動かします。"));
+        menuItemAdapter.add(new MenuItemModel(R.drawable.move_back, "後退", "パワーと時間を設定して、ロボットを後ろに動かします。"));
+        menuItemAdapter.add(new MenuItemModel(R.drawable.move_left, "左回転", "パワーと時間を設定して、ロボットを左に回転させます。"));
+        menuItemAdapter.add(new MenuItemModel(R.drawable.move_right, "右回転", "パワーと時間を設定して、ロボットを右に回転させます。"));
+        menuItemAdapter.add(new MenuItemModel(R.drawable.loop_start, "ループ開始", "ループの始まり"));
+        menuItemAdapter.add(new MenuItemModel(R.drawable.loop_end, "ループ終了", "ループの終わり"));
+        ListView brockList = findViewById(R.id.brock_list);
+        brockList.setAdapter(menuItemAdapter);
 
-        drawerMenuList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        brockList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 // positionが1から始まるため
                 int orderId = i + 1;
                 switch (orderId) {
-                    case 1:
-                    case 2:
-                    case 3:
-                    case 4:
-                        mAdapter.addItem(new ItemDataModel(orderId, DEFAULT_SPEED_R, DEFAULT_SPEED_L, DEFAULT_TIME, DEFAULT_BLOCKSTATE, 0));
+                    case 1: //前進
+                        mAdapter.addItem(new ItemDataModel(orderId, DEFAULT_FRONT_WHEEL_R, DEFAULT_FRONT_WHEEL_L, DEFAULT_TIME, DEFAULT_BLOCK_STATE));
                         break;
-                    case 5:
-                        mAdapter.addItem(new ItemDataModel(orderId, DEFAULT_SPEED_R, DEFAULT_SPEED_L, DEFAULT_TIME, 1, 2));
+                    case 2: //後退
+                        mAdapter.addItem(new ItemDataModel(orderId, DEFAULT_BACK_WHEEL_R, DEFAULT_BACK_WHEEL_L, DEFAULT_TIME, DEFAULT_BLOCK_STATE));
                         break;
-                    case 6:
-                        mAdapter.addItem(new ItemDataModel(orderId, DEFAULT_SPEED_R, DEFAULT_SPEED_L, DEFAULT_TIME, 2, 0));
+                    case 3: //左回転
+                        mAdapter.addItem(new ItemDataModel(orderId, DEFAULT_L_WHEEL_R, DEFAULT_L_WHEEL_L, DEFAULT_TIME, DEFAULT_BLOCK_STATE));
+                        break;
+                    case 4: //右回転
+                        mAdapter.addItem(new ItemDataModel(orderId, DEFAULT_R_WHEEL_R, DEFAULT_R_WHEEL_L, DEFAULT_TIME, DEFAULT_BLOCK_STATE));
+                        break;
+                    case 5: //ループスタート
+                        mAdapter.addItem(new ItemDataModel(orderId, 1, 2));
+                        break;
+                    case 6: //ループエンド
+                        mAdapter.addItem(new ItemDataModel(orderId, 2, 0));
                         break;
 
                 }
@@ -168,9 +178,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Button startButton = findViewById(R.id.start_button);
         Button connectButton = findViewById(R.id.connect_button);
+        Button globalSpeedSettingButton = findViewById(R.id.global_setting);
 
         startButton.setOnClickListener(this);
         connectButton.setOnClickListener(this);
+        globalSpeedSettingButton.setOnClickListener(this);
 
     }
 
@@ -183,6 +195,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onResume() {
         super.onResume();
+
+        SharedPreferences preferences = getSharedPreferences("globalSetting", MODE_PRIVATE);
+
+        DEFAULT_FRONT_WHEEL_R = preferences.getInt("frontWheelRight", 100);
+        DEFAULT_FRONT_WHEEL_L = preferences.getInt("frontWheelLeft", 100);
+        DEFAULT_BACK_WHEEL_R = preferences.getInt("backWheelRight", 100);
+        DEFAULT_BACK_WHEEL_L = preferences.getInt("backWheelLeft", 100);
+        DEFAULT_R_WHEEL_R = preferences.getInt("rightWheelRight", 100);
+        DEFAULT_R_WHEEL_L = preferences.getInt("rightWheelLeft", 100);
+        DEFAULT_L_WHEEL_R = preferences.getInt("leftWheelRight", 100);
+        DEFAULT_L_WHEEL_L = preferences.getInt("leftWheelLeft", 100);
     }
 
     @Override
@@ -270,6 +293,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 break;
 
+            case R.id.global_setting:
+                Intent intent = new Intent(this, GlobalSettingActivity.class);
+                startActivity(intent);
+                break;
+
             case R.id.start_button:
                 if (!loopErrorCheck()) {
                     return;
@@ -304,14 +332,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onRecyclerClicked(View view, int position) {
         Log.d("recyclerView", String.valueOf(position));
 
+        //ループブロックのとき
         if (mAdapter.getItem(position).getBlockState() == 1) {
             EditLoopParamDialog editLoopParamDialog = new EditLoopParamDialog();
             Bundle data = new Bundle();
             ItemDataModel itemDataModel = new ItemDataModel(
                     mAdapter.getItem(position).getOrderId(),
-                    mAdapter.getItem(position).getRightSpeed(),
-                    mAdapter.getItem(position).getLeftSpeed(),
-                    mAdapter.getItem(position).getTime(),
                     mAdapter.getItem(position).getBlockState(),
                     mAdapter.getItem(position).getLoopCount());
 
@@ -320,9 +346,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             editLoopParamDialog.setArguments(data);
             editLoopParamDialog.show(getFragmentManager(), null);
 
+            //基本動作ブロックのとき
         } else {
-            // ダイアログの表示
-            EditParamDialog editImageParamDialog = new EditParamDialog();
+            EditParamDialog editParamDialog = new EditParamDialog();
             Bundle data = new Bundle();
 
             ItemDataModel itemDataModel = new ItemDataModel(
@@ -330,13 +356,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     mAdapter.getItem(position).getRightSpeed(),
                     mAdapter.getItem(position).getLeftSpeed(),
                     mAdapter.getItem(position).getTime(),
-                    mAdapter.getItem(position).getBlockState(),
-                    mAdapter.getItem(position).getLoopCount());
+                    mAdapter.getItem(position).getBlockState());
 
             data.putSerializable("itemData", itemDataModel);
             data.putInt("listItemPosition", position);
-            editImageParamDialog.setArguments(data);
-            editImageParamDialog.show(getFragmentManager(), null);
+            editParamDialog.setArguments(data);
+            editParamDialog.show(getFragmentManager(), null);
         }
 
     }

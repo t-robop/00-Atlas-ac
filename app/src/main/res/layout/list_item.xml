@@ -6,7 +6,8 @@
     <FrameLayout
         android:id="@+id/container_loop"
         android:layout_width="match_parent"
-        android:layout_height="100dp">
+        android:layout_height="100dp"
+        android:visibility="visible">
 
         <ImageView
             android:id="@+id/img_loop_back"
@@ -95,7 +96,7 @@
                     android:lines="1"
                     android:text="右パワー : "
                     android:textColor="#ffffff"
-                    android:textSize="18sp"
+                    android:textSize="15sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -107,7 +108,7 @@
                     android:lines="1"
                     android:text="左パワー : "
                     android:textColor="#ffffff"
-                    android:textSize="18sp"
+                    android:textSize="15sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -119,7 +120,7 @@
                     android:lines="1"
                     android:text="秒"
                     android:textColor="#ffffff"
-                    android:textSize="18sp"
+                    android:textSize="15sp"
                     android:textStyle="bold" />
 
             </LinearLayout>
