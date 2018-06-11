@@ -3,6 +3,7 @@ package com.robop.scriptrobotcontroller;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,13 +20,21 @@ public class GlobalSettingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_global_setting);
 
         frontWheelLeft = findViewById(R.id.global_front_L);
+        frontWheelLeft.setInputType(InputType.TYPE_CLASS_NUMBER);
         frontWheelRight = findViewById(R.id.global_front_R);
+        frontWheelRight.setInputType(InputType.TYPE_CLASS_NUMBER);
         backWheelLeft = findViewById(R.id.global_back_L);
+        backWheelLeft.setInputType(InputType.TYPE_CLASS_NUMBER);
         backWheelRight = findViewById(R.id.global_back_R);
+        backWheelRight.setInputType(InputType.TYPE_CLASS_NUMBER);
         leftWheelLeft = findViewById(R.id.global_left_L);
+        leftWheelLeft.setInputType(InputType.TYPE_CLASS_NUMBER);
         leftWheelRight = findViewById(R.id.global_left_R);
+        leftWheelRight.setInputType(InputType.TYPE_CLASS_NUMBER);
         rightWheelLeft = findViewById(R.id.global_right_L);
+        rightWheelLeft.setInputType(InputType.TYPE_CLASS_NUMBER);
         rightWheelRight = findViewById(R.id.global_right_R);
+        rightWheelRight.setInputType(InputType.TYPE_CLASS_NUMBER);
 
         final EditText[] editTexts = {frontWheelLeft, frontWheelRight, backWheelLeft, backWheelRight, leftWheelLeft, leftWheelRight, rightWheelLeft, rightWheelRight};
 
