@@ -6,9 +6,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginVertical="10dp"
-        android:layout_marginHorizontal="12dp">
+        android:orientation="vertical" >
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/text_input_loop"
@@ -20,6 +18,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/loopNum"
+                android:textSize="20sp"
                 android:maxLength="2" />
 
         </android.support.design.widget.TextInputLayout>
