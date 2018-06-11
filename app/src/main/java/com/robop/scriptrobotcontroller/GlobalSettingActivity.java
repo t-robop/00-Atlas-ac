@@ -11,23 +11,23 @@ import android.widget.Toast;
 public class GlobalSettingActivity extends AppCompatActivity {
 
     SharedPreferences preferences;
-    EditText frontLeft, frontRight, backLeft, backRight, leftRotateLeft, leftRotateRight, rightRotateLeft, rightRotateRight;
+    EditText frontWheelLeft, frontWheelRight, backWheelLeft, backWheelRight, leftWheelLeft, leftWheelRight, rightWheelLeft, rightWheelRight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_global_setting);
 
-        frontLeft = findViewById(R.id.global_front_L);
-        frontRight = findViewById(R.id.global_front_R);
-        backLeft = findViewById(R.id.global_back_L);
-        backRight = findViewById(R.id.global_back_R);
-        leftRotateLeft = findViewById(R.id.global_left_L);
-        leftRotateRight = findViewById(R.id.global_left_R);
-        rightRotateLeft = findViewById(R.id.global_right_L);
-        rightRotateRight = findViewById(R.id.global_right_R);
+        frontWheelLeft = findViewById(R.id.global_front_L);
+        frontWheelRight = findViewById(R.id.global_front_R);
+        backWheelLeft = findViewById(R.id.global_back_L);
+        backWheelRight = findViewById(R.id.global_back_R);
+        leftWheelLeft = findViewById(R.id.global_left_L);
+        leftWheelRight = findViewById(R.id.global_left_R);
+        rightWheelLeft = findViewById(R.id.global_right_L);
+        rightWheelRight = findViewById(R.id.global_right_R);
 
-        final EditText[] editTexts = {frontLeft, frontRight, backLeft, backRight, leftRotateLeft, leftRotateRight, rightRotateLeft, rightRotateRight};
+        final EditText[] editTexts = {frontWheelLeft, frontWheelRight, backWheelLeft, backWheelRight, leftWheelLeft, leftWheelRight, rightWheelLeft, rightWheelRight};
 
         Button saveButton = findViewById(R.id.global_save);
         saveButton.setOnClickListener(new View.OnClickListener() {
@@ -48,14 +48,14 @@ public class GlobalSettingActivity extends AppCompatActivity {
                     SharedPreferences.Editor editor;
                     editor = preferences.edit();
 
-                    editor.putInt("frontLeft", Integer.valueOf(frontLeft.getText().toString()));
-                    editor.putInt("frontRight", Integer.valueOf(frontRight.getText().toString()));
-                    editor.putInt("backLeft", Integer.valueOf(backLeft.getText().toString()));
-                    editor.putInt("backRight", Integer.valueOf(backRight.getText().toString()));
-                    editor.putInt("leftRotateLeft", Integer.valueOf(leftRotateLeft.getText().toString()));
-                    editor.putInt("leftRotateRight", Integer.valueOf(leftRotateRight.getText().toString()));
-                    editor.putInt("rightRotateLeft", Integer.valueOf(rightRotateLeft.getText().toString()));
-                    editor.putInt("rightRotateRight", Integer.valueOf(rightRotateRight.getText().toString()));
+                    editor.putInt("frontWheelLeft", Integer.valueOf(frontWheelLeft.getText().toString()));
+                    editor.putInt("frontWheelRight", Integer.valueOf(frontWheelRight.getText().toString()));
+                    editor.putInt("backWheelLeft", Integer.valueOf(backWheelLeft.getText().toString()));
+                    editor.putInt("backWheelRight", Integer.valueOf(backWheelRight.getText().toString()));
+                    editor.putInt("leftWheelLeft", Integer.valueOf(leftWheelLeft.getText().toString()));
+                    editor.putInt("leftWheelRight", Integer.valueOf(leftWheelRight.getText().toString()));
+                    editor.putInt("rightWheelLeft", Integer.valueOf(rightWheelLeft.getText().toString()));
+                    editor.putInt("rightWheelRight", Integer.valueOf(rightWheelRight.getText().toString()));
 
                     editor.apply();
                     Toast.makeText(GlobalSettingActivity.this, "保存しました", Toast.LENGTH_SHORT).show();
@@ -71,23 +71,23 @@ public class GlobalSettingActivity extends AppCompatActivity {
 
         preferences = getSharedPreferences("globalSetting", MODE_PRIVATE);
 
-        int paramFrontLeft = preferences.getInt("frontLeft", 100);
-        int paramFrontRight = preferences.getInt("frontRight", 100);
-        int paramBackLeft = preferences.getInt("backLeft", 100);
-        int paramBackRight = preferences.getInt("backRight", 100);
-        int paramLeftRotateLeft = preferences.getInt("leftRotateLeft", 100);
-        int paramLeftRotateRight = preferences.getInt("leftRotateRight", 100);
-        int paramRightRotateLeft = preferences.getInt("rightRotateLeft", 100);
-        int paramRightRotateRight = preferences.getInt("rightRotateRight", 100);
+        int paramFrontLeft = preferences.getInt("frontWheelLeft", 100);
+        int paramFrontRight = preferences.getInt("frontWheelRight", 100);
+        int paramBackLeft = preferences.getInt("backWheelLeft", 100);
+        int paramBackRight = preferences.getInt("backWheelRight", 100);
+        int paramLeftRotateLeft = preferences.getInt("leftWheelLeft", 100);
+        int paramLeftRotateRight = preferences.getInt("leftWheelRight", 100);
+        int paramRightRotateLeft = preferences.getInt("rightWheelLeft", 100);
+        int paramRightRotateRight = preferences.getInt("rightWheelRight", 100);
 
-        frontLeft.setText(String.valueOf(paramFrontLeft));
-        frontRight.setText(String.valueOf(paramFrontRight));
-        backLeft.setText(String.valueOf(paramBackLeft));
-        backRight.setText(String.valueOf(paramBackRight));
-        leftRotateLeft.setText(String.valueOf(paramLeftRotateLeft));
-        leftRotateRight.setText(String.valueOf(paramLeftRotateRight));
-        rightRotateLeft.setText(String.valueOf(paramRightRotateLeft));
-        rightRotateRight.setText(String.valueOf(paramRightRotateRight));
+        frontWheelLeft.setText(String.valueOf(paramFrontLeft));
+        frontWheelRight.setText(String.valueOf(paramFrontRight));
+        backWheelLeft.setText(String.valueOf(paramBackLeft));
+        backWheelRight.setText(String.valueOf(paramBackRight));
+        leftWheelLeft.setText(String.valueOf(paramLeftRotateLeft));
+        leftWheelRight.setText(String.valueOf(paramLeftRotateRight));
+        rightWheelLeft.setText(String.valueOf(paramRightRotateLeft));
+        rightWheelRight.setText(String.valueOf(paramRightRotateRight));
     }
 
     //設定値が0~255の範囲内にあるかどうか

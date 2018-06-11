@@ -50,14 +50,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private int DEFAULT_TIME = 2;
     private int DEFAULT_BLOCK_STATE = 0;
 
-    private int DEFAULT_FRONT_R = 100;
-    private int DEFAULT_FRONT_L = 100;
-    private int DEFAULT_BACK_R = 100;
-    private int DEFAULT_BACK_L = 100;
-    private int DEFAULT_R_ROTATE_R = 100;
-    private int DEFAULT_R_ROTATE_L = 100;
-    private int DEFAULT_L_ROTATE_R = 100;
-    private int DEFAULT_L_ROTATE_L = 100;
+    private int DEFAULT_FRONT_WHEEL_R = 100;
+    private int DEFAULT_FRONT_WHEEL_L = 100;
+    private int DEFAULT_BACK_WHEEL_R = 100;
+    private int DEFAULT_BACK_WHEEL_L = 100;
+    private int DEFAULT_R_WHEEL_R = 100;
+    private int DEFAULT_R_WHEEL_L = 100;
+    private int DEFAULT_L_WHEEL_R = 100;
+    private int DEFAULT_L_WHEEL_L = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,16 +152,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 int orderId = i + 1;
                 switch (orderId) {
                     case 1: //前進
-                        mAdapter.addItem(new ItemDataModel(orderId, DEFAULT_FRONT_R, DEFAULT_FRONT_L, DEFAULT_TIME, DEFAULT_BLOCK_STATE));
+                        mAdapter.addItem(new ItemDataModel(orderId, DEFAULT_FRONT_WHEEL_R, DEFAULT_FRONT_WHEEL_L, DEFAULT_TIME, DEFAULT_BLOCK_STATE));
                         break;
                     case 2: //後退
-                        mAdapter.addItem(new ItemDataModel(orderId, DEFAULT_BACK_R, DEFAULT_BACK_L, DEFAULT_TIME, DEFAULT_BLOCK_STATE));
+                        mAdapter.addItem(new ItemDataModel(orderId, DEFAULT_BACK_WHEEL_R, DEFAULT_BACK_WHEEL_L, DEFAULT_TIME, DEFAULT_BLOCK_STATE));
                         break;
                     case 3: //左回転
-                        mAdapter.addItem(new ItemDataModel(orderId, DEFAULT_L_ROTATE_R, DEFAULT_L_ROTATE_L, DEFAULT_TIME, DEFAULT_BLOCK_STATE));
+                        mAdapter.addItem(new ItemDataModel(orderId, DEFAULT_L_WHEEL_R, DEFAULT_L_WHEEL_L, DEFAULT_TIME, DEFAULT_BLOCK_STATE));
                         break;
                     case 4: //右回転
-                        mAdapter.addItem(new ItemDataModel(orderId, DEFAULT_R_ROTATE_R, DEFAULT_R_ROTATE_L, DEFAULT_TIME, DEFAULT_BLOCK_STATE));
+                        mAdapter.addItem(new ItemDataModel(orderId, DEFAULT_R_WHEEL_R, DEFAULT_R_WHEEL_L, DEFAULT_TIME, DEFAULT_BLOCK_STATE));
                         break;
                     case 5: //ループスタート
                         mAdapter.addItem(new ItemDataModel(orderId, 1, 2));
@@ -198,14 +198,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         SharedPreferences preferences = getSharedPreferences("globalSetting", MODE_PRIVATE);
 
-        DEFAULT_FRONT_R = preferences.getInt("frontRight", 100);
-        DEFAULT_FRONT_L = preferences.getInt("frontLeft", 100);
-        DEFAULT_BACK_R = preferences.getInt("backRight", 100);
-        DEFAULT_BACK_L = preferences.getInt("backLeft", 100);
-        DEFAULT_R_ROTATE_R = preferences.getInt("rightRotateRight", 100);
-        DEFAULT_R_ROTATE_L = preferences.getInt("rightRotateLeft", 100);
-        DEFAULT_L_ROTATE_R = preferences.getInt("leftRotateRight", 100);
-        DEFAULT_L_ROTATE_L = preferences.getInt("leftRotateLeft", 100);
+        DEFAULT_FRONT_WHEEL_R = preferences.getInt("frontWheelRight", 100);
+        DEFAULT_FRONT_WHEEL_L = preferences.getInt("frontWheelLeft", 100);
+        DEFAULT_BACK_WHEEL_R = preferences.getInt("backWheelRight", 100);
+        DEFAULT_BACK_WHEEL_L = preferences.getInt("backWheelLeft", 100);
+        DEFAULT_R_WHEEL_R = preferences.getInt("rightWheelRight", 100);
+        DEFAULT_R_WHEEL_L = preferences.getInt("rightWheelLeft", 100);
+        DEFAULT_L_WHEEL_R = preferences.getInt("leftWheelRight", 100);
+        DEFAULT_L_WHEEL_L = preferences.getInt("leftWheelLeft", 100);
     }
 
     @Override
