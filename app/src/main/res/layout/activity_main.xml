@@ -78,7 +78,8 @@
             <ListView
                 android:id="@+id/brock_list"
                 android:layout_width="250dp"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:background="#B1B1B1B1">
 
             </ListView>
 
