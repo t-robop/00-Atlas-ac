@@ -274,7 +274,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (!loopErrorCheck()) {
                     return;
                 }
-                fullGenerateDataArray.clear();
 
                 autoSave();
                 //BlueToothで送る文字列のnullチェック
@@ -399,43 +398,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             // forブロックが入ってた時
         } else {
-            convertLoopCommand(0,mAdapter.getItemCount()-1,0);
-            return generateBTCommand(fullGenerateDataArray);
+            ArrayList<ItemDataModel> list = mAdapter.getAllItem();
+            return generateBTCommand(evolutionItems(list));
         }
 
     }
 
-
-    private ArrayList<ItemDataModel> fullGenerateDataArray = new ArrayList<>();
-    private void convertLoopCommand(int start,int end, int depth) {
-
-        for (int i = start; i <= end; i++) {
-            if (mAdapter.getItem(i).getBlockState() == 1) {
-                convertLoopCommand(i + 1, end, depth + 1);
-                for (;i < end; i++){
-                    if (mAdapter.getItem(i).getBlockState() == 2) {
-                        break;
-                    }
-                }
-
-            }else if (mAdapter.getItem(i).getBlockState() == 2) {
-                if (depth != 0) {
-                    ArrayList<ItemDataModel> tmpDataArray = new ArrayList<>();
-                    ArrayList<ItemDataModel> tmpDataArray2 = new ArrayList<>();
-                    for (int j = start; j < i; j++) {
-                        tmpDataArray.add(mAdapter.getItem(j));
-                    }
-                    for (int j = 0; j < mAdapter.getItem(start - 1).getLoopCount(); j++) {
-                        tmpDataArray2.addAll(tmpDataArray);
-                    }
-                    fullGenerateDataArray.addAll(tmpDataArray2);
-                    return;
-                }
-            } else if (depth == 0) {
-                fullGenerateDataArray.add(mAdapter.getItem(i));
-            }
-        }
-    }
 
     private String[] generateBTCommand(ArrayList<ItemDataModel> dataArray) {
         if (mAdapter.getItemCount() < 7) {
@@ -490,5 +458,49 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else {
             return true;
         }
+    }
+
+    //todo こいつに送信前のリストデータを与えれば二重loop処理が動くはず
+    //完全体に進化するメソッド(結果にCommitします)
+    public ArrayList<ItemDataModel> evolutionItems(ArrayList<ItemDataModel> items){
+        //ArrayList<ItemDataModel> test = ;
+        return convertLoopItem(items,0,0,0);
+    }
+
+    //loop文があったら外してリスト化してくれるメソッド
+    public ArrayList<ItemDataModel> convertLoopItem(ArrayList<ItemDataModel> items,int posLoopStart,int cntLoop,int depth){
+        int posEnd=-1;
+        int i;
+
+        for(i=depth;i<items.size();i++){
+            if(items.get(i).getBlockState()==1){
+                items=convertLoopItem(items,i,items.get(i).getLoopCount(),++depth);
+            }
+            if(items.get(i).getBlockState()==2){
+                posEnd=i;
+                break;
+            }
+        }
+        if(items.get(posLoopStart).getBlockState()!=1){
+            return items;
+        }
+
+        //loop前の処理を保持
+        ArrayList<ItemDataModel> content=new ArrayList<>();
+        for(i=0;i<posLoopStart;i++){
+            content.add(items.get(i));
+        }
+        //連結
+        for(int cnt=0;cnt<cntLoop;cnt++) {
+            for (i = posLoopStart + 1; i < posEnd; i++) {
+                content.add(items.get(i));
+            }
+        }
+        //loop外の残りを連結
+        for (i=posEnd+1;i<items.size();i++){
+            content.add(items.get(i));
+        }
+
+        return content;
     }
 }
