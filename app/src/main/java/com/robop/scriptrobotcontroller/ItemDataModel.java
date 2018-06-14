@@ -6,8 +6,10 @@ import io.realm.RealmObject;
 
 public class ItemDataModel extends RealmObject implements Serializable {
 
-    private int rightSpeed;
-    private int leftSpeed;
+    // globalConfとseekBarの倍率を掛けた値
+    private int rightRerativeSpeed;
+    private int leftRerativeSpeed;
+    private float seekBarRate;
     private int time;
     private int orderId;
     private int blockState;
@@ -16,10 +18,10 @@ public class ItemDataModel extends RealmObject implements Serializable {
     public ItemDataModel(){}
 
     //基本動作ブロックのコンストラクタ
-    ItemDataModel(int orderId, int rightSpeed, int leftSpeed, int time, int blockState){
+    ItemDataModel(int orderId, int rightRerativeSpeed, int leftRerativeSpeed, int time, int blockState){
         setOrderId(orderId);
-        setRightSpeed(rightSpeed);
-        setLeftSpeed(leftSpeed);
+        setRightRerativeSpeed(rightRerativeSpeed);
+        setLeftRerativeSpeed(leftRerativeSpeed);
         setTime(time);
         setBlockState(blockState);
     }
@@ -31,11 +33,14 @@ public class ItemDataModel extends RealmObject implements Serializable {
         setLoopCount(loopCount);
     }
 
-    public int getRightSpeed(){
-        return rightSpeed;
+    public int getRightRerativeSpeed(){
+        return rightRerativeSpeed;
     }
-    public int getLeftSpeed(){
-        return leftSpeed;
+    public int getLeftRerativeSpeed(){
+        return leftRerativeSpeed;
+    }
+    public float getSeekBarRate() {
+        return seekBarRate;
     }
     public int getTime(){
         return time;
@@ -50,21 +55,24 @@ public class ItemDataModel extends RealmObject implements Serializable {
         return loopCount;
     }
 
-    void setRightSpeed(int rightSpeed){
-        if (rightSpeed > 255) {
-            this.rightSpeed = 255;
-        } else if (rightSpeed < 0) {
-            this.rightSpeed = 0;
+    void setRightRerativeSpeed(int rightRerativeSpeed){
+        if (rightRerativeSpeed > 255) {
+            this.rightRerativeSpeed = 255;
+        } else if (rightRerativeSpeed < 0) {
+            this.rightRerativeSpeed = 0;
         }
-        this.rightSpeed = rightSpeed;
+        this.rightRerativeSpeed = rightRerativeSpeed;
     }
-    void setLeftSpeed(int leftSpeed){
-        if (leftSpeed > 255) {
-            this.leftSpeed = 255;
-        } else if (leftSpeed < 0) {
-            this.leftSpeed = 0;
+    void setLeftRerativeSpeed(int leftRerativeSpeed){
+        if (leftRerativeSpeed > 255) {
+            this.leftRerativeSpeed = 255;
+        } else if (leftRerativeSpeed < 0) {
+            this.leftRerativeSpeed = 0;
         }
-        this.leftSpeed = leftSpeed;
+        this.leftRerativeSpeed = leftRerativeSpeed;
+    }
+    public void setSeekBarRate(float seekBarRate) {
+        this.seekBarRate = seekBarRate;
     }
     void setTime(int time){
         if (time < 1) {

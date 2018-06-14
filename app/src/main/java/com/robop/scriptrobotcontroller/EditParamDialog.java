@@ -11,19 +11,22 @@ import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.SeekBar;
 
 import static android.content.Context.MODE_PRIVATE;
 
 public class EditParamDialog extends DialogFragment{
+    SharedPreferences prefs;
+    private float seekRate;
 
-    private int DEFAULT_FRONT_WHEEL_R = 100;
-    private int DEFAULT_FRONT_WHEEL_L = 100;
-    private int DEFAULT_BACK_WHEEL_R = 100;
-    private int DEFAULT_BACK_WHEEL_L = 100;
-    private int DEFAULT_R_WHEEL_R = 100;
-    private int DEFAULT_R_WHEEL_L = 100;
-    private int DEFAULT_L_WHEEL_R = 100;
-    private int DEFAULT_L_WHEEL_L = 100;
+    private int GLOBAL_FRONT_WHEEL_R;
+    private int GLOBAL_FRONT_WHEEL_L;
+    private int GLOBAL_BACK_WHEEL_R;
+    private int GLOBAL_BACK_WHEEL_L;
+    private int GLOBAL_R_WHEEL_R;
+    private int GLOBAL_R_WHEEL_L;
+    private int GLOBAL_L_WHEEL_R;
+    private int GLOBAL_L_WHEEL_L;
 
     @SuppressLint({"InflateParams", "SetTextI18n"})
     @Override
@@ -33,21 +36,50 @@ public class EditParamDialog extends DialogFragment{
         final LayoutInflater inflater = getActivity().getLayoutInflater();
         final View view = inflater.inflate(R.layout.layout_dialog, null);
 
-        syncPreference();
 
         //ItemDataModelとposition受取
         final int listItemPosition = getArguments().getInt("listItemPosition");
         final ItemDataModel dataModel = (ItemDataModel) getArguments().getSerializable("itemData");
 
-        final EditText editSpeedRight = view.findViewById(R.id.edit_speed_right);
-        editSpeedRight.setInputType(InputType.TYPE_CLASS_NUMBER);
-        final EditText editSpeedLeft = view.findViewById(R.id.edit_speed_left);
-        editSpeedLeft.setInputType(InputType.TYPE_CLASS_NUMBER);
+        //SharePreからデータを受け取る
+        prefs = getActivity().getSharedPreferences("globalSetting", MODE_PRIVATE);
+        GLOBAL_FRONT_WHEEL_R = prefs.getInt("frontWheelRight", 0);
+        GLOBAL_FRONT_WHEEL_L = prefs.getInt("frontWheelLeft", 0);
+        GLOBAL_BACK_WHEEL_R = prefs.getInt("backWheelRight", 0);
+        GLOBAL_BACK_WHEEL_L = prefs.getInt("backWheelLeft", 0);
+        GLOBAL_R_WHEEL_R = prefs.getInt("rightWheelRight", 0);
+        GLOBAL_R_WHEEL_L = prefs.getInt("rightWheelLeft", 0);
+        GLOBAL_L_WHEEL_R = prefs.getInt("leftWheelRight", 0);
+        GLOBAL_L_WHEEL_L = prefs.getInt("leftWheelLeft", 0);
+
+
+        final SeekBar seekBar = view.findViewById(R.id.powerSeekBar);
+        seekRate = dataModel.getSeekBarRate();
+        seekBar.setProgress((int) seekRate * 100);
+        seekBar.setMax(100);
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                seekRate = (float) progress / 100;
+                //dataModel.setSeekBarRate(seekRate);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+
+
         final EditText editTime = view.findViewById(R.id.edit_time);
         editTime.setInputType(InputType.TYPE_CLASS_NUMBER);
 
-        editSpeedRight.setText(Integer.toString(dataModel.getRightSpeed()));
-        editSpeedLeft.setText(Integer.toString(dataModel.getLeftSpeed()));
         editTime.setText(Integer.toString(dataModel.getTime()));
 
         builder.setView(view)
@@ -56,30 +88,28 @@ public class EditParamDialog extends DialogFragment{
                     public void onClick(DialogInterface dialogInterface, int i) {
 
                         // EditTextの空白判定
-                        if (editSpeedRight.getText().toString().length() != 0 && editSpeedLeft.getText().toString().length() != 0 && editTime.getText().toString().length() != 0){
-                            // 数値が入力されてる時
-                            double relativeRight = Double.valueOf(editSpeedRight.getText().toString()) / 100;
-                            double relativeLeft = Double.valueOf(editSpeedLeft.getText().toString()) / 100;
+                        if (editTime.getText().toString().length() != 0){
 
                             switch (dataModel.getOrderId()){
                                 case 1:
-                                    dataModel.setRightSpeed((int)(DEFAULT_FRONT_WHEEL_R * relativeRight));
-                                    dataModel.setLeftSpeed((int)(DEFAULT_FRONT_WHEEL_L * relativeLeft));
+                                    dataModel.setRightRerativeSpeed((int)(GLOBAL_FRONT_WHEEL_R * seekRate));
+                                    dataModel.setLeftRerativeSpeed((int)(GLOBAL_FRONT_WHEEL_L * seekRate));
+                                    dataModel.setSeekBarRate(seekRate);
                                     break;
 
                                 case 2:
-                                    dataModel.setRightSpeed((int)(DEFAULT_BACK_WHEEL_R * relativeRight));
-                                    dataModel.setLeftSpeed((int)(DEFAULT_BACK_WHEEL_L * relativeLeft));
+                                    dataModel.setRightRerativeSpeed((int)(GLOBAL_BACK_WHEEL_R * seekRate));
+                                    dataModel.setLeftRerativeSpeed((int)(GLOBAL_BACK_WHEEL_L * seekRate));
                                     break;
 
                                 case 3:
-                                    dataModel.setRightSpeed((int)(DEFAULT_L_WHEEL_R * relativeRight));
-                                    dataModel.setLeftSpeed((int)(DEFAULT_L_WHEEL_L * relativeLeft));
+                                    dataModel.setRightRerativeSpeed((int)(GLOBAL_L_WHEEL_R * seekRate));
+                                    dataModel.setLeftRerativeSpeed((int)(GLOBAL_L_WHEEL_L * seekRate));
                                     break;
 
                                 case 4:
-                                    dataModel.setRightSpeed((int)(DEFAULT_R_WHEEL_R * relativeRight));
-                                    dataModel.setLeftSpeed((int)(DEFAULT_R_WHEEL_L * relativeLeft));
+                                    dataModel.setRightRerativeSpeed((int)(GLOBAL_R_WHEEL_R * seekRate));
+                                    dataModel.setLeftRerativeSpeed((int)(GLOBAL_R_WHEEL_L * seekRate));
                                     break;
 
                             }
@@ -94,19 +124,6 @@ public class EditParamDialog extends DialogFragment{
 
         return builder.create();
 
-    }
-
-    private void syncPreference(){
-        SharedPreferences preferences = getActivity().getSharedPreferences("globalSetting", MODE_PRIVATE);
-
-        DEFAULT_FRONT_WHEEL_R = preferences.getInt("frontWheelRight", 100);
-        DEFAULT_FRONT_WHEEL_L = preferences.getInt("frontWheelLeft", 100);
-        DEFAULT_BACK_WHEEL_R = preferences.getInt("backWheelRight", 100);
-        DEFAULT_BACK_WHEEL_L = preferences.getInt("backWheelLeft", 100);
-        DEFAULT_R_WHEEL_R = preferences.getInt("rightWheelRight", 100);
-        DEFAULT_R_WHEEL_L = preferences.getInt("rightWheelLeft", 100);
-        DEFAULT_L_WHEEL_R = preferences.getInt("leftWheelRight", 100);
-        DEFAULT_L_WHEEL_L = preferences.getInt("leftWheelLeft", 100);
     }
 
 }

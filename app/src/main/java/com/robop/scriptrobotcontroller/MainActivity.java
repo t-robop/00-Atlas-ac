@@ -353,8 +353,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             ItemDataModel itemDataModel = new ItemDataModel(
                     mAdapter.getItem(position).getOrderId(),
-                    mAdapter.getItem(position).getRightSpeed(),
-                    mAdapter.getItem(position).getLeftSpeed(),
+                    mAdapter.getItem(position).getRightRerativeSpeed(),
+                    mAdapter.getItem(position).getLeftRerativeSpeed(),
                     mAdapter.getItem(position).getTime(),
                     mAdapter.getItem(position).getBlockState());
 
@@ -380,8 +380,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         for (int i = 0; i < dataArray.size(); i++) {
             sendText.append(dataArray.get(i).getOrderId());
             sendText.append(String.format("%02d", dataArray.get(i).getTime()));
-            sendText.append(String.format("%03d", dataArray.get(i).getRightSpeed()));
-            sendText.append(String.format("%03d", dataArray.get(i).getLeftSpeed()));
+            sendText.append(String.format("%03d", dataArray.get(i).getRightRerativeSpeed()));
+            sendText.append(String.format("%03d", dataArray.get(i).getLeftRerativeSpeed()));
         }
         sendText.append('\0');  //1命令分の終端文字
 
@@ -395,8 +395,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         for (int i = 1; i <= dataArray.size(); i++) {
             tmpText.append(dataArray.get(i - 1).getOrderId());
             tmpText.append(String.format("%02d", dataArray.get(i - 1).getTime()));
-            tmpText.append(String.format("%03d", dataArray.get(i - 1).getRightSpeed()));
-            tmpText.append(String.format("%03d", dataArray.get(i - 1).getLeftSpeed()));
+            tmpText.append(String.format("%03d", dataArray.get(i - 1).getRightRerativeSpeed()));
+            tmpText.append(String.format("%03d", dataArray.get(i - 1).getLeftRerativeSpeed()));
 
             if (i % 6 == 0) {
                 tmpText.append('\0');  //1命令分の終端文字
