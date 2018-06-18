@@ -44,14 +44,14 @@ public class EditParamDialog extends DialogFragment{
 
         //SharePreからデータを受け取る
         prefs = getActivity().getSharedPreferences("globalSetting", MODE_PRIVATE);
-        GLOBAL_FRONT_WHEEL_R = prefs.getInt("frontWheelRight", 0);
-        GLOBAL_FRONT_WHEEL_L = prefs.getInt("frontWheelLeft", 0);
-        GLOBAL_BACK_WHEEL_R = prefs.getInt("backWheelRight", 0);
-        GLOBAL_BACK_WHEEL_L = prefs.getInt("backWheelLeft", 0);
-        GLOBAL_R_WHEEL_R = prefs.getInt("rightWheelRight", 0);
-        GLOBAL_R_WHEEL_L = prefs.getInt("rightWheelLeft", 0);
-        GLOBAL_L_WHEEL_R = prefs.getInt("leftWheelRight", 0);
-        GLOBAL_L_WHEEL_L = prefs.getInt("leftWheelLeft", 0);
+        GLOBAL_FRONT_WHEEL_R = prefs.getInt("frontWheelRight", 100);
+        GLOBAL_FRONT_WHEEL_L = prefs.getInt("frontWheelLeft", 100);
+        GLOBAL_BACK_WHEEL_R = prefs.getInt("backWheelRight", 100);
+        GLOBAL_BACK_WHEEL_L = prefs.getInt("backWheelLeft", 100);
+        GLOBAL_R_WHEEL_R = prefs.getInt("rightWheelRight", 100);
+        GLOBAL_R_WHEEL_L = prefs.getInt("rightWheelLeft", 100);
+        GLOBAL_L_WHEEL_R = prefs.getInt("leftWheelRight", 100);
+        GLOBAL_L_WHEEL_L = prefs.getInt("leftWheelLeft", 100);
 
         seekBar.setMax(100);
         seekRate = dataModel.getSeekBarRate();
