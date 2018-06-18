@@ -54,8 +54,7 @@ public class EditParamDialog extends DialogFragment{
         GLOBAL_L_WHEEL_L = prefs.getInt("leftWheelLeft", 0);
 
         seekBar.setMax(100);
-        float rate =dataModel.getSeekBarRate() * 100;
-        seekBar.setProgress((int) rate);  //計算ミスって0.0にしかならない
+        seekBar.setProgress((int) dataModel.getSeekBarRate() * 100);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
