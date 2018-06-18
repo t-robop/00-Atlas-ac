@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.SeekBar;
+import android.widget.Toast;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -35,7 +36,7 @@ public class EditParamDialog extends DialogFragment{
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         final LayoutInflater inflater = getActivity().getLayoutInflater();
         final View view = inflater.inflate(R.layout.layout_dialog, null);
-
+        final SeekBar seekBar = view.findViewById(R.id.powerSeekBar);
 
         //ItemDataModelとposition受取
         final int listItemPosition = getArguments().getInt("listItemPosition");
@@ -52,16 +53,13 @@ public class EditParamDialog extends DialogFragment{
         GLOBAL_L_WHEEL_R = prefs.getInt("leftWheelRight", 0);
         GLOBAL_L_WHEEL_L = prefs.getInt("leftWheelLeft", 0);
 
-
-        final SeekBar seekBar = view.findViewById(R.id.powerSeekBar);
-        seekRate = dataModel.getSeekBarRate();
-        seekBar.setProgress((int) seekRate * 100);
         seekBar.setMax(100);
+        float rate =dataModel.getSeekBarRate() * 100;
+        seekBar.setProgress((int) rate);  //計算ミスって0.0にしかならない
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 seekRate = (float) progress / 100;
-                //dataModel.setSeekBarRate(seekRate);
             }
 
             @Override
