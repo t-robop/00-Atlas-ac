@@ -62,7 +62,7 @@ public class DataLoadDialogFragment extends DialogFragment {
         MainActivity mainActivity = (MainActivity) getActivity();
         for (ItemDataModel model : realmRead()) {
             if (model.getOrderId() < 5){
-                ItemDataModel basicBlockModel = new ItemDataModel(model.getOrderId(), model.getRightRerativeSpeed(), model.getLeftRerativeSpeed(), model.getTime(), model.getBlockState());
+                ItemDataModel basicBlockModel = new ItemDataModel(model.getOrderId(), model.getRightRerativeSpeed(), model.getLeftRerativeSpeed(), model.getTime(), model.getBlockState(), model.getSeekBarRate());
                 mainActivity.setAdapter(basicBlockModel);
             }else{
                 ItemDataModel loopBlockModel = new ItemDataModel(model.getOrderId(), model.getBlockState(), model.getLoopCount());
