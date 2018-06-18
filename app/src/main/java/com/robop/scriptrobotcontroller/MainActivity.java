@@ -152,16 +152,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 int orderId = i + 1;
                 switch (orderId) {
                     case 1: //前進
-                        mAdapter.addItem(new ItemDataModel(orderId, DEFAULT_FRONT_WHEEL_R, DEFAULT_FRONT_WHEEL_L, DEFAULT_TIME, DEFAULT_BLOCK_STATE));
+                        mAdapter.addItem(new ItemDataModel(orderId, DEFAULT_FRONT_WHEEL_R, DEFAULT_FRONT_WHEEL_L, DEFAULT_TIME, DEFAULT_BLOCK_STATE, 1));
                         break;
                     case 2: //後退
-                        mAdapter.addItem(new ItemDataModel(orderId, DEFAULT_BACK_WHEEL_R, DEFAULT_BACK_WHEEL_L, DEFAULT_TIME, DEFAULT_BLOCK_STATE));
+                        mAdapter.addItem(new ItemDataModel(orderId, DEFAULT_BACK_WHEEL_R, DEFAULT_BACK_WHEEL_L, DEFAULT_TIME, DEFAULT_BLOCK_STATE,1));
                         break;
                     case 3: //左回転
-                        mAdapter.addItem(new ItemDataModel(orderId, DEFAULT_L_WHEEL_R, DEFAULT_L_WHEEL_L, DEFAULT_TIME, DEFAULT_BLOCK_STATE));
+                        mAdapter.addItem(new ItemDataModel(orderId, DEFAULT_L_WHEEL_R, DEFAULT_L_WHEEL_L, DEFAULT_TIME, DEFAULT_BLOCK_STATE, 1));
                         break;
                     case 4: //右回転
-                        mAdapter.addItem(new ItemDataModel(orderId, DEFAULT_R_WHEEL_R, DEFAULT_R_WHEEL_L, DEFAULT_TIME, DEFAULT_BLOCK_STATE));
+                        mAdapter.addItem(new ItemDataModel(orderId, DEFAULT_R_WHEEL_R, DEFAULT_R_WHEEL_L, DEFAULT_TIME, DEFAULT_BLOCK_STATE, 1));
                         break;
                     case 5: //ループスタート
                         mAdapter.addItem(new ItemDataModel(orderId, 1, 2));
@@ -356,7 +356,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     mAdapter.getItem(position).getRightRerativeSpeed(),
                     mAdapter.getItem(position).getLeftRerativeSpeed(),
                     mAdapter.getItem(position).getTime(),
-                    mAdapter.getItem(position).getBlockState());
+                    mAdapter.getItem(position).getBlockState(),
+                    mAdapter.getItem(position).getSeekBarRate());
 
             data.putSerializable("itemData", itemDataModel);
             data.putInt("listItemPosition", position);
