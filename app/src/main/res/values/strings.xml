@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">ScriptRobotController</string>
     <string name="time">時間(秒)</string>
-    <string name="rightSpeed">右タイヤパワー</string>
-    <string name="leftSpeed">左タイヤパワー</string>
+    <string name="rightRerativeSpeed">右タイヤパワー</string>
+    <string name="leftRerativeSpeed">左タイヤパワー</string>
     <string name="err_msg">値が設定されていません</string>
     <string name="ok">決定</string>h
     <string name="cancel">キャンセル</string>
