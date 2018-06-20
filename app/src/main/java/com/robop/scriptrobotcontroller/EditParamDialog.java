@@ -80,6 +80,7 @@ public class EditParamDialog extends DialogFragment{
         editTime.setInputType(InputType.TYPE_CLASS_NUMBER);
 
         editTime.setText(Integer.toString(dataModel.getTime()));
+        editTime.setSelection(editTime.getText().length());
 
         builder.setView(view)
                 .setPositiveButton("決定", new DialogInterface.OnClickListener() {

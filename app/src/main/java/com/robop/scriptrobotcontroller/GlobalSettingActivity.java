@@ -12,7 +12,7 @@ import android.widget.Toast;
 public class GlobalSettingActivity extends AppCompatActivity {
 
     SharedPreferences preferences;
-    EditText frontWheelLeft, frontWheelRight, backWheelLeft, backWheelRight, leftWheelLeft, leftWheelRight, rightWheelLeft, rightWheelRight;
+    EditText frontWheelLeft, frontWheelRight, backWheelLeft, backWheelRight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,16 +28,9 @@ public class GlobalSettingActivity extends AppCompatActivity {
         backWheelLeft.setInputType(InputType.TYPE_CLASS_NUMBER);
         backWheelRight = findViewById(R.id.global_back_R);
         backWheelRight.setInputType(InputType.TYPE_CLASS_NUMBER);
-        leftWheelLeft = findViewById(R.id.global_left_L);
-        leftWheelLeft.setInputType(InputType.TYPE_CLASS_NUMBER);
-        leftWheelRight = findViewById(R.id.global_left_R);
-        leftWheelRight.setInputType(InputType.TYPE_CLASS_NUMBER);
-        rightWheelLeft = findViewById(R.id.global_right_L);
-        rightWheelLeft.setInputType(InputType.TYPE_CLASS_NUMBER);
-        rightWheelRight = findViewById(R.id.global_right_R);
-        rightWheelRight.setInputType(InputType.TYPE_CLASS_NUMBER);
 
-        final EditText[] editTexts = {frontWheelLeft, frontWheelRight, backWheelLeft, backWheelRight, leftWheelLeft, leftWheelRight, rightWheelLeft, rightWheelRight};
+
+        final EditText[] editTexts = {frontWheelLeft, frontWheelRight, backWheelLeft, backWheelRight};
 
         Button saveButton = findViewById(R.id.global_save);
         saveButton.setOnClickListener(new View.OnClickListener() {
@@ -62,10 +55,6 @@ public class GlobalSettingActivity extends AppCompatActivity {
                     editor.putInt("frontWheelRight", Integer.valueOf(frontWheelRight.getText().toString()));
                     editor.putInt("backWheelLeft", Integer.valueOf(backWheelLeft.getText().toString()));
                     editor.putInt("backWheelRight", Integer.valueOf(backWheelRight.getText().toString()));
-                    editor.putInt("leftWheelLeft", Integer.valueOf(leftWheelLeft.getText().toString()));
-                    editor.putInt("leftWheelRight", Integer.valueOf(leftWheelRight.getText().toString()));
-                    editor.putInt("rightWheelLeft", Integer.valueOf(rightWheelLeft.getText().toString()));
-                    editor.putInt("rightWheelRight", Integer.valueOf(rightWheelRight.getText().toString()));
 
                     editor.apply();
                     Toast.makeText(GlobalSettingActivity.this, "保存しました", Toast.LENGTH_SHORT).show();
@@ -90,13 +79,16 @@ public class GlobalSettingActivity extends AppCompatActivity {
         int paramRightRotateRight = preferences.getInt("rightWheelRight", 220);
 
         frontWheelLeft.setText(String.valueOf(paramFrontLeft));
+        frontWheelLeft.setSelection(frontWheelLeft.getText().length());
+
         frontWheelRight.setText(String.valueOf(paramFrontRight));
+        frontWheelRight.setSelection(frontWheelRight.getText().length());
+
         backWheelLeft.setText(String.valueOf(paramBackLeft));
+        backWheelLeft.setSelection(backWheelLeft.getText().length());
+
         backWheelRight.setText(String.valueOf(paramBackRight));
-        leftWheelLeft.setText(String.valueOf(paramLeftRotateLeft));
-        leftWheelRight.setText(String.valueOf(paramLeftRotateRight));
-        rightWheelLeft.setText(String.valueOf(paramRightRotateLeft));
-        rightWheelRight.setText(String.valueOf(paramRightRotateRight));
+        backWheelRight.setSelection(backWheelRight.getText().length());
     }
 
     //設定値が0~255の範囲内にあるかどうか
