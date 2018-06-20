@@ -18,6 +18,7 @@ public class GlobalSettingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_global_setting);
+        preferences = getSharedPreferences("globalSetting", MODE_PRIVATE);
 
         frontWheelLeft = findViewById(R.id.global_front_L);
         frontWheelLeft.setInputType(InputType.TYPE_CLASS_NUMBER);
@@ -78,7 +79,6 @@ public class GlobalSettingActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        preferences = getSharedPreferences("globalSetting", MODE_PRIVATE);
 
         int paramFrontLeft = preferences.getInt("frontWheelLeft", 100);
         int paramFrontRight = preferences.getInt("frontWheelRight", 100);
