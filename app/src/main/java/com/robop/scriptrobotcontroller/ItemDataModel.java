@@ -9,7 +9,7 @@ public class ItemDataModel extends RealmObject implements Serializable {
     // globalConfとseekBarの倍率を掛けた値
     private int rightRerativeSpeed;
     private int leftRerativeSpeed;
-    private float seekBarRate;
+    private float seekBarRate = 0.5f;
     private int time;
     private int orderId;
     private int blockState;
@@ -57,22 +57,27 @@ public class ItemDataModel extends RealmObject implements Serializable {
     }
 
     void setRightRerativeSpeed(int rightRerativeSpeed){
-        if (rightRerativeSpeed > 255) {
-            this.rightRerativeSpeed = 255;
+        if (rightRerativeSpeed > 100) {
+            this.rightRerativeSpeed = 100;
         } else if (rightRerativeSpeed < 0) {
             this.rightRerativeSpeed = 0;
         }
         this.rightRerativeSpeed = rightRerativeSpeed;
     }
     void setLeftRerativeSpeed(int leftRerativeSpeed){
-        if (leftRerativeSpeed > 255) {
-            this.leftRerativeSpeed = 255;
+        if (leftRerativeSpeed > 100) {
+            this.leftRerativeSpeed = 100;
         } else if (leftRerativeSpeed < 0) {
             this.leftRerativeSpeed = 0;
         }
         this.leftRerativeSpeed = leftRerativeSpeed;
     }
     public void setSeekBarRate(float seekBarRate) {
+        if (seekBarRate > 1) {
+            this.seekBarRate = 1;
+        }else if (seekBarRate < 0 ){
+            this.seekBarRate = 0;
+        }
         this.seekBarRate = seekBarRate;
     }
     void setTime(int time){

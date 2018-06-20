@@ -59,6 +59,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private int DEFAULT_L_WHEEL_R = 100;
     private int DEFAULT_L_WHEEL_L = 100;
 
+    private float DEFAULT_POWER = 0.5f;
+
+    SharedPreferences preferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -152,16 +156,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 int orderId = i + 1;
                 switch (orderId) {
                     case 1: //前進
-                        mAdapter.addItem(new ItemDataModel(orderId, DEFAULT_FRONT_WHEEL_R, DEFAULT_FRONT_WHEEL_L, DEFAULT_TIME, DEFAULT_BLOCK_STATE, 1));
+                        mAdapter.addItem(new ItemDataModel(orderId, DEFAULT_FRONT_WHEEL_R, DEFAULT_FRONT_WHEEL_L, DEFAULT_TIME, DEFAULT_BLOCK_STATE, DEFAULT_POWER));
                         break;
                     case 2: //後退
-                        mAdapter.addItem(new ItemDataModel(orderId, DEFAULT_BACK_WHEEL_R, DEFAULT_BACK_WHEEL_L, DEFAULT_TIME, DEFAULT_BLOCK_STATE,1));
+                        mAdapter.addItem(new ItemDataModel(orderId, DEFAULT_BACK_WHEEL_R, DEFAULT_BACK_WHEEL_L, DEFAULT_TIME, DEFAULT_BLOCK_STATE,DEFAULT_POWER));
                         break;
                     case 3: //左回転
-                        mAdapter.addItem(new ItemDataModel(orderId, DEFAULT_L_WHEEL_R, DEFAULT_L_WHEEL_L, DEFAULT_TIME, DEFAULT_BLOCK_STATE, 1));
+                        mAdapter.addItem(new ItemDataModel(orderId, DEFAULT_L_WHEEL_R, DEFAULT_L_WHEEL_L, DEFAULT_TIME, DEFAULT_BLOCK_STATE, DEFAULT_POWER));
                         break;
                     case 4: //右回転
-                        mAdapter.addItem(new ItemDataModel(orderId, DEFAULT_R_WHEEL_R, DEFAULT_R_WHEEL_L, DEFAULT_TIME, DEFAULT_BLOCK_STATE, 1));
+                        mAdapter.addItem(new ItemDataModel(orderId, DEFAULT_R_WHEEL_R, DEFAULT_R_WHEEL_L, DEFAULT_TIME, DEFAULT_BLOCK_STATE, DEFAULT_POWER));
                         break;
                     case 5: //ループスタート
                         mAdapter.addItem(new ItemDataModel(orderId, 1, 2));
@@ -196,16 +200,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onResume() {
         super.onResume();
 
-        SharedPreferences preferences = getSharedPreferences("globalSetting", MODE_PRIVATE);
+        preferences = getSharedPreferences("globalSetting", MODE_PRIVATE);
 
-        DEFAULT_FRONT_WHEEL_R = preferences.getInt("frontWheelRight", 100);
-        DEFAULT_FRONT_WHEEL_L = preferences.getInt("frontWheelLeft", 100);
-        DEFAULT_BACK_WHEEL_R = preferences.getInt("backWheelRight", 100);
-        DEFAULT_BACK_WHEEL_L = preferences.getInt("backWheelLeft", 100);
-        DEFAULT_R_WHEEL_R = preferences.getInt("rightWheelRight", 100);
-        DEFAULT_R_WHEEL_L = preferences.getInt("rightWheelLeft", 100);
-        DEFAULT_L_WHEEL_R = preferences.getInt("leftWheelRight", 100);
-        DEFAULT_L_WHEEL_L = preferences.getInt("leftWheelLeft", 100);
+//        DEFAULT_FRONT_WHEEL_R = preferences.getInt("frontWheelRight", 100);
+//        DEFAULT_FRONT_WHEEL_L = preferences.getInt("frontWheelLeft", 100);
+//        DEFAULT_BACK_WHEEL_R = preferences.getInt("backWheelRight", 100);
+//        DEFAULT_BACK_WHEEL_L = preferences.getInt("backWheelLeft", 100);
+//        DEFAULT_R_WHEEL_R = preferences.getInt("rightWheelRight", 100);
+//        DEFAULT_R_WHEEL_L = preferences.getInt("rightWheelLeft", 100);
+//        DEFAULT_L_WHEEL_R = preferences.getInt("leftWheelRight", 100);
+//        DEFAULT_L_WHEEL_L = preferences.getInt("leftWheelLeft", 100);
     }
 
     @Override
@@ -375,14 +379,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @SuppressLint("DefaultLocale")
     private String singleBT(ArrayList<ItemDataModel> dataArray) {
+        int right = preferences.getInt("frontWheelRight", 50);
+        int left = preferences.getInt("frontWheelLeft", 50);
+
+
         StringBuilder sendText = new StringBuilder();
 
         //OrderId、Time、Speedの文字列を連結
         for (int i = 0; i < dataArray.size(); i++) {
             sendText.append(dataArray.get(i).getOrderId());
             sendText.append(String.format("%02d", dataArray.get(i).getTime()));
-            sendText.append(String.format("%03d", dataArray.get(i).getRightRerativeSpeed()));
-            sendText.append(String.format("%03d", dataArray.get(i).getLeftRerativeSpeed()));
+            int convertRight = (int) (dataArray.get(i).getSeekBarRate() * right);
+            int convertLeft = (int) (dataArray.get(i).getSeekBarRate() * left);
+            sendText.append(String.format("%03d",convertRight));
+            sendText.append(String.format("%03d", convertLeft));
         }
         sendText.append('\0');  //1命令分の終端文字
 
@@ -390,14 +400,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private String[] multiBT(ArrayList<ItemDataModel> dataArray) {
+        int right = preferences.getInt("frontWheelRight", 50);
+        int left = preferences.getInt("frontWheelLeft", 50);
+
         int arrayNum = dataArray.size() / 6 + 1;
         String[] strings = new String[arrayNum];
         StringBuilder tmpText = new StringBuilder();
         for (int i = 1; i <= dataArray.size(); i++) {
             tmpText.append(dataArray.get(i - 1).getOrderId());
             tmpText.append(String.format("%02d", dataArray.get(i - 1).getTime()));
-            tmpText.append(String.format("%03d", dataArray.get(i - 1).getRightRerativeSpeed()));
-            tmpText.append(String.format("%03d", dataArray.get(i - 1).getLeftRerativeSpeed()));
+
+            int convertRight = (int) (dataArray.get(i).getSeekBarRate() * right);
+            int convertLeft = (int) (dataArray.get(i).getSeekBarRate() * left);
+            tmpText.append(String.format("%03d",convertRight));
+            tmpText.append(String.format("%03d",convertLeft));
 
             if (i % 6 == 0) {
                 tmpText.append('\0');  //1命令分の終端文字

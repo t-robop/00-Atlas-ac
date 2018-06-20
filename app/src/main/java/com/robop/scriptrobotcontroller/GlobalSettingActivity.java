@@ -80,14 +80,14 @@ public class GlobalSettingActivity extends AppCompatActivity {
         super.onResume();
 
 
-        int paramFrontLeft = preferences.getInt("frontWheelLeft", 100);
-        int paramFrontRight = preferences.getInt("frontWheelRight", 100);
-        int paramBackLeft = preferences.getInt("backWheelLeft", 100);
-        int paramBackRight = preferences.getInt("backWheelRight", 100);
-        int paramLeftRotateLeft = preferences.getInt("leftWheelLeft", 100);
-        int paramLeftRotateRight = preferences.getInt("leftWheelRight", 100);
-        int paramRightRotateLeft = preferences.getInt("rightWheelLeft", 100);
-        int paramRightRotateRight = preferences.getInt("rightWheelRight", 100);
+        int paramFrontLeft = preferences.getInt("frontWheelLeft", 220);
+        int paramFrontRight = preferences.getInt("frontWheelRight", 220);
+        int paramBackLeft = preferences.getInt("backWheelLeft", 220);
+        int paramBackRight = preferences.getInt("backWheelRight", 220);
+        int paramLeftRotateLeft = preferences.getInt("leftWheelLeft", 220);
+        int paramLeftRotateRight = preferences.getInt("leftWheelRight", 220);
+        int paramRightRotateLeft = preferences.getInt("rightWheelLeft", 220);
+        int paramRightRotateRight = preferences.getInt("rightWheelRight", 220);
 
         frontWheelLeft.setText(String.valueOf(paramFrontLeft));
         frontWheelRight.setText(String.valueOf(paramFrontRight));

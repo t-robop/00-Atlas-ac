@@ -35,7 +35,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             super(view);
             this.linearLayout = view.findViewById(R.id.item_frame);
             this.speedRight = view.findViewById(R.id.text_speed_right);
-            this.speedLeft = view.findViewById(R.id.text_speed_left);
+            //this.speedLeft = view.findViewById(R.id.text_speed_left);
             this.time = view.findViewById(R.id.text_time);
             this.image = view.findViewById(R.id.direction_item_image);
 
@@ -117,8 +117,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             }
         }else {
 
-            holder.speedRight.setText("右パワー : " + ItemDataArray.get(position).getRightRerativeSpeed());
-            holder.speedLeft.setText("左パワー : " + ItemDataArray.get(position).getLeftRerativeSpeed());
+            holder.speedRight.setText("速度:" + ItemDataArray.get(position).getSeekBarRate()*100 +"%");
+            //holder.speedLeft.setText("左パワー : " + ItemDataArray.get(position).getLeftRerativeSpeed());
             holder.time.setText(ItemDataArray.get(position).getTime() + "秒");
 
             holder.linearLayout.setOnClickListener(new View.OnClickListener(){
