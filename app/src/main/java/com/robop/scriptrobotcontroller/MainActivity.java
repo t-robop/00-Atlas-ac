@@ -3,6 +3,7 @@ package com.robop.scriptrobotcontroller;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,7 +11,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -66,6 +70,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
 
         Realm.init(this);
@@ -549,5 +555,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         return content;
+    }
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent e) {
+        // 戻るボタンが押されたとき
+        if(e.getKeyCode() == KeyEvent.KEYCODE_BACK) {
+            // ボタンが押されたとき
+            if (e.getAction() == KeyEvent.ACTION_DOWN) {
+            }
+            // ボタンが離されたとき
+            else if (e.getAction() == KeyEvent.ACTION_UP) {
+                Toast.makeText(this,"無効です",Toast.LENGTH_SHORT).show();
+            }
+
+        }
+
+        return false;
+        //return super.dispatchKeyEvent(e);
     }
 }

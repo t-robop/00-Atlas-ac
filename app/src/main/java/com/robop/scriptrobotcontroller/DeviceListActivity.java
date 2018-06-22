@@ -121,4 +121,8 @@ public class DeviceListActivity extends AppCompatActivity implements AdapterView
             }, 1000);
         }
     };
+
+    public void close(View view) {
+        finish();
+    }
 }

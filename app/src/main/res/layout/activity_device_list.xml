@@ -6,6 +6,8 @@
     android:background="#ffffff"
     tools:context="com.robop.scriptrobotcontroller.DeviceListActivity">
 
+
+
     <TextView
         android:id="@+id/empty_pairing_device"
         android:layout_width="wrap_content"
@@ -15,21 +17,42 @@
         android:text="No Device"
         android:textSize="20sp" />
 
-    <android.support.v4.widget.SwipeRefreshLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/refresh"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <ListView
-            android:id="@+id/device_list"
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/refresh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ListView
+                android:id="@+id/device_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="16dp"
+                android:smoothScrollbar="true">
+
+            </ListView>
+
+        </android.support.v4.widget.SwipeRefreshLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/button2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginHorizontal="16dp"
-            android:layout_marginTop="16dp"
-            android:smoothScrollbar="true" />
-
-    </android.support.v4.widget.SwipeRefreshLayout>
+            android:text="Button"
+            android:onClick="close"/>
+    </LinearLayout>
 
 </RelativeLayout>
