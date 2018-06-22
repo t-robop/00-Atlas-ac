@@ -54,14 +54,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private int DEFAULT_TIME = 2;
     private int DEFAULT_BLOCK_STATE = 0;
 
-    private int DEFAULT_FRONT_WHEEL_R = 100;
-    private int DEFAULT_FRONT_WHEEL_L = 100;
-    private int DEFAULT_BACK_WHEEL_R = 100;
-    private int DEFAULT_BACK_WHEEL_L = 100;
-    private int DEFAULT_R_WHEEL_R = 100;
-    private int DEFAULT_R_WHEEL_L = 100;
-    private int DEFAULT_L_WHEEL_R = 100;
-    private int DEFAULT_L_WHEEL_L = 100;
+    private int DEFAULT_FRONT_WHEEL_R = 220;
+    private int DEFAULT_FRONT_WHEEL_L = 220;
+    private int DEFAULT_BACK_WHEEL_R = 220;
+    private int DEFAULT_BACK_WHEEL_L = 220;
+    private int DEFAULT_R_WHEEL_R = 220;
+    private int DEFAULT_R_WHEEL_L = 220;
+    private int DEFAULT_L_WHEEL_R = 220;
+    private int DEFAULT_L_WHEEL_L = 220;
 
     private float DEFAULT_POWER = 0.5f;
 
@@ -335,7 +335,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 break;
         }
-
     }
 
     @Override
@@ -385,9 +384,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @SuppressLint("DefaultLocale")
     private String singleBT(ArrayList<ItemDataModel> dataArray) {
-        int right = preferences.getInt("frontWheelRight", 50);
-        int left = preferences.getInt("frontWheelLeft", 50);
-
+        int right = preferences.getInt("frontWheelRight", 220);
+        int left = preferences.getInt("frontWheelLeft", 220);
 
         StringBuilder sendText = new StringBuilder();
 
@@ -406,8 +404,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private String[] multiBT(ArrayList<ItemDataModel> dataArray) {
-        int right = preferences.getInt("frontWheelRight", 50);
-        int left = preferences.getInt("frontWheelLeft", 50);
+        int right = preferences.getInt("frontWheelRight", 220);
+        int left = preferences.getInt("frontWheelLeft", 220);
 
         int arrayNum = dataArray.size() / 6 + 1;
         String[] strings = new String[arrayNum];
