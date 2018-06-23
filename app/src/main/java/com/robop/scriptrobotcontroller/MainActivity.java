@@ -414,8 +414,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             tmpText.append(dataArray.get(i - 1).getOrderId());
             tmpText.append(String.format("%02d", dataArray.get(i - 1).getTime()));
 
-            int convertRight = (int) (dataArray.get(i).getSeekBarRate() * right);
-            int convertLeft = (int) (dataArray.get(i).getSeekBarRate() * left);
+            int convertRight = (int) (dataArray.get(i - 1).getSeekBarRate() * right);
+            int convertLeft = (int) (dataArray.get(i - 1).getSeekBarRate() * left);
             tmpText.append(String.format("%03d",convertRight));
             tmpText.append(String.format("%03d",convertLeft));
 
