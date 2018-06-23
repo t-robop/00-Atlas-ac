@@ -119,7 +119,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
             holder.speedRight.setText(""+(int)(ItemDataArray.get(position).getSeekBarRate()*100));
             //holder.speedLeft.setText("左パワー : " + ItemDataArray.get(position).getLeftRerativeSpeed());
-            holder.time.setText(ItemDataArray.get(position).getTime() + "秒");
+            holder.time.setText(ItemDataArray.get(position).getTime() + "びょう");
 
             holder.linearLayout.setOnClickListener(new View.OnClickListener(){
                 @Override

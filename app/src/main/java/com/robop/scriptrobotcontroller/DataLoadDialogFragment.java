@@ -21,8 +21,8 @@ public class DataLoadDialogFragment extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         return new AlertDialog.Builder(getActivity())
-                .setTitle("前回のデータが残っています")
-                .setMessage("復元しますか？")
+                .setTitle("まえのデータがのこっています")
+                .setMessage("もどしますか？")
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -30,7 +30,7 @@ public class DataLoadDialogFragment extends DialogFragment {
                         setRecycleView();
                     }
                 })
-                .setNegativeButton("Cancel", null)
+                .setNegativeButton("キャンセル", null)
                 .create();
     }
 

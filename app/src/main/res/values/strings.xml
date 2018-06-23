@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Atlas</string>
-    <string name="time">時間(秒)</string>
+    <string name="time">じかん(びょう)</string>
     <string name="rightRerativeSpeed">右タイヤパワー</string>
     <string name="leftRerativeSpeed">左タイヤパワー</string>
     <string name="err_msg">値が設定されていません</string>
@@ -10,7 +10,7 @@
     <string name="backId">0002</string>
     <string name="rightId">0003</string>
     <string name="leftId">0004</string>
-    <string name="loopNum">ループ数</string>
+    <string name="loopNum">ループかいすう</string>
 
     <string-array name="directionId">
         <item>0001</item>

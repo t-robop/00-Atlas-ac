@@ -19,10 +19,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    packagingOptions {
-        exclude 'lib/mips64/NAME_OF_THE_LIB.so'
-        exclude 'lib/mips/NAME_OF_THE_LIB.so'
-    }
 }
 
 dependencies {
