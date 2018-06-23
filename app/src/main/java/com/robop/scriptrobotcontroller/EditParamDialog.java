@@ -81,6 +81,7 @@ public class EditParamDialog extends DialogFragment{
         final EditText editTime = view.findViewById(R.id.edit_time);
         //小数と整数に対応
         editTime.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+        editTime.setText(Float.toString((dataModel.getTime()/10f)));
 
         InputFilter inputFilter = new InputFilter() {
             @Override
@@ -147,7 +148,6 @@ public class EditParamDialog extends DialogFragment{
         // フィルターの配列をセット
         editTime.setFilters(filters);
 
-        editTime.setText(Float.toString((dataModel.getTime()/10f)));
         editTime.setSelection(editTime.getText().length());
 
         builder.setView(view)
