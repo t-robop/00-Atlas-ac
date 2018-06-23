@@ -7,7 +7,7 @@
         android:id="@+id/container_loop"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/img_loop_back"
@@ -54,7 +54,7 @@
         android:id="@+id/container_move"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <ImageView
             android:layout_width="match_parent"
@@ -87,28 +87,46 @@
                 android:gravity="center"
                 android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/text_speed_right"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:lines="1"
-                    android:textColor="#ffffff"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
+                    android:layout_weight="3"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/text_speed_right"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:lines="1"
+                        android:text="50"
+                        android:textColor="#ffffff"
+                        android:textSize="40sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="left|bottom"
+                        android:lines="1"
+                        android:text="%"
+                        android:textColor="#ffffff"
+                        android:textSize="30sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
 
 
                 <TextView
                     android:id="@+id/text_time"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"
+                    android:layout_weight="5"
                     android:gravity="center_vertical"
                     android:lines="1"
                     android:text="秒"
                     android:textColor="#ffffff"
-                    android:textSize="15sp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
 
             </LinearLayout>
