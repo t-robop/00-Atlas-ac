@@ -146,12 +146,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         itemDecor.attachToRecyclerView(mRecyclerView);
 
         MenuItemAdapter menuItemAdapter = new MenuItemAdapter(this);
-        menuItemAdapter.add(new MenuItemModel(R.drawable.move_front, "前進", "パワーと時間を設定して、ロボットを前に動かします。"));
-        menuItemAdapter.add(new MenuItemModel(R.drawable.move_back, "後退", "パワーと時間を設定して、ロボットを後ろに動かします。"));
-        menuItemAdapter.add(new MenuItemModel(R.drawable.move_left, "左回転", "パワーと時間を設定して、ロボットを左に回転させます。"));
-        menuItemAdapter.add(new MenuItemModel(R.drawable.move_right, "右回転", "パワーと時間を設定して、ロボットを右に回転させます。"));
-        menuItemAdapter.add(new MenuItemModel(R.drawable.loop_start, "ループ開始", "ループの始まり"));
-        menuItemAdapter.add(new MenuItemModel(R.drawable.loop_end, "ループ終了", "ループの終わり"));
+        menuItemAdapter.add(new MenuItemModel(R.drawable.move_front, "まえにすすむ", "パワーと時間を設定して、ロボットを前に動かします。"));
+        menuItemAdapter.add(new MenuItemModel(R.drawable.move_back, "うしろにすすむ", "パワーと時間を設定して、ロボットを後ろに動かします。"));
+        menuItemAdapter.add(new MenuItemModel(R.drawable.move_left, "ひだりにまがる", "パワーと時間を設定して、ロボットを左に回転させます。"));
+        menuItemAdapter.add(new MenuItemModel(R.drawable.move_right, "みぎにまがる", "パワーと時間を設定して、ロボットを右に回転させます。"));
+        menuItemAdapter.add(new MenuItemModel(R.drawable.loop_start, "ループはじまり", "ループの始まり"));
+        menuItemAdapter.add(new MenuItemModel(R.drawable.loop_end, "ループおわり", "ループの終わり"));
         ListView brockList = findViewById(R.id.brock_list);
         brockList.setAdapter(menuItemAdapter);
 
@@ -494,17 +494,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             } else if (mAdapter.getItem(i).getBlockState() == 2) {
                 loopEnd++;
                 if (loopStart < loopEnd) {
-                    Toast.makeText(this, "forブロックの始まりより前に終わりが来ています", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(this, "forブロックの始まりより前に終わりが来ています", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "ループブロックがおかしいです", Toast.LENGTH_SHORT).show();
                     return false;
                 }
 
             }
         }
         if ((loopStart < loopEnd)) {
-            Toast.makeText(this, "forブロックの終わりの数が多すぎます", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "forブロックの終わりの数が多すぎます", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "ループブロックがおかしいです", Toast.LENGTH_SHORT).show();
             return false;
         } else if (loopStart > loopEnd) {
-            Toast.makeText(this, "forブロックの始まりの数が多すぎます", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "forブロックの始まりの数が多すぎます", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "ループブロックがおかしいです", Toast.LENGTH_SHORT).show();
             return false;
         } else {
             return true;

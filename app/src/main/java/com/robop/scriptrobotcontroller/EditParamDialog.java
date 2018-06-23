@@ -151,7 +151,7 @@ public class EditParamDialog extends DialogFragment{
         editTime.setSelection(editTime.getText().length());
 
         builder.setView(view)
-                .setPositiveButton("決定", new DialogInterface.OnClickListener() {
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
