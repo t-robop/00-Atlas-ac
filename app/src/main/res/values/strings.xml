@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ScriptRobotController</string>
+    <string name="app_name">Atlas</string>
     <string name="time">時間(秒)</string>
     <string name="rightRerativeSpeed">右タイヤパワー</string>
     <string name="leftRerativeSpeed">左タイヤパワー</string>
