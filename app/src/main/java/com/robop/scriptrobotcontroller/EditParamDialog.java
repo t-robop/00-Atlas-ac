@@ -85,43 +85,69 @@ public class EditParamDialog extends DialogFragment{
         InputFilter inputFilter = new InputFilter() {
             @Override
             public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart, int dend) {
-                int dotPos = -1;
-                int len = dest.length();
-                for (int i = 0; i < len; i++) {
-                    char c = dest.charAt(i);
-                    if (c == '.' || c == ',') {
-                        dotPos = i;
-                        break;
+                String s = dest.toString();
+                int UPPER_POINT_DIGITS_NUM = 1;
+                int LOWER_POINT_DIGITS_NUM = 1;
+                int i = s.indexOf(".");
+                if (i >= 0) {
+                    // 小数点が入力されている場合
+                    if (dstart <= i && i < dend) {
+                        // 小数点を含む部分を変更
+                        if (!source.equals(".")) {
+                            // 小数点を削除する場合
+                            if (dest.length() - (dend - dstart) + (end - start) <= UPPER_POINT_DIGITS_NUM) {
+                                return null;
+                            } else {
+                                return ".";
+                            }
+                        } else {
+                            // 小数点を小数点に置き換える場合
+                            return null;
+                        }
+                    }
+                    // 小数点を含まない部分を変更
+                    if (dstart <= i) {
+                        // 小数点以上を変更する場合
+                        if (i - (dend - dstart) + (end - start) <= UPPER_POINT_DIGITS_NUM) {
+                            return null;
+                        } else {
+                            return "";
+                        }
+                    } else {
+                        // 小数点以下を変更する場合
+                        if (dest.length() - (dend - dstart) + (end - start) - i - 1 <= LOWER_POINT_DIGITS_NUM) {
+                            return null;
+                        } else {
+                            return "";
+                        }
+                    }
+                } else {
+                    // 小数点が入力されていない場合
+                    if (source.equals(".")) {
+                        // 小数点を入力する場合
+                        // 例）upper = 4, lower = 2 の時に 1111 → 1.111 や 111 → .111 を許可しない
+                        if (dest.length() - dend <= LOWER_POINT_DIGITS_NUM) {
+                            return null;
+                        } else {
+                            return "";
+                        }
+                    } else {
+                        // 数字を入力する場合
+                        if (dest.length() - (dend - dstart) + (end - start) <= UPPER_POINT_DIGITS_NUM) {
+                            return null;
+                        } else {
+                            return "";
+                        }
                     }
                 }
-                if (dotPos >= 0) {
-
-                    // protects against many dots
-                    if (source.equals(".") || source.equals(","))
-                    {
-                        return "";
-                    }
-                    // if the text is entered before the dot
-                    if (dend <= dotPos) {
-                        return null;
-                    }
-                    if (len - dotPos > 2) {
-                        return "";
-                    }
-                }
-
-                return null;
             }
         };
         // フィルターの配列を作成
-        InputFilter[] filters = new InputFilter[] {
-                inputFilter,
-                new InputFilter.LengthFilter(3)
-        };
+        InputFilter[] filters = new InputFilter[] {inputFilter};
         // フィルターの配列をセット
         editTime.setFilters(filters);
 
-        editTime.setText(Float.toString(((float) (dataModel.getTime()))/10f));
+        editTime.setText(Float.toString((dataModel.getTime()/10f)));
         editTime.setSelection(editTime.getText().length());
 
         builder.setView(view)
