@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView connectStatus;
     private ImageView connectImg;
 
+  
     private int DEFAULT_TIME = 10;
     private int DEFAULT_BLOCK_STATE = 0;
 
