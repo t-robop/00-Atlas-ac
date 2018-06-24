@@ -437,9 +437,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private ArrayList<ItemDataModel> getForDeployed() {
         String str = null;
+
+        if (mAdapter.getItemCount() == 0){
+            Toast.makeText(this, "おくるデータがありません", Toast.LENGTH_SHORT).show();
+            return mAdapter.getAllItem();
+        }
+
         for (int i = 0; i < mAdapter.getItemCount(); i++) {
             str += mAdapter.getItem(i).getBlockState();
         }
+
         //  forブロックが入ってなかった時
         if (str.indexOf("1") == -1) {
             // 一致しなかったら
