@@ -12,17 +12,17 @@ public class ItemDataModel extends RealmObject implements Serializable {
     private float seekBarRate = 0.5f;
     private int time;
     private int orderId;
-    private int blockState;
+    private int blockState;  //0 : 前後左右移動ブロック, 1 : ループスタートブロック, 2 : ループエンドブロック
     private int loopCount;
 
     public ItemDataModel() {
     }
 
     //基本動作ブロックのコンストラクタ
-    ItemDataModel(int orderId, int rightRerativeSpeed, int leftRerativeSpeed, int time, int blockState, float seekRate) {
+    ItemDataModel(int orderId, int rightRelativeSpeed, int leftRelativeSpeed, int time, int blockState, float seekRate) {
         setOrderId(orderId);
-        setRightRelativeSpeed(rightRerativeSpeed);
-        setLeftRelativeSpeed(leftRerativeSpeed);
+        setRightRelativeSpeed(rightRelativeSpeed);
+        setLeftRelativeSpeed(leftRelativeSpeed);
         setTime(time);
         setBlockState(blockState);
         setSeekBarRate(seekRate);

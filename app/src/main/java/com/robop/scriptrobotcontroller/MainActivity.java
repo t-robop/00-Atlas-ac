@@ -204,9 +204,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onResume() {
         super.onResume();
-
         preferences = getSharedPreferences("globalSetting", MODE_PRIVATE);
-
     }
 
     @Override

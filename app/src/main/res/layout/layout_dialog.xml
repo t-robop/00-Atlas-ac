@@ -6,7 +6,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -17,8 +17,8 @@
                 android:id="@+id/textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="  モーターパワー"
-                android:textSize="16dp"/>
+                android:text="モーターパワー"
+                android:textSize="16sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -29,9 +29,10 @@
                     android:id="@+id/textView2"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginStart="16dp"
                     android:layout_weight="1"
                     android:gravity="left"
-                    android:layout_marginLeft="16dp"
                     android:text="0" />
 
                 <TextView
@@ -46,16 +47,19 @@
                     android:id="@+id/textView4"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginRight="16dp"
                     android:layout_weight="1"
                     android:gravity="right"
-                    android:layout_marginRight="16dp"
                     android:text="100" />
+
             </LinearLayout>
 
             <SeekBar
                 android:id="@+id/powerSeekBar"
                 android:layout_width="match_parent"
                 android:layout_height="32dp" />
+
         </LinearLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -68,8 +72,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/time"
-                android:textSize="20sp"
-                android:maxLength="3"/>
+                android:maxLength="3"
+                android:textSize="20sp" />
 
         </android.support.design.widget.TextInputLayout>
 
