@@ -4,10 +4,10 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -59,10 +59,10 @@ public class DeviceListActivity extends AppCompatActivity implements AdapterView
         // SwipeRefreshLayoutの設定
         mSwipeRefreshLayout = findViewById(R.id.refresh);
         mSwipeRefreshLayout.setOnRefreshListener(mOnRefreshListener);
-        mSwipeRefreshLayout.setColorSchemeColors(Color.parseColor("#aaaaff"),Color.parseColor("#333333"));
+        mSwipeRefreshLayout.setColorSchemeColors(Color.parseColor("#aaaaff"), Color.parseColor("#333333"));
     }
 
-    private void scanDevices(){
+    private void scanDevices() {
         pairedDevicesArrayAdapter.clear();
         searchPairedDevices();
         pairedDevicesArrayAdapter.notifyDataSetChanged();
@@ -71,31 +71,31 @@ public class DeviceListActivity extends AppCompatActivity implements AdapterView
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
         String tryConnectDeviceAddress = null;
-        if(!resultPairedDevicesName.isEmpty() && !resultPairedDevicesAddress.isEmpty()){
+        if (!resultPairedDevicesName.isEmpty() && !resultPairedDevicesAddress.isEmpty()) {
             tryConnectDeviceAddress = resultPairedDevicesAddress.get(position);
         }
 
         Intent intent = new Intent();
-        if(tryConnectDeviceAddress != null){
+        if (tryConnectDeviceAddress != null) {
             intent.putExtra("deviceAddress", tryConnectDeviceAddress);  //接続先のMACアドレスをMainActivityに返す
-            setResult(RESULT_OK,intent);
+            setResult(RESULT_OK, intent);
             finish();
-        }else{
+        } else {
             Toast.makeText(this, "MACアドレスが取得できません", Toast.LENGTH_SHORT).show();
         }
 
     }
 
     //ペアリングされているBlueTooth端末の検索
-    private void searchPairedDevices(){
+    private void searchPairedDevices() {
         Set<BluetoothDevice> pairedDevices = bluetoothAdapter.getBondedDevices();
-        if(pairedDevices.size() > 0){
-            for(BluetoothDevice device : pairedDevices){
+        if (pairedDevices.size() > 0) {
+            for (BluetoothDevice device : pairedDevices) {
                 pairedDevicesArrayAdapter.add(device.getName() + "\n" + device.getAddress());
                 resultPairedDevicesName.add(device.getName());
                 resultPairedDevicesAddress.add(device.getAddress());
             }
-        }else{
+        } else {
             String noDevices = "No devices found";
             pairedDevicesArrayAdapter.add(noDevices);
         }

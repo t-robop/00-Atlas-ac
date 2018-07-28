@@ -10,10 +10,6 @@ import io.realm.Realm;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
 
-/**
- * Created by yuusuke on 2018/05/09.
- */
-
 public class DataLoadDialogFragment extends DialogFragment {
 
     Realm realm;
@@ -37,7 +33,6 @@ public class DataLoadDialogFragment extends DialogFragment {
     @Override
     public void onPause() {
         super.onPause();
-
         // onPause でダイアログを閉じる場合
         dismiss();
     }
@@ -45,26 +40,23 @@ public class DataLoadDialogFragment extends DialogFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        //realm.close();
+        realm.close();
     }
 
     RealmResults<ItemDataModel> realmRead() {
         Realm.init(getActivity());
         realm = Realm.getDefaultInstance();
         RealmQuery<ItemDataModel> query = realm.where(ItemDataModel.class);
-        RealmResults<ItemDataModel> items = query.findAll();
-        return items;
-
-
-
+        return query.findAll();
     }
-    void setRecycleView(){
+
+    void setRecycleView() {
         MainActivity mainActivity = (MainActivity) getActivity();
         for (ItemDataModel model : realmRead()) {
-            if (model.getOrderId() < 5){
-                ItemDataModel basicBlockModel = new ItemDataModel(model.getOrderId(), model.getRightRerativeSpeed(), model.getLeftRerativeSpeed(), model.getTime(), model.getBlockState(), model.getSeekBarRate());
+            if (model.getOrderId() < 5) {
+                ItemDataModel basicBlockModel = new ItemDataModel(model.getOrderId(), model.getRightRelativeSpeed(), model.getLeftRelativeSpeed(), model.getTime(), model.getBlockState(), model.getSeekBarRate());
                 mainActivity.setAdapter(basicBlockModel);
-            }else{
+            } else {
                 ItemDataModel loopBlockModel = new ItemDataModel(model.getOrderId(), model.getBlockState(), model.getLoopCount());
                 mainActivity.setAdapter(loopBlockModel);
             }

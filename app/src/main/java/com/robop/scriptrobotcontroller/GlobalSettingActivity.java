@@ -1,8 +1,8 @@
 package com.robop.scriptrobotcontroller;
 
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
@@ -45,9 +45,9 @@ public class GlobalSettingActivity extends AppCompatActivity {
                     }
                 }
 
-                if (errorText != null){
+                if (errorText != null) {
                     Toast.makeText(GlobalSettingActivity.this, errorText, Toast.LENGTH_SHORT).show();
-                }else{
+                } else {
                     SharedPreferences.Editor editor;
                     editor = preferences.edit();
 
@@ -88,8 +88,8 @@ public class GlobalSettingActivity extends AppCompatActivity {
     }
 
     //設定値が0~255の範囲内にあるかどうか
-    boolean sizeCheck(String speedStr){
-        if (speedStr.equals("")){
+    boolean sizeCheck(String speedStr) {
+        if (speedStr.equals("")) {
             return false;
         }
 

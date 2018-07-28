@@ -11,11 +11,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 
-public class EditLoopParamDialog extends DialogFragment{
+public class EditLoopParamDialog extends DialogFragment {
 
     @SuppressLint({"InflateParams", "SetTextI18n"})
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState){
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         final LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -28,7 +28,6 @@ public class EditLoopParamDialog extends DialogFragment{
         final EditText editLoopNum = view.findViewById(R.id.edit_loop_num);
         editLoopNum.setInputType(InputType.TYPE_CLASS_NUMBER);
 
-
         editLoopNum.setText(Integer.toString(dataModel.getLoopCount()));
 
         builder.setView(view)
@@ -37,7 +36,7 @@ public class EditLoopParamDialog extends DialogFragment{
                     public void onClick(DialogInterface dialogInterface, int i) {
 
                         // EditTextの空白判定
-                        if (editLoopNum.getText().toString().length() != 0 ) {
+                        if (editLoopNum.getText().toString().length() != 0) {
                             // 数値が入力されてる時
                             dataModel.setLoopCount(Integer.valueOf(editLoopNum.getText().toString()));
 

@@ -17,13 +17,13 @@ import android.widget.SeekBar;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class EditParamDialog extends DialogFragment{
+public class EditParamDialog extends DialogFragment {
     SharedPreferences prefs;
     private float seekRate;
 
     @SuppressLint({"InflateParams", "SetTextI18n"})
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState){
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         final LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -59,11 +59,10 @@ public class EditParamDialog extends DialogFragment{
         });
 
 
-
         final EditText editTime = view.findViewById(R.id.edit_time);
         //小数と整数に対応
         editTime.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
-        editTime.setText(Float.toString((dataModel.getTime()/10f)));
+        editTime.setText(Float.toString((dataModel.getTime() / 10f)));
 
         InputFilter inputFilter = new InputFilter() {
             @Override
@@ -126,7 +125,7 @@ public class EditParamDialog extends DialogFragment{
             }
         };
         // フィルターの配列を作成
-        InputFilter[] filters = new InputFilter[] {inputFilter};
+        InputFilter[] filters = new InputFilter[]{inputFilter};
         // フィルターの配列をセット
         editTime.setFilters(filters);
 
@@ -138,9 +137,9 @@ public class EditParamDialog extends DialogFragment{
                     public void onClick(DialogInterface dialogInterface, int i) {
 
                         // EditTextの空白判定
-                        if (editTime.getText().toString().length() != 0){
+                        if (editTime.getText().toString().length() != 0) {
 
-                            switch (dataModel.getOrderId()){
+                            switch (dataModel.getOrderId()) {
                                 case 1:
                                     dataModel.setSeekBarRate(seekRate);
                                     break;
@@ -158,7 +157,7 @@ public class EditParamDialog extends DialogFragment{
                                     break;
 
                             }
-                            dataModel.setTime((int) ((Float.parseFloat(editTime.getText().toString()))*10));
+                            dataModel.setTime((int) ((Float.parseFloat(editTime.getText().toString())) * 10));
 
                             MainActivity mainActivity = (MainActivity) getActivity();
                             mainActivity.updateItemParam(listItemPosition, dataModel);

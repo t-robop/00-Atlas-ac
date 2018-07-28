@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder>{
+public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
     private OnRecyclerListener recyclerListener;
 
     private ArrayList<ItemDataModel> ItemDataArray;
@@ -30,22 +30,22 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         TextView textLoopNum;
         ImageView imgLoopBack;
 
-        ViewHolder(View view){
+        ViewHolder(View view) {
             super(view);
             this.linearLayout = view.findViewById(R.id.item_frame);
             this.speed = view.findViewById(R.id.text_speed);
             this.time = view.findViewById(R.id.text_time);
             this.image = view.findViewById(R.id.direction_item_image);
 
-            this.containerMove=view.findViewById(R.id.container_move);
-            this.containerLoop=view.findViewById(R.id.container_loop);
-            this.containerLoopNum=view.findViewById(R.id.container_loop_text);
-            this.textLoopNum=view.findViewById(R.id.cnt_loop);
-            this.imgLoopBack=view.findViewById(R.id.img_loop_back);
+            this.containerMove = view.findViewById(R.id.container_move);
+            this.containerLoop = view.findViewById(R.id.container_loop);
+            this.containerLoopNum = view.findViewById(R.id.container_loop_text);
+            this.textLoopNum = view.findViewById(R.id.cnt_loop);
+            this.imgLoopBack = view.findViewById(R.id.img_loop_back);
         }
     }
 
-    RecyclerAdapter(ArrayList<ItemDataModel> itemDataList, OnRecyclerListener listener){
+    RecyclerAdapter(ArrayList<ItemDataModel> itemDataList, OnRecyclerListener listener) {
         ItemDataArray = itemDataList;
         recyclerListener = listener;
     }
@@ -53,34 +53,36 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     public ItemDataModel getItem(int position) {
         return ItemDataArray.get(position);
     }
-    public ArrayList<ItemDataModel> getAllItem(){
+
+    public ArrayList<ItemDataModel> getAllItem() {
         return ItemDataArray;
     }
 
     public void setItem(int position, ItemDataModel dataModel) {
-        ItemDataArray.set(position,dataModel);
+        ItemDataArray.set(position, dataModel);
     }
 
     public void addItem(ItemDataModel dataModel) {
         ItemDataArray.add(dataModel);
     }
+
     public void removeItem(int position) {
         ItemDataArray.remove(position);
     }
 
-    public void itemMoved(int fromPos, int toPos){
+    public void itemMoved(int fromPos, int toPos) {
 
         ItemDataModel fromItem = ItemDataArray.get(fromPos);
         ItemDataModel toItem = ItemDataArray.get(toPos);
-        ItemDataArray.set(toPos,fromItem);
-        ItemDataArray.set(fromPos,toItem);
+        ItemDataArray.set(toPos, fromItem);
+        ItemDataArray.set(fromPos, toItem);
 
     }
 
 
-        @NonNull
+    @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType){
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item, parent, false);
         return new ViewHolder(view);
@@ -91,15 +93,15 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") final int position) {
         final ViewHolder viewHolder = holder;
 
-        if(ItemDataArray.get(position).getOrderId()==5||ItemDataArray.get(position).getOrderId()==6){
+        if (ItemDataArray.get(position).getOrderId() == 5 || ItemDataArray.get(position).getOrderId() == 6) {
             holder.containerLoop.setVisibility(View.VISIBLE);
             holder.containerMove.setVisibility(View.GONE);
 
             switch (ItemDataArray.get(position).getOrderId()) {
                 case 5:
-                    holder.containerLoopNum.setOnClickListener(new View.OnClickListener(){
+                    holder.containerLoopNum.setOnClickListener(new View.OnClickListener() {
                         @Override
-                        public void onClick(View view){
+                        public void onClick(View view) {
                             recyclerListener.onRecyclerClicked(view, viewHolder.getLayoutPosition());
                         }
                     });
@@ -113,14 +115,14 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                     holder.imgLoopBack.setImageResource(R.drawable.loop_end_block);
                     break;
             }
-        }else {
+        } else {
 
-            holder.speed.setText(""+(int)(ItemDataArray.get(position).getSeekBarRate()*100));
-            holder.time.setText((float)ItemDataArray.get(position).getTime()/10f + "びょう");
+            holder.speed.setText("" + (int) (ItemDataArray.get(position).getSeekBarRate() * 100));
+            holder.time.setText((float) ItemDataArray.get(position).getTime() / 10f + "びょう");
 
-            holder.linearLayout.setOnClickListener(new View.OnClickListener(){
+            holder.linearLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View view){
+                public void onClick(View view) {
                     recyclerListener.onRecyclerClicked(view, viewHolder.getLayoutPosition());
                 }
             });
@@ -154,7 +156,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     }
 
     @Override
-    public int getItemCount(){
+    public int getItemCount() {
         return ItemDataArray.size();
     }
 
