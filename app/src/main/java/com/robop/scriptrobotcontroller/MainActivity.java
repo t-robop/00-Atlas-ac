@@ -1,12 +1,15 @@
 package com.robop.scriptrobotcontroller;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
+import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -21,10 +24,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.app.Activity;
-import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
-import android.content.Intent;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -51,7 +50,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView connectStatus;
     private ImageView connectImg;
 
-  
     private int DEFAULT_TIME = 10;
     private int DEFAULT_BLOCK_STATE = 0;
 
@@ -166,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         mAdapter.addItem(new ItemDataModel(orderId, DEFAULT_FRONT_WHEEL_R, DEFAULT_FRONT_WHEEL_L, DEFAULT_TIME, DEFAULT_BLOCK_STATE, DEFAULT_POWER));
                         break;
                     case 2: //後退
-                        mAdapter.addItem(new ItemDataModel(orderId, DEFAULT_BACK_WHEEL_R, DEFAULT_BACK_WHEEL_L, DEFAULT_TIME, DEFAULT_BLOCK_STATE,DEFAULT_POWER));
+                        mAdapter.addItem(new ItemDataModel(orderId, DEFAULT_BACK_WHEEL_R, DEFAULT_BACK_WHEEL_L, DEFAULT_TIME, DEFAULT_BLOCK_STATE, DEFAULT_POWER));
                         break;
                     case 3: //左回転
                         mAdapter.addItem(new ItemDataModel(orderId, DEFAULT_L_WHEEL_R, DEFAULT_L_WHEEL_L, DEFAULT_TIME, DEFAULT_BLOCK_STATE, DEFAULT_POWER));
@@ -206,17 +204,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onResume() {
         super.onResume();
-
         preferences = getSharedPreferences("globalSetting", MODE_PRIVATE);
-
-//        DEFAULT_FRONT_WHEEL_R = preferences.getInt("frontWheelRight", 100);
-//        DEFAULT_FRONT_WHEEL_L = preferences.getInt("frontWheelLeft", 100);
-//        DEFAULT_BACK_WHEEL_R = preferences.getInt("backWheelRight", 100);
-//        DEFAULT_BACK_WHEEL_L = preferences.getInt("backWheelLeft", 100);
-//        DEFAULT_R_WHEEL_R = preferences.getInt("rightWheelRight", 100);
-//        DEFAULT_R_WHEEL_L = preferences.getInt("rightWheelLeft", 100);
-//        DEFAULT_L_WHEEL_R = preferences.getInt("leftWheelRight", 100);
-//        DEFAULT_L_WHEEL_L = preferences.getInt("leftWheelLeft", 100);
     }
 
     @Override
@@ -331,8 +319,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 for (String command : commands) {
                     // データフォーマット通りの文字列が送信される
                     // 最初に f が2つあったら複数送信 ffのあとに送る回数が入ってる
+                    Log.d("SendCommand", command);
                     bluetooth.send(command);
-
                 }
                 break;
         }
@@ -363,8 +351,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             ItemDataModel itemDataModel = new ItemDataModel(
                     mAdapter.getItem(position).getOrderId(),
-                    mAdapter.getItem(position).getRightRerativeSpeed(),
-                    mAdapter.getItem(position).getLeftRerativeSpeed(),
+                    mAdapter.getItem(position).getRightRelativeSpeed(),
+                    mAdapter.getItem(position).getLeftRelativeSpeed(),
                     mAdapter.getItem(position).getTime(),
                     mAdapter.getItem(position).getBlockState(),
                     mAdapter.getItem(position).getSeekBarRate());
@@ -396,7 +384,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             sendText.append(String.format("%02d", dataArray.get(i).getTime()));
             int convertRight = (int) (dataArray.get(i).getSeekBarRate() * right);
             int convertLeft = (int) (dataArray.get(i).getSeekBarRate() * left);
-            sendText.append(String.format("%03d",convertRight));
+            sendText.append(String.format("%03d", convertRight));
             sendText.append(String.format("%03d", convertLeft));
         }
         sendText.append('\0');  //1命令分の終端文字
@@ -417,8 +405,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             int convertRight = (int) (dataArray.get(i - 1).getSeekBarRate() * right);
             int convertLeft = (int) (dataArray.get(i - 1).getSeekBarRate() * left);
-            tmpText.append(String.format("%03d",convertRight));
-            tmpText.append(String.format("%03d",convertLeft));
+            tmpText.append(String.format("%03d", convertRight));
+            tmpText.append(String.format("%03d", convertLeft));
 
             if (i % 6 == 0) {
                 tmpText.append('\0');  //1命令分の終端文字
@@ -438,7 +426,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ArrayList<ItemDataModel> getForDeployed() {
         String str = null;
 
-        if (mAdapter.getItemCount() == 0){
+        if (mAdapter.getItemCount() == 0) {
             Toast.makeText(this, "おくるデータがありません", Toast.LENGTH_SHORT).show();
             return mAdapter.getAllItem();
         }
@@ -455,8 +443,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             // forブロックが入ってた時
         } else {
             ArrayList<ItemDataModel> list = mAdapter.getAllItem();
-            ArrayList<ItemDataModel> forConvertList = evolutionItems(list);
-            return forConvertList;
+            return evolutionItems(list);
         }
 
     }
@@ -466,8 +453,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (dataArray.size() < 7) {
             return new String[]{singleBT(dataArray)};
         } else {
-            String[] commands = multiBT(dataArray);
-            return commands;
+            return multiBT(dataArray);
         }
     }
 
@@ -477,8 +463,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //realm 削除
         Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
-        RealmResults<ItemDataModel> datas = realm.where(ItemDataModel.class).findAll();
-        datas.deleteAllFromRealm();
+        RealmResults<ItemDataModel> realmResults = realm.where(ItemDataModel.class).findAll();
+        realmResults.deleteAllFromRealm();
 
         List<ItemDataModel> items = new ArrayList<>();
         for (int i = 0; i < mAdapter.getItemCount(); i++) {
@@ -502,7 +488,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             } else if (mAdapter.getItem(i).getBlockState() == 2) {
                 loopEnd++;
                 if (loopStart < loopEnd) {
-                    //Toast.makeText(this, "forブロックの始まりより前に終わりが来ています", Toast.LENGTH_SHORT).show();
                     Toast.makeText(this, "ループブロックがおかしいです", Toast.LENGTH_SHORT).show();
                     return false;
                 }
@@ -510,11 +495,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
         if ((loopStart < loopEnd)) {
-            //Toast.makeText(this, "forブロックの終わりの数が多すぎます", Toast.LENGTH_SHORT).show();
             Toast.makeText(this, "ループブロックがおかしいです", Toast.LENGTH_SHORT).show();
             return false;
         } else if (loopStart > loopEnd) {
-            //Toast.makeText(this, "forブロックの始まりの数が多すぎます", Toast.LENGTH_SHORT).show();
             Toast.makeText(this, "ループブロックがおかしいです", Toast.LENGTH_SHORT).show();
             return false;
         } else {
@@ -525,7 +508,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //todo こいつに送信前のリストデータを与えれば二重loop処理が動くはず
     //完全体に進化するメソッド(結果にCommitします)
     public ArrayList<ItemDataModel> evolutionItems(ArrayList<ItemDataModel> items) {
-        //ArrayList<ItemDataModel> test = ;
         return convertLoopItem(items, 0, 0, 0);
     }
 
@@ -565,21 +547,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         return content;
     }
+
     @Override
     public boolean dispatchKeyEvent(KeyEvent e) {
         // 戻るボタンが押されたとき
-        if(e.getKeyCode() == KeyEvent.KEYCODE_BACK) {
-            // ボタンが押されたとき
-            if (e.getAction() == KeyEvent.ACTION_DOWN) {
-            }
+        if (e.getKeyCode() == KeyEvent.KEYCODE_BACK) {
             // ボタンが離されたとき
-            else if (e.getAction() == KeyEvent.ACTION_UP) {
-                Toast.makeText(this,"無効です",Toast.LENGTH_SHORT).show();
+            if (e.getAction() == KeyEvent.ACTION_UP) {
+                Toast.makeText(this, "無効です", Toast.LENGTH_SHORT).show();
             }
-
         }
 
         return false;
-        //return super.dispatchKeyEvent(e);
     }
 }

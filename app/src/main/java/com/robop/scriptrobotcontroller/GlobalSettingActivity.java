@@ -1,8 +1,8 @@
 package com.robop.scriptrobotcontroller;
 
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
@@ -22,13 +22,15 @@ public class GlobalSettingActivity extends AppCompatActivity {
 
         frontWheelLeft = findViewById(R.id.global_front_L);
         frontWheelLeft.setInputType(InputType.TYPE_CLASS_NUMBER);
+
         frontWheelRight = findViewById(R.id.global_front_R);
         frontWheelRight.setInputType(InputType.TYPE_CLASS_NUMBER);
+
         backWheelLeft = findViewById(R.id.global_back_L);
         backWheelLeft.setInputType(InputType.TYPE_CLASS_NUMBER);
+
         backWheelRight = findViewById(R.id.global_back_R);
         backWheelRight.setInputType(InputType.TYPE_CLASS_NUMBER);
-
 
         final EditText[] editTexts = {frontWheelLeft, frontWheelRight, backWheelLeft, backWheelRight};
 
@@ -45,9 +47,9 @@ public class GlobalSettingActivity extends AppCompatActivity {
                     }
                 }
 
-                if (errorText != null){
+                if (errorText != null) {
                     Toast.makeText(GlobalSettingActivity.this, errorText, Toast.LENGTH_SHORT).show();
-                }else{
+                } else {
                     SharedPreferences.Editor editor;
                     editor = preferences.edit();
 
@@ -68,15 +70,10 @@ public class GlobalSettingActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-
         int paramFrontLeft = preferences.getInt("frontWheelLeft", 220);
         int paramFrontRight = preferences.getInt("frontWheelRight", 220);
         int paramBackLeft = preferences.getInt("backWheelLeft", 220);
         int paramBackRight = preferences.getInt("backWheelRight", 220);
-        int paramLeftRotateLeft = preferences.getInt("leftWheelLeft", 220);
-        int paramLeftRotateRight = preferences.getInt("leftWheelRight", 220);
-        int paramRightRotateLeft = preferences.getInt("rightWheelLeft", 220);
-        int paramRightRotateRight = preferences.getInt("rightWheelRight", 220);
 
         frontWheelLeft.setText(String.valueOf(paramFrontLeft));
         frontWheelLeft.setSelection(frontWheelLeft.getText().length());
@@ -92,8 +89,8 @@ public class GlobalSettingActivity extends AppCompatActivity {
     }
 
     //設定値が0~255の範囲内にあるかどうか
-    boolean sizeCheck(String speedStr){
-        if (speedStr.equals("")){
+    boolean sizeCheck(String speedStr) {
+        if (speedStr.equals("")) {
             return false;
         }
 
