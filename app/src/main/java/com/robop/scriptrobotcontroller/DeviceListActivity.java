@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,7 +43,6 @@ public class DeviceListActivity extends AppCompatActivity implements AdapterView
 
         resultPairedDevicesName = new ArrayList<>();
         resultPairedDevicesAddress = new ArrayList<>();
-        //Button scanButton = findViewById(R.id.scan_device);
 
         pairedDevicesListView = findViewById(R.id.device_list);
         TextView emptyView = findViewById(R.id.empty_pairing_device);
@@ -57,12 +55,10 @@ public class DeviceListActivity extends AppCompatActivity implements AdapterView
         pairedDevicesListView.setAdapter(pairedDevicesArrayAdapter);
 
         pairedDevicesListView.setOnItemClickListener(this);
-//        scanButton.setOnClickListener(this);
 
         // SwipeRefreshLayoutの設定
-        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refresh);
+        mSwipeRefreshLayout = findViewById(R.id.refresh);
         mSwipeRefreshLayout.setOnRefreshListener(mOnRefreshListener);
-        //mSwipeRefreshLayout.setColorSchemeResources(R.color.colorAccent,R.color.colorPrimary);
         mSwipeRefreshLayout.setColorSchemeColors(Color.parseColor("#aaaaff"),Color.parseColor("#333333"));
     }
 
@@ -74,10 +70,8 @@ public class DeviceListActivity extends AppCompatActivity implements AdapterView
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-        //String tryConnectDeviceName = null;
         String tryConnectDeviceAddress = null;
         if(!resultPairedDevicesName.isEmpty() && !resultPairedDevicesAddress.isEmpty()){
-            //tryConnectDeviceName = resultPairedDevicesName.get(position);
             tryConnectDeviceAddress = resultPairedDevicesAddress.get(position);
         }
 

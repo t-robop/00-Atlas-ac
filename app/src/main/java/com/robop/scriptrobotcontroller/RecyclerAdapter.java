@@ -20,8 +20,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         LinearLayout linearLayout;
-        TextView speedRight;
-        TextView speedLeft;
+        TextView speed;
         TextView time;
         ImageView image;
 
@@ -34,8 +33,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         ViewHolder(View view){
             super(view);
             this.linearLayout = view.findViewById(R.id.item_frame);
-            this.speedRight = view.findViewById(R.id.text_speed_right);
-            //this.speedLeft = view.findViewById(R.id.text_speed_left);
+            this.speed = view.findViewById(R.id.text_speed);
             this.time = view.findViewById(R.id.text_time);
             this.image = view.findViewById(R.id.direction_item_image);
 
@@ -91,7 +89,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") final int position) {
-        final ViewHolder viewHolder = (ViewHolder)holder;
+        final ViewHolder viewHolder = holder;
 
         if(ItemDataArray.get(position).getOrderId()==5||ItemDataArray.get(position).getOrderId()==6){
             holder.containerLoop.setVisibility(View.VISIBLE);
@@ -117,7 +115,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             }
         }else {
 
-            holder.speedRight.setText(""+(int)(ItemDataArray.get(position).getSeekBarRate()*100));
+            holder.speed.setText(""+(int)(ItemDataArray.get(position).getSeekBarRate()*100));
             holder.time.setText((float)ItemDataArray.get(position).getTime()/10f + "びょう");
 
             holder.linearLayout.setOnClickListener(new View.OnClickListener(){

@@ -3,7 +3,6 @@ package com.robop.scriptrobotcontroller;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -209,14 +208,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         preferences = getSharedPreferences("globalSetting", MODE_PRIVATE);
 
-//        DEFAULT_FRONT_WHEEL_R = preferences.getInt("frontWheelRight", 100);
-//        DEFAULT_FRONT_WHEEL_L = preferences.getInt("frontWheelLeft", 100);
-//        DEFAULT_BACK_WHEEL_R = preferences.getInt("backWheelRight", 100);
-//        DEFAULT_BACK_WHEEL_L = preferences.getInt("backWheelLeft", 100);
-//        DEFAULT_R_WHEEL_R = preferences.getInt("rightWheelRight", 100);
-//        DEFAULT_R_WHEEL_L = preferences.getInt("rightWheelLeft", 100);
-//        DEFAULT_L_WHEEL_R = preferences.getInt("leftWheelRight", 100);
-//        DEFAULT_L_WHEEL_L = preferences.getInt("leftWheelLeft", 100);
     }
 
     @Override
@@ -502,7 +493,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             } else if (mAdapter.getItem(i).getBlockState() == 2) {
                 loopEnd++;
                 if (loopStart < loopEnd) {
-                    //Toast.makeText(this, "forブロックの始まりより前に終わりが来ています", Toast.LENGTH_SHORT).show();
                     Toast.makeText(this, "ループブロックがおかしいです", Toast.LENGTH_SHORT).show();
                     return false;
                 }
@@ -510,11 +500,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
         if ((loopStart < loopEnd)) {
-            //Toast.makeText(this, "forブロックの終わりの数が多すぎます", Toast.LENGTH_SHORT).show();
             Toast.makeText(this, "ループブロックがおかしいです", Toast.LENGTH_SHORT).show();
             return false;
         } else if (loopStart > loopEnd) {
-            //Toast.makeText(this, "forブロックの始まりの数が多すぎます", Toast.LENGTH_SHORT).show();
             Toast.makeText(this, "ループブロックがおかしいです", Toast.LENGTH_SHORT).show();
             return false;
         } else {
@@ -525,7 +513,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //todo こいつに送信前のリストデータを与えれば二重loop処理が動くはず
     //完全体に進化するメソッド(結果にCommitします)
     public ArrayList<ItemDataModel> evolutionItems(ArrayList<ItemDataModel> items) {
-        //ArrayList<ItemDataModel> test = ;
         return convertLoopItem(items, 0, 0, 0);
     }
 
@@ -580,6 +567,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         return false;
-        //return super.dispatchKeyEvent(e);
     }
 }

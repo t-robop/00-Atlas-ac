@@ -14,22 +14,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.SeekBar;
-import android.widget.Toast;
 
 import static android.content.Context.MODE_PRIVATE;
 
 public class EditParamDialog extends DialogFragment{
     SharedPreferences prefs;
     private float seekRate;
-
-    private int GLOBAL_FRONT_WHEEL_R;
-    private int GLOBAL_FRONT_WHEEL_L;
-    private int GLOBAL_BACK_WHEEL_R;
-    private int GLOBAL_BACK_WHEEL_L;
-    private int GLOBAL_R_WHEEL_R;
-    private int GLOBAL_R_WHEEL_L;
-    private int GLOBAL_L_WHEEL_R;
-    private int GLOBAL_L_WHEEL_L;
 
     @SuppressLint({"InflateParams", "SetTextI18n"})
     @Override
@@ -46,14 +36,6 @@ public class EditParamDialog extends DialogFragment{
 
         //SharePreからデータを受け取る
         prefs = getActivity().getSharedPreferences("globalSetting", MODE_PRIVATE);
-        GLOBAL_FRONT_WHEEL_R = prefs.getInt("frontWheelRight", 220);
-        GLOBAL_FRONT_WHEEL_L = prefs.getInt("frontWheelLeft", 220);
-        GLOBAL_BACK_WHEEL_R = prefs.getInt("backWheelRight", 220);
-        GLOBAL_BACK_WHEEL_L = prefs.getInt("backWheelLeft", 220);
-        GLOBAL_R_WHEEL_R = prefs.getInt("rightWheelRight", 220);
-        GLOBAL_R_WHEEL_L = prefs.getInt("rightWheelLeft", 220);
-        GLOBAL_L_WHEEL_R = prefs.getInt("leftWheelRight", 220);
-        GLOBAL_L_WHEEL_L = prefs.getInt("leftWheelLeft", 220);
 
         seekBar.setMax(100);
         seekRate = dataModel.getSeekBarRate();
@@ -160,26 +142,18 @@ public class EditParamDialog extends DialogFragment{
 
                             switch (dataModel.getOrderId()){
                                 case 1:
-                                    //dataModel.setRightRerativeSpeed((int)(seekRate));
-                                    //dataModel.setLeftRerativeSpeed((int)(seekRate));
                                     dataModel.setSeekBarRate(seekRate);
                                     break;
 
                                 case 2:
-                                    //dataModel.setRightRerativeSpeed((int)(seekRate));
-                                    //dataModel.setLeftRerativeSpeed((int)(seekRate));
                                     dataModel.setSeekBarRate(seekRate);
                                     break;
 
                                 case 3:
-                                    //dataModel.setRightRerativeSpeed((int)(seekRate));
-                                    //dataModel.setLeftRerativeSpeed((int)(seekRate));
                                     dataModel.setSeekBarRate(seekRate);
                                     break;
 
                                 case 4:
-                                    //dataModel.setRightRerativeSpeed((int)(seekRate));
-                                    //dataModel.setLeftRerativeSpeed((int)(seekRate));
                                     dataModel.setSeekBarRate(seekRate);
                                     break;
 
