@@ -465,8 +465,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //realm 削除
         Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
-        RealmResults<ItemDataModel> datas = realm.where(ItemDataModel.class).findAll();
-        datas.deleteAllFromRealm();
+        RealmResults<ItemDataModel> realmResults = realm.where(ItemDataModel.class).findAll();
+        realmResults.deleteAllFromRealm();
 
         List<ItemDataModel> items = new ArrayList<>();
         for (int i = 0; i < mAdapter.getItemCount(); i++) {

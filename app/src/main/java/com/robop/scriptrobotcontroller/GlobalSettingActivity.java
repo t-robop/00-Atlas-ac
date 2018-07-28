@@ -22,13 +22,15 @@ public class GlobalSettingActivity extends AppCompatActivity {
 
         frontWheelLeft = findViewById(R.id.global_front_L);
         frontWheelLeft.setInputType(InputType.TYPE_CLASS_NUMBER);
+
         frontWheelRight = findViewById(R.id.global_front_R);
         frontWheelRight.setInputType(InputType.TYPE_CLASS_NUMBER);
+
         backWheelLeft = findViewById(R.id.global_back_L);
         backWheelLeft.setInputType(InputType.TYPE_CLASS_NUMBER);
+
         backWheelRight = findViewById(R.id.global_back_R);
         backWheelRight.setInputType(InputType.TYPE_CLASS_NUMBER);
-
 
         final EditText[] editTexts = {frontWheelLeft, frontWheelRight, backWheelLeft, backWheelRight};
 
@@ -67,7 +69,6 @@ public class GlobalSettingActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
 
         int paramFrontLeft = preferences.getInt("frontWheelLeft", 220);
         int paramFrontRight = preferences.getInt("frontWheelRight", 220);

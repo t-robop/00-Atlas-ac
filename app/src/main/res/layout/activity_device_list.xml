@@ -6,8 +6,6 @@
     android:background="#ffffff"
     tools:context="com.robop.scriptrobotcontroller.DeviceListActivity">
 
-
-
     <TextView
         android:id="@+id/empty_pairing_device"
         android:layout_width="wrap_content"
@@ -32,7 +30,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:layout_marginHorizontal="16dp"
                 android:layout_marginTop="16dp"
                 android:smoothScrollbar="true">
 

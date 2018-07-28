@@ -16,6 +16,10 @@ public class DataLoadDialogFragment extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+
+        Realm.init(getActivity());
+        realm = Realm.getDefaultInstance();
+
         return new AlertDialog.Builder(getActivity())
                 .setTitle("まえのデータがのこっています")
                 .setMessage("もどしますか？")
@@ -44,8 +48,6 @@ public class DataLoadDialogFragment extends DialogFragment {
     }
 
     RealmResults<ItemDataModel> realmRead() {
-        Realm.init(getActivity());
-        realm = Realm.getDefaultInstance();
         RealmQuery<ItemDataModel> query = realm.where(ItemDataModel.class);
         return query.findAll();
     }
